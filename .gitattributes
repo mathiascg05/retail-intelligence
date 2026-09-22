@@ -1,0 +1,6 @@
+# nbstripout: quita las salidas de los notebooks al commitear (ver README)
+*.ipynb filter=nbstripout
+*.ipynb diff=ipynb
+
+# Datos originales: binarios a efectos de diff, nunca se modifican
+data/raw/** -diff
