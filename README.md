@@ -1,59 +1,46 @@
-# Retail Intelligence — RetailVenture C.A.
+# Retail Intelligence – RetailVenture C.A.
 
-Proyecto 01 de **Tópicos Especiales para la Gestión de Datos** (UCAB, Prof. Armen Djenanian).
-Análisis exploratorio y storytelling con datos para explicar la caída de márgenes,
-el aumento de devoluciones y la pérdida de efectividad del marketing.
+Proyecto 01 de Tópicos Especiales para la Gestión de Datos (UCAB, prof. Armen Djenanian).
 
-**Entrega y defensa: semana 6** (el PDF del enunciado dice semana 15; la fecha real
-fue indicada por el profesor — anotar aquí la fuente de la confirmación: ______).
+Tenemos 24 meses de datos de una cadena de retail (ventas, clientes, productos, devoluciones, CRM y campañas) y hay que explicar por qué caen los márgenes y qué hacer al respecto. El enunciado completo está en `data/raw/Proyecto_01_Retail_Intelligence.pdf`.
 
-## Equipo y responsabilidades
+Entrega y defensa: **semana 6** (el PDF dice semana 15, pero el profesor lo movió en clase).
 
-| Integrante | Dueño de | Segundo de |
-|---|---|---|
-| Integrante 1 | A1 Calidad de datos + `src/carga.py` (integrador) | A5 |
-| Integrante 2 | A2 Rentabilidad | A3 |
-| Integrante 3 | A3 Fugas de ingresos | A4 |
-| Integrante 4 | A4 Marketing | A2 |
-| Integrante 5 | A5 Storytelling + bitácora de IA | A1 |
+## Fases y responsables
 
-## Calendario
+| Fase | Qué es | Responsable | Estado |
+|---|---|---|---|
+| A1 | Calidad de datos y limpieza | | lista |
+| A2 | Rentabilidad y comportamiento de compra | | pendiente |
+| A3 | Fugas de ingresos (devoluciones, churn, CRM) | | pendiente |
+| A4 | Marketing (conversión, descuentos, ROI) | | pendiente |
+| A5 | Relato, visualizaciones y presentación | | pendiente |
 
-| Semana | Objetivo |
-|---|---|
-| 2 | Cerrar A1 e implementar `cargar_limpio()` en `main` |
-| 3 | A2, A3 y A4 en paralelo |
-| 4 | Terminar A2–A4, revisión cruzada, borrador del relato |
-| 5 | A5 completo; **cifras congeladas el viernes** |
-| 6 | Ensayos, entrega y defensa |
+Plan: A1 en la semana 2; A2, A3 y A4 en paralelo en las semanas 3 y 4; A5 en la semana 5 (el viernes congelamos las cifras); la semana 6 es para ensayar.
 
-## Estructura
+## Organización del repo
 
 ```
-data/raw/        CSV originales + enunciado (NUNCA se modifican)
-data/clean/      salidas de A1 (no versionadas, se regeneran)
-src/carga.py     única puerta de entrada a los datos
-notebooks/       un notebook por fase (01_calidad … 05_visualizaciones)
-figures/         gráficos finales para la presentación
-DECISIONES.md    decisiones de limpieza y metodológicas
-BITACORA.md      bitácora de uso de IA (criterio 5 de la rúbrica)
-FEEDBACK_PROFESOR.md  reuniones semanales con el profesor
+data/raw/      archivos originales (no se tocan)
+data/clean/    tablas limpias en parquet (se generan solas, no se suben)
+src/carga.py   carga y limpieza de datos
+notebooks/     un notebook por fase
+docs/          modelo relacional
+figures/       gráficos para la presentación
 ```
 
-## Cómo empezar
+- `DECISIONES.md`: qué hicimos con cada problema de los datos y por qué.
+- `BITACORA.md`: uso de IA (lo pide la rúbrica).
+- `FEEDBACK_PROFESOR.md`: lo que vamos hablando con el profesor.
+
+## Para correrlo
 
 ```bash
-python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\activate
+python -m venv .venv
+source .venv/bin/activate        # en Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-nbstripout --install --attributes .gitattributes    # quita las salidas de los notebooks al commitear
+nbstripout --install --attributes .gitattributes
 jupyter lab
 ```
 
-## Reglas de trabajo
-
-1. Nadie lee los CSV directamente: siempre `from src.carga import cargar_crudo, cargar_limpio`.
-2. Una rama por fase (`a2-rentabilidad`, `a3-fugas`, …). A `main` solo se entra por PR.
-3. Cada PR lo revisa **el segundo** de esa fase, que debe poder explicar cada cifra.
-4. Cada notebook tiene un solo dueño a la vez; los demás aportan por PR.
-5. Toda sugerencia de IA que se use o se descarte se registra en `BITACORA.md` con link al commit.
-6. Después del viernes de la semana 5 no cambia ninguna cifra, salvo que sea un error real.
+En los notebooks los datos se cargan con `from src.carga import cargar_limpio` en vez de leer los CSV directamente, para que todos trabajemos con las mismas tablas. Cada fase va en su propia rama (`a2-rentabilidad`, `a3-fugas`, …) y entra a `main` con un PR que revisa otra persona del equipo.
