@@ -3,8 +3,8 @@
 ## Semana 2
 
 **Qué le vamos a preguntar:**
-- ¿La entrega es en la semana 6? ¿Hay que entregar el código o solo la presentación?
-- Las cifras del enunciado (ticket −8%, devoluciones al 14%, conversión de 22% a 11%) no aparecen en los datos. ¿Es a propósito?
+- ¿Hay que entregar el código o solo la presentación?
+- Las cifras del enunciado (ticket −8%, devoluciones al 14%, conversión de 22% a 11%) coinciden con los datos solo en parte. ¿Es a propósito? ¿Nos basamos en los datos?
 - ¿Está de acuerdo con nuestras decisiones de limpieza (`DECISIONES.md`)? Sobre todo la 1 (fecha de registro) y la 2 (conversiones sin compra).
 
 **Qué respondió:**

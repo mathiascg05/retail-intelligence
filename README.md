@@ -12,7 +12,7 @@ El enunciado completo está en `data/raw/Proyecto_01_Retail_Intelligence.pdf`.
 
 | Fase | Tema | Responsable | Estado |
 |---|---|---|---|
-| A1 | Calidad y limpieza de los datos | Mathias Carstens | lista |
+| A1 | Calidad y limpieza de los datos | Mathias Carstens | en revisión (PR #2) |
 | A2 | Qué productos, clientes y canales dejan más margen | Mikel Muñoz | pendiente |
 | A3 | Dónde se pierde dinero: devoluciones, clientes que se van, quejas | Federico Celis | pendiente |
 | A4 | Qué tan bien funcionan las campañas de marketing | Fernando Álvarez | pendiente |

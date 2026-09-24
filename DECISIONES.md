@@ -17,13 +17,16 @@ Por eso no eliminamos nada. Cuando un registro es raro, le agregamos una columna
 - 433 clientes tienen el género como "No especificado". Es un dato faltante escrito como texto.
 - Hay 318 productos. El enunciado dice 320.
 - Hay un tercer canal de venta, la app móvil, que el enunciado no menciona.
-- Las cifras del enunciado no coinciden con los datos (sección 5 del notebook):
+- Las cifras del enunciado no coinciden con los datos (sección 5 del notebook). Así medimos cada una:
+  - **Ticket promedio:** total vendido dividido entre el número de compras.
+  - **Devoluciones:** de cada 100 ventas de un trimestre, cuántas se devolvieron.
+  - **Conversión:** de cada 100 campañas enviadas en un trimestre, cuántas quedaron marcadas como convertidas.
 
-| Métrica | Enunciado | Datos |
-|---|---|---|
-| Ticket promedio | baja 8% | baja 1,9% |
-| Devoluciones | suben al 14% | se mantienen entre 13,0% y 13,8% |
-| Conversión de campañas | baja de 22% a 11% | baja de 11,3% a 5,6% |
+| Métrica | Qué dice el enunciado | Qué muestran los datos | ¿Coincide? |
+|---|---|---|---|
+| Ticket promedio | Bajó 8% en un año | Bajó 1,9% (de 351 en 2023 a 344 en 2024). Comparando solo el último trimestre de cada año, bajó 0,2% | **No** |
+| Devoluciones | Subieron hasta 14% en el último trimestre | 13,5% en el último trimestre, pero siempre entre 13,0% y 13,8% desde 2023 | **A medias:** el nivel se parece, pero no hubo subida |
+| Conversión de campañas | Bajó de 22% a 11% en 18 meses | Bajó de 11,3% a 5,6% entre el primer trimestre de 2023 y el último de 2024 | **En parte:** se cayó a la mitad, pero empezó en 11%, no en 22% |
 
 ## Decisiones
 
@@ -53,7 +56,7 @@ Esto hay que mencionarlo como limitación en la presentación.
 
 **Qué hicimos:** las conservamos y las marcamos.
 
-**Por qué:** no es un error. 633 son de Electrónica, la categoría con menos margen (18,6% sobre el precio de lista). Con descuentos de entre 9% y 34,5%, la venta termina en pérdida. Es un hallazgo para A2.
+**Por qué:** no es un error. 633 son de Electrónica, la categoría con menos margen: un producto típico de Electrónica deja 18,6% de su precio de lista. Con descuentos de entre 9% y 34,5%, la venta termina en pérdida. Es un hallazgo para A2.
 
 ### 4. El segmento del cliente no coincide con su comportamiento
 
@@ -70,7 +73,11 @@ Esto hay que mencionarlo como limitación en la presentación.
 | Nuevo | hizo su primera compra en los últimos 90 días |
 | Esporádico | todos los demás |
 
-**Por qué 180 días:** el 90% de las veces, un cliente vuelve a comprar en menos de 162 días. Si pasan más de 180, lo normal es que ya no vuelva.
+Las reglas se aplican en ese orden: a cada cliente le toca la primera que cumpla, de arriba hacia abajo.
+
+**Por qué 180 días:** cuando un cliente vuelve a comprar, 9 de cada 10 veces lo hace en menos de 162 días. Pasar de 180 días sin comprar es, por tanto, una ausencia fuera de lo normal.
+
+**Ojo:** eso no significa que el cliente se haya perdido. De los clientes que llegan a 180 días sin comprar, el 52% vuelve en los 180 días siguientes. "Inactivo" quiere decir "en riesgo", no "perdido". En A3 hay que tenerlo en cuenta al definir qué es un cliente perdido.
 
 ### 5. Clientes que nunca compraron
 
