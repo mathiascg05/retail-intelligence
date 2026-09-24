@@ -10,11 +10,11 @@ Entrega y defensa: **semana 6** (el PDF dice semana 15, pero el profesor lo movi
 
 | Fase | Qué es | Responsable | Estado |
 |---|---|---|---|
-| A1 | Calidad de datos y limpieza | | lista |
-| A2 | Rentabilidad y comportamiento de compra | | pendiente |
-| A3 | Fugas de ingresos (devoluciones, churn, CRM) | | pendiente |
-| A4 | Marketing (conversión, descuentos, ROI) | | pendiente |
-| A5 | Relato, visualizaciones y presentación | | pendiente |
+| A1 | Calidad de datos y limpieza | Mathias Carstens | lista |
+| A2 | Rentabilidad y comportamiento de compra | Mikel Muñoz | pendiente |
+| A3 | Fugas de ingresos (devoluciones, churn, CRM) | Federico Celis | pendiente |
+| A4 | Marketing (conversión, descuentos, ROI) | Fernando Álvarez | pendiente |
+| A5 | Relato, visualizaciones y presentación | Leonardo Reyes | pendiente |
 
 Plan: A1 en la semana 2; A2, A3 y A4 en paralelo en las semanas 3 y 4; A5 en la semana 5 (el viernes congelamos las cifras); la semana 6 es para ensayar.
 
