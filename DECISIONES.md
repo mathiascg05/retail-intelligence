@@ -1,49 +1,102 @@
 # Decisiones sobre los datos
 
-Todo sale de `notebooks/01_calidad.ipynb` y está implementado en `src/carga.py` (`cargar_limpio`).
+Este documento explica qué problemas encontramos en los datos y qué hicimos con cada uno.
+Las cifras salen de `notebooks/01_calidad.ipynb`. Los cambios están aplicados en `src/carga.py`, en la función `cargar_limpio()`.
 
-Criterio general: **no borramos filas**. Los datos no traen nulos, duplicados ni claves huérfanas, así que los problemas que hay son de interpretación, no de formato. Los casos raros se marcan con una columna booleana y cada análisis decide qué hacer con ellos.
+## Regla general: no borramos filas
+
+Los datos vienen limpios en la forma: no hay celdas vacías, filas repetidas ni códigos que apunten a registros inexistentes. Los problemas están en lo que significan algunos datos.
+
+Por eso no eliminamos nada. Cuando un registro es raro, le agregamos una columna que lo marca (verdadero/falso). Así cada análisis decide si lo incluye o no.
 
 ## Lo que encontramos
 
-- 0 celdas vacías y 0 duplicados en las 6 tablas. Todas las claves foráneas existen.
-- Montos, precios y márgenes cuadran aritméticamente en el 100% de las filas.
-- `genero = "No especificado"` en 433 clientes: es un nulo disfrazado.
-- 318 productos (el enunciado dice 320).
-- Las cifras del contexto del caso no aparecen en los datos: el ticket cae 1,9% (no 8%), las devoluciones se mantienen entre 13,0% y 13,8% (no suben al 14%) y la conversión cae de 11,3% a 5,6% (no de 22% a 11%). Hay un tercer canal, `app_movil`, que el enunciado no menciona.
+- No hay celdas vacías ni filas repetidas en ninguna de las 6 tablas.
+- Todos los códigos de cliente, producto y transacción existen en su tabla.
+- Los montos, precios y márgenes cuadran en el 100% de las filas.
+- 433 clientes tienen el género como "No especificado". Es un dato faltante escrito como texto.
+- Hay 318 productos. El enunciado dice 320.
+- Hay un tercer canal de venta, la app móvil, que el enunciado no menciona.
+- Las cifras del enunciado no coinciden con los datos (sección 5 del notebook):
+
+| Métrica | Enunciado | Datos |
+|---|---|---|
+| Ticket promedio | baja 8% | baja 1,9% |
+| Devoluciones | suben al 14% | se mantienen entre 13,0% y 13,8% |
+| Conversión de campañas | baja de 22% a 11% | baja de 11,3% a 5,6% |
 
 ## Decisiones
 
-**1. Compras anteriores a `fecha_registro`** (24.972 transacciones, 50%)
-Las dejamos. Pasa igual en los tres canales (49–50%) y la fecha de registro no tiene relación con la primera compra (correlación 0,009). La empresa tiene 12 años, pero todos los registros son de 2023–2024, así que lo más razonable es que `fecha_registro` sea el alta en la plataforma actual, no el inicio de la relación. No la usamos para medir antigüedad; para eso usamos la fecha de la primera compra (`clientes.primera_compra`).
+### 1. Compras hechas antes de la fecha de registro del cliente
 
-**2. Conversiones de campaña sin compra que las respalde** (618 de 797)
-No hay ninguna llave entre campaña y transacción. Buscamos una compra del mismo cliente en los 30 días siguientes al envío: solo aparece en 179 casos, y en 102 la única compra cercana es anterior al envío (el caso de "campañas con fechas posteriores a la compra" del enunciado).
-- Para **tasas de conversión** (comparar tipos, canales y segmentos) usamos `convertido` tal cual, porque es lo que registra la empresa. El % de conversiones respaldadas es parecido entre años (22–23%) y entre tipos de campaña, aunque no idéntico: va de 17% (`social_ads`) a 25% (emails). Por eso las diferencias pequeñas entre tipos hay que tomarlas con cuidado en A4.
-- Para **montos y ROI** solo contamos las conversiones con compra en la ventana (`conversion_respaldada`, `monto_respaldado`). Esto hay que decirlo como limitación en la presentación.
+**Qué pasa:** la mitad de las compras (24.972) tiene una fecha anterior a la fecha en que el cliente se registró.
 
-**3. Ventas por debajo del costo** (711)
-Las dejamos y las marcamos (`bajo_costo`). 633 son de Electrónica, que tiene el margen de lista más bajo (18,6%): con descuentos entre 9% y 34,5% el margen se vuelve negativo. No es un error, es un hallazgo para A2.
+**Qué hicimos:** conservamos esas compras. Para medir cuánto tiempo lleva alguien como cliente no usamos la fecha de registro, sino la fecha de su primera compra.
 
-**4. Segmento declarado vs comportamiento** (108 "Inactivos" con compras en los últimos 90 días)
-Dejamos `segmento` como viene, porque el enunciado pide el análisis por segmento. Agregamos `segmento_rfm`, calculado con reglas simples sobre el comportamiento, para contrastar:
-- Sin compras: nunca compró.
-- Inactivo: más de 180 días sin comprar (el p90 del tiempo entre compras es 162 días).
-- Premium: gasto total en el 10% más alto.
-- Frecuente: 8 compras o más.
-- Nuevo: primera compra en los últimos 90 días.
-- Esporádico: el resto.
+**Por qué:** el problema aparece igual en los tres canales, y la fecha de registro no tiene ninguna relación con la fecha de la primera compra. Además, la empresa tiene 12 años, pero todos los registros son de 2023 y 2024. Lo más probable es que esa fecha sea el alta en un sistema nuevo, no el día en que el cliente empezó a comprar.
 
-**5. Clientes sin compras** (392)
-Los dejamos con `sin_compras = True`. No entran en CLV ni en churn (no se puede perder a quien nunca compró), pero sí en el análisis de campañas: 242 de los 392 reciben campañas. Por segmento declarado, 255 son "Inactivo", 94 "Nuevo" y 43 "Esporádico".
+### 2. Campañas marcadas como convertidas sin una compra que lo confirme
 
-**6. Tiempos de respuesta del CRM muy altos** (352 por encima de 48,9 h según IQR; 15 de más de una semana)
-Los dejamos y los marcamos (`respuesta_atipica`). Un tiempo de respuesta alto es justamente lo que queremos medir en A3, no ruido. En los resúmenes usamos la mediana.
+**Qué pasa:** hay 797 envíos de campaña marcados como convertidos. Los datos no dicen qué compra generó cada campaña, así que buscamos una compra del mismo cliente en los 30 días siguientes al envío. Solo la encontramos en 179 casos. En otros 102, la única compra cercana es anterior al envío.
 
-**7. Montos de venta "atípicos"**
-Con un IQR global salían 4.138 outliers, dos tercios de ellos (2.672) de Electrónica, simplemente porque es la categoría más cara. Calculamos el IQR por categoría (`outlier_cat`, 3.420 filas) y no eliminamos nada: son ventas reales con montos coherentes.
+**Qué hicimos:**
+- Para comparar tasas de conversión entre tipos de campaña, canales y segmentos, usamos la marca de conversión tal como viene.
+- Para calcular cuánto dinero trajo una campaña (y su retorno), solo contamos las 179 conversiones con compra confirmada.
 
-## Columnas que agrega `cargar_limpio`
+**Por qué:** la marca de conversión es lo que registra la empresa. El porcentaje de conversiones confirmadas es casi igual en 2023 y 2024 (22% y 23%), así que la tendencia sigue siendo válida. Pero varía entre tipos de campaña: 17% en redes sociales y 25% en emails. Por eso, en A4, las diferencias pequeñas entre tipos de campaña no son concluyentes.
+
+Esto hay que mencionarlo como limitación en la presentación.
+
+### 3. Ventas por debajo del costo
+
+**Qué pasa:** en 711 ventas, el cliente pagó menos de lo que le costó el producto a la empresa.
+
+**Qué hicimos:** las conservamos y las marcamos.
+
+**Por qué:** no es un error. 633 son de Electrónica, la categoría con menos margen (18,6% sobre el precio de lista). Con descuentos de entre 9% y 34,5%, la venta termina en pérdida. Es un hallazgo para A2.
+
+### 4. El segmento del cliente no coincide con su comportamiento
+
+**Qué pasa:** 108 clientes marcados como "Inactivo" compraron en los últimos 90 días.
+
+**Qué hicimos:** dejamos el segmento original, porque el enunciado pide analizar por segmento. Además agregamos un segundo segmento, calculado según cómo compra cada cliente en realidad:
+
+| Segmento calculado | Regla |
+|---|---|
+| Sin compras | nunca compró |
+| Inactivo | lleva más de 180 días sin comprar |
+| Premium | está en el 10% de clientes que más gastó |
+| Frecuente | tiene 8 compras o más |
+| Nuevo | hizo su primera compra en los últimos 90 días |
+| Esporádico | todos los demás |
+
+**Por qué 180 días:** el 90% de las veces, un cliente vuelve a comprar en menos de 162 días. Si pasan más de 180, lo normal es que ya no vuelva.
+
+### 5. Clientes que nunca compraron
+
+**Qué pasa:** 392 clientes no tienen ninguna compra.
+
+**Qué hicimos:** los conservamos y los marcamos. No entran en el cálculo del valor del cliente ni en el de clientes perdidos, pero sí en el análisis de campañas.
+
+**Por qué:** no se puede perder a un cliente que nunca compró. Pero 242 de ellos reciben campañas, y eso cuenta para medir si el marketing funciona.
+
+### 6. Tiempos de respuesta muy altos en atención al cliente
+
+**Qué pasa:** 352 contactos tardaron más de 48,9 horas en recibir respuesta, y 15 tardaron más de una semana. Las 48,9 horas son el límite a partir del cual un valor se considera fuera de lo normal en estos datos (regla del rango intercuartílico).
+
+**Qué hicimos:** los conservamos y los marcamos. En los resúmenes usamos la mediana (el valor del medio), que no se deja arrastrar por los casos extremos.
+
+**Por qué:** una respuesta lenta no es un error de los datos. Es justo lo que queremos estudiar en A3.
+
+### 7. Ventas con montos muy altos
+
+**Qué pasa:** si buscamos montos fuera de lo normal mirando todas las ventas juntas, salen 4.138. Dos tercios (2.672) son de Electrónica.
+
+**Qué hicimos:** buscamos los montos fuera de lo normal dentro de cada categoría (salen 3.420) y los marcamos. No eliminamos ninguno.
+
+**Por qué:** Electrónica sale "fuera de lo normal" solo porque sus productos son más caros. Es más justo comparar cada venta con las de su propia categoría. Y aun así son ventas reales, con montos que cuadran.
+
+## Columnas que agrega `cargar_limpio()`
 
 | Tabla | Columnas nuevas |
 |---|---|
@@ -53,4 +106,4 @@ Con un IQR global salían 4.138 outliers, dos tercios de ellos (2.672) de Electr
 | interacciones_crm | `respuesta_atipica` |
 | campanas_marketing | `compra_en_ventana`, `conversion_respaldada`, `monto_respaldado` |
 
-Los umbrales (30, 180, 90 días y 8 compras) están arriba en `src/carga.py`, para cambiarlos en un solo lugar si el profesor pide otra cosa.
+Los umbrales (30, 90 y 180 días, y 8 compras) están al principio de `src/carga.py`. Si el profesor pide otros valores, se cambian ahí.

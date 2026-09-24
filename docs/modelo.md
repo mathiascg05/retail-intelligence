@@ -1,8 +1,11 @@
-# Modelo relacional (esquema estrella)
+# Cómo se relacionan las tablas
 
-`transacciones` es la tabla de hechos principal: una fila es un producto comprado por un cliente en una fecha. Alrededor están las dimensiones `clientes`, `productos` y fecha.
+Usamos un esquema estrella: una tabla central con los hechos (las ventas) y, alrededor, las tablas que los describen (quién compró, qué compró y cuándo).
 
-`devoluciones` cuelga de una transacción concreta (cada transacción tiene como mucho una devolución). `campanas_marketing` e `interacciones_crm` son eventos del cliente: solo tienen llave hacia `clientes`, no hacia una compra. Por eso la relación "esta campaña generó esta compra" no está en los datos y hay que inferirla por fechas (ver DECISIONES.md, #2).
+- **Ventas (`transacciones`)** es la tabla central. Cada fila es un producto que un cliente compró en una fecha.
+- **Clientes, productos y fechas** son las tablas que describen cada venta.
+- **Devoluciones** se conecta con una venta concreta. Cada venta tiene como máximo una devolución.
+- **Campañas y atención al cliente** solo se conectan con el cliente, no con una venta. Por eso los datos no dicen qué campaña generó qué compra, y hay que deducirlo por las fechas (ver `DECISIONES.md`, punto 2).
 
 ```mermaid
 erDiagram
@@ -81,8 +84,8 @@ erDiagram
     }
 ```
 
-Notas:
+## Notas
 
-- `devoluciones.cliente_id` es redundante (siempre coincide con el cliente de la transacción; lo comprobamos en el notebook 01), pero lo dejamos porque viene en el archivo.
-- La dimensión fecha no existe como archivo: se genera a partir de las fechas de las demás tablas.
-- Cardinalidades comprobadas en `notebooks/01_calidad.ipynb`, sección 6.
+- La tabla de fechas no viene en los archivos. Se arma con las fechas de las demás tablas.
+- Devoluciones trae también el código del cliente. Es un dato repetido: siempre coincide con el cliente de la venta (lo comprobamos en el notebook 01).
+- Las relaciones "uno a muchos" están comprobadas en el notebook 01, sección 6.
