@@ -91,3 +91,29 @@ La regla es simple: no aceptamos nada que no podamos explicar nosotros mismos.
 **Qué hicimos:**
 - **Corregimos** todo lo anterior y agregamos al notebook el cálculo del 52%.
 - **Cambiamos** el significado del segmento "Inactivo" calculado: ahora es "en riesgo", no "perdido". Esto afecta a cómo se define el cliente perdido en A3.
+
+---
+
+## 25 de septiembre: A2, rentabilidad
+
+**Qué le pedimos:** hacer A2 siguiendo el enunciado al pie de la letra y, donde el enunciado no dice cómo hacer algo, proponer un método y dejarlo anotado para confirmarlo con el profesor.
+
+**Qué propuso:**
+- Revisar los datos antes de decidir el método. Encontró que las devoluciones reembolsan el 100% de la venta, que los descuentos no parecen cambiar las unidades por compra y que la estacionalidad es débil.
+- Tres opciones para el margen neto (el producto devuelto siempre se revende, nunca se revende, o depende del motivo) y dos para el CLV (horizonte fijo de 3 años o fórmula con tasa de descuento).
+- Comprobar cada hallazgo con una prueba (intervalos de confianza, regresión, repetición entre años) para no presentar correlaciones como causas, que la rúbrica penaliza.
+
+**Qué hicimos:**
+- **Elegimos** el margen neto según el motivo: se revende salvo defectuoso o fraude. Nos pareció el supuesto más realista.
+- **Elegimos** el CLV con horizonte de 3 años, sin tasa de descuento, porque en Venezuela justificar una tasa es muy discutible.
+- **Ajustamos** el CLV para calcularlo por semestres en vez de por años. Con 2 años de datos solo hay un paso anual, y así no se puede ver si un segmento cae. La versión anual queda en el notebook como comprobación y da el mismo orden.
+- **Aceptamos** usar el margen bruto como medida principal, porque es lo que pide el enunciado, y el neto como complemento.
+- **Aceptamos** nombrar los picos y valles de cada categoría y canal (lo pide el enunciado) y además comprobar si se repiten. No se repiten.
+- **Dejamos anotado** para el profesor todo lo que el enunciado no especifica (`FEEDBACK_PROFESOR.md`, semana 3).
+
+**Errores que encontramos al revisar lo que generó la IA:**
+- El primer cálculo del margen a precio de lista estaba mal planteado. Lo reescribimos como 1 − costo / (cantidad × precio de lista).
+- El resumen decía que con más de 20% de descuento había que vender "el doble" para compensar. Con los números del notebook (207% de volumen extra) es el triple.
+- Una frase mezclaba la tendencia de ventas de Electrónica con la de su margen. La separamos.
+
+**Falta:** que Mikel Muñoz, responsable de A2, revise el notebook 02 y pueda explicar el CLV, el *bootstrap* y la regresión sin ayuda.

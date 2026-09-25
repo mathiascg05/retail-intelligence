@@ -26,10 +26,13 @@ FECHAS = {
 TABLAS = list(FECHAS)
 
 # Umbrales (ver DECISIONES.md)
-VENTANA_CONVERSION = 30   # días después del envío para aceptar una compra como respaldo (#2)
-DIAS_INACTIVO = 180       # ~p90 del tiempo entre compras (162 d), redondeado (#4)
-DIAS_NUEVO = 90           # primera compra en los últimos 90 días (#4)
-COMPRAS_FRECUENTE = 8     # (#4)
+VENTANA_CONVERSION = 30   # días después del envío para aceptar una compra como respaldo (A1.2)
+DIAS_INACTIVO = 180       # ~p90 del tiempo entre compras (162 d), redondeado (A1.4)
+DIAS_NUEVO = 90           # primera compra en los últimos 90 días (A1.4)
+COMPRAS_FRECUENTE = 8     # (A1.4)
+
+# Devoluciones en las que el producto no se puede revender: se pierde también su costo (A2.1)
+MOTIVOS_PERDIDA = {"Producto_defectuoso", "Fraude_reportado"}
 
 
 def cargar_crudo(nombre=None):
@@ -57,18 +60,26 @@ def _limpiar(d):
                    (dev, "devolucion_id"), (crm, "interaccion_id"), (cam, "campana_id")]:
         t.drop_duplicates(subset=id_, inplace=True)
 
-    # --- transacciones: margen por línea y marcas (#3, #7)
+    # --- transacciones: margen por línea y marcas (A1.3, A1.7)
     trx = trx.merge(prd[["producto_id", "categoria", "subcategoria", "costo"]], on="producto_id", how="left")
     trx["costo_total"] = (trx["costo"] * trx["cantidad"]).round(2)
     trx["margen_bruto"] = trx["monto_neto"] - trx["costo_total"]
     trx["bajo_costo"] = trx["margen_bruto"] < 0
     trx["outlier_cat"] = trx.groupby("categoria")["monto_neto"].transform(_iqr_alto)
     trx["devuelta"] = trx["transaccion_id"].isin(dev["transaccion_id"])
+    trx["costo_descuento"] = (trx["cantidad"] * trx["precio_unitario"] * trx["descuento"]).round(2)
+
+    # Margen neto (A2.1): si se devuelve, la venta se deshace y el margen es 0;
+    # si además el producto no se puede revender, se pierde su costo
+    trx["motivo_devolucion"] = trx["transaccion_id"].map(dev.set_index("transaccion_id")["motivo"])
+    trx["margen_neto"] = trx["margen_bruto"].where(~trx["devuelta"], 0.0)
+    perdido = trx["motivo_devolucion"].isin(MOTIVOS_PERDIDA)
+    trx.loc[perdido, "margen_neto"] = -trx.loc[perdido, "costo_total"]
     trx["mes"] = trx["fecha"].dt.to_period("M").dt.to_timestamp()
     trx["trimestre"] = trx["fecha"].dt.to_period("Q").astype(str)
     trx = trx.drop(columns="costo")
 
-    # --- clientes: comportamiento real además del segmento declarado (#1, #4, #5)
+    # --- clientes: comportamiento real además del segmento declarado (A1.1, A1.4, A1.5)
     fin = trx["fecha"].max()
     resumen = trx.groupby("cliente_id").agg(
         primera_compra=("fecha", "min"),
@@ -76,11 +87,13 @@ def _limpiar(d):
         n_compras=("transaccion_id", "size"),
         gasto_total=("monto_neto", "sum"),
         margen_total=("margen_bruto", "sum"),
+        margen_neto_total=("margen_neto", "sum"),
     )
     cli = cli.merge(resumen, on="cliente_id", how="left")
     cli["sin_compras"] = cli["n_compras"].isna()
     cli["n_compras"] = cli["n_compras"].fillna(0).astype(int)
-    cli[["gasto_total", "margen_total"]] = cli[["gasto_total", "margen_total"]].fillna(0)
+    totales = ["gasto_total", "margen_total", "margen_neto_total"]
+    cli[totales] = cli[totales].fillna(0)
     cli["dias_sin_comprar"] = (fin - cli["ultima_compra"]).dt.days
 
     corte_premium = cli.loc[~cli["sin_compras"], "gasto_total"].quantile(0.9)
@@ -97,10 +110,10 @@ def _limpiar(d):
                     on="transaccion_id", how="left").rename(columns={"fecha": "fecha_compra"})
     dev["dias_a_devolucion"] = (dev["fecha_devolucion"] - dev["fecha_compra"]).dt.days
 
-    # --- CRM (#6)
+    # --- CRM (A1.6)
     crm["respuesta_atipica"] = _iqr_alto(crm["tiempo_respuesta_hrs"])
 
-    # --- campañas (#2): ¿hay una compra del cliente en los 30 días siguientes al envío?
+    # --- campañas (A1.2): ¿hay una compra del cliente en los 30 días siguientes al envío?
     pares = cam[["campana_id", "cliente_id", "fecha_envio"]].merge(
         trx[["cliente_id", "fecha", "monto_neto"]], on="cliente_id")
     dias = (pares["fecha"] - pares["fecha_envio"]).dt.days

@@ -5,7 +5,7 @@ Usamos un esquema estrella: una tabla central con los hechos (las ventas) y, alr
 - **Ventas (`transacciones`)** es la tabla central. Cada fila es un producto que un cliente compró en una fecha.
 - **Clientes, productos y fechas** son las tablas que describen cada venta.
 - **Devoluciones** se conecta con una venta concreta. Cada venta tiene como máximo una devolución.
-- **Campañas y atención al cliente** solo se conectan con el cliente, no con una venta. Por eso los datos no dicen qué campaña generó qué compra, y hay que deducirlo por las fechas (ver `DECISIONES.md`, punto 2).
+- **Campañas y atención al cliente** solo se conectan con el cliente, no con una venta. Por eso los datos no dicen qué campaña generó qué compra, y hay que deducirlo por las fechas (ver `DECISIONES.md`, decisión A1.2).
 
 ```mermaid
 erDiagram
