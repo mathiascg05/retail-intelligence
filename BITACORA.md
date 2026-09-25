@@ -41,6 +41,29 @@ La regla es simple: no aceptamos nada que no podamos explicar nosotros mismos.
 
 ---
 
+## 22 de septiembre: modelo estrella y código de carga
+
+**Qué le pedimos:** ayuda para estructurar el modelo estrella y para escribir las funciones que cargan y limpian los datos.
+
+**Qué propuso para el modelo:**
+- Poner las ventas como tabla central, con clientes, productos y fechas alrededor.
+- Conectar las devoluciones con una venta concreta.
+- Conectar las campañas y la atención al cliente solo con el cliente, porque los datos no traen ninguna columna que las una a una venta.
+- Crear una tabla de fechas a partir de las fechas de las demás tablas, porque no viene en los archivos.
+- Dibujar el diagrama en Mermaid (`docs/modelo.md`), que GitHub muestra directamente, y exportarlo como imagen para la presentación.
+
+**Qué propuso para el código (`src/carga.py`):**
+- `cargar_crudo()`: lee los 6 archivos tal como vienen, con las fechas ya convertidas.
+- `cargar_limpio()`: aplica las 7 decisiones de `DECISIONES.md`. Agrega columnas que marcan los casos raros, calcula el margen de cada venta y el segmento calculado de cada cliente, y busca la compra que confirma cada conversión. Guarda el resultado en `data/clean/` para no recalcularlo cada vez.
+- Los umbrales (30, 90 y 180 días, y 8 compras) como constantes al principio del archivo.
+
+**Qué hicimos:**
+- **Aceptamos** la estructura del modelo. En el notebook comprobamos las relaciones: cada venta tiene como máximo una devolución, y el cliente de cada devolución coincide siempre con el de la venta.
+- **Aceptamos** el código de carga. Comprobamos que los datos limpios tienen las mismas filas que los originales, que los conteos de cada marca coinciden con los del notebook (711 ventas bajo costo, 392 clientes sin compras, 179 conversiones confirmadas) y que las columnas nuevas son las que lista `DECISIONES.md`.
+- **Falta:** que cada integrante lea `src/carga.py` y pueda explicar qué hace cada paso. El profesor puede preguntarlo en la defensa.
+
+---
+
 ## 24 de septiembre: revisión de los textos
 
 **Qué le pedimos:** revisar que cada cifra de `DECISIONES.md` saliera realmente del notebook.
