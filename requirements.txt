@@ -6,4 +6,3 @@ scipy>=1.11
 statsmodels>=0.14
 pyarrow>=15
 jupyterlab>=4
-nbstripout>=0.7

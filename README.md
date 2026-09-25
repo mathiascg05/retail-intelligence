@@ -41,15 +41,26 @@ El enunciado completo está en `data/raw/Proyecto_01_Retail_Intelligence.pdf`.
 | `BITACORA.md` | cómo usamos la IA (lo pide la rúbrica) |
 | `FEEDBACK_PROFESOR.md` | lo que hablamos con el profesor |
 
-## Cómo correrlo
+## Ver los resultados
+
+Abre cualquier notebook de la carpeta `notebooks/` aquí en GitHub. Se ven los textos, las tablas y los gráficos, sin instalar nada. Los notebooks se suben ya ejecutados.
+
+## Correrlo en tu computadora
+
+La primera vez, crea el entorno e instala las librerías:
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate        # en Windows: .venv\Scripts\activate
 pip install -r requirements.txt
-nbstripout --install --attributes .gitattributes
-jupyter lab
 ```
+
+Después, abre un notebook de dos formas:
+
+- **VS Code:** abre la carpeta del proyecto, abre el notebook, elige el entorno `.venv` arriba a la derecha ("Select Kernel") y pulsa "Run All".
+- **Jupyter:** con el entorno activado, corre `jupyter lab` y abre el notebook en el navegador. Menú "Run" → "Run All Cells".
+
+Antes de subir un notebook, ejecútalo completo (Run All) para que los resultados que se ven en GitHub estén al día.
 
 ## Cómo trabajamos
 
