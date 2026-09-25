@@ -114,14 +114,24 @@ def _limpiar(d):
             "interacciones_crm": crm, "campanas_marketing": cam}
 
 
+def _cache_viejo():
+    """True si falta algún parquet o si carga.py o los CSV cambiaron después de generarlo
+    (por ejemplo, al cambiar de rama)."""
+    archivos = [CLEAN / f"{n}.parquet" for n in TABLAS]
+    if not all(a.exists() for a in archivos):
+        return True
+    generado = min(a.stat().st_mtime for a in archivos)
+    fuentes = [Path(__file__)] + [RAW / f"{n}.csv" for n in TABLAS]
+    return any(f.stat().st_mtime > generado for f in fuentes)
+
+
 def cargar_limpio(nombre=None, recalcular=False):
     """Tablas con las decisiones de DECISIONES.md aplicadas.
 
     La primera vez se calculan y se guardan en data/clean/ como parquet; después
-    se leen de ahí. Usar recalcular=True si se cambia este archivo.
+    se leen de ahí. Si cambia este archivo o algún CSV, se vuelven a calcular solas.
     """
-    faltan = any(not (CLEAN / f"{n}.parquet").exists() for n in TABLAS)
-    if recalcular or faltan:
+    if recalcular or _cache_viejo():
         CLEAN.mkdir(exist_ok=True)
         for n, t in _limpiar(cargar_crudo()).items():
             t.to_parquet(CLEAN / f"{n}.parquet", index=False)
