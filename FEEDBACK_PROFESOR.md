@@ -24,6 +24,11 @@
 - **En riesgo (A3.4):** más de 180 días sin comprar, con una probabilidad de volver por segmento sacada de una foto pasada (en la prueba acierta: 41% previsto, 41% real).
 - **Ingresos perdidos (A3.5):** (1 − probabilidad de volver) × gasto semestral del cliente, más las devoluciones aparte. ¿"Ingresos perdidos" debe incluir las devoluciones?
 
+**Qué le vamos a pedir que confirme (A4):** detalle en `DECISIONES.md`, A4:
+- **Descuento (A4.2):** el descuento se repartió como en un sorteo (no depende del segmento, del tipo, del canal ni del año). ¿Podemos leer su efecto como causal?
+- **Conversión contra compras reales (A4.3):** según la marca, el descuento dobla la conversión; según las transacciones, ni las campañas ni el descuento cambian las compras. ¿La conversión puede venir de compras que no están en `transacciones.csv`? ¿Cuál de las dos lecturas presentamos?
+- **ROI (A4.5):** damos tres versiones (sobre ventas, la del enunciado; sobre margen; e incremental). ¿Cuál presentamos como principal?
+
 **Qué respondió:**
 
 ## Semana 4

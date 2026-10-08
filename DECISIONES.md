@@ -267,6 +267,76 @@ Cifras de `notebooks/03_fugas.ipynb`.
 
 **A confirmar con el profesor:** si "ingresos perdidos" debe incluir las devoluciones (nosotros las damos aparte) y el supuesto de gasto de los clientes que se van.
 
+## A4 – Efectividad del marketing
+
+Cifras de `notebooks/04_marketing.ipynb`.
+
+### Qué pide el enunciado y cómo lo cubrimos
+
+| Qué pide el enunciado | Cómo lo cubrimos | ¿El enunciado dice cómo hacerlo? |
+|---|---|---|
+| Conversión por tipo de campaña, canal y segmento, y las combinaciones con más retorno | Tasas con IC, prueba de si hay combinaciones especiales y dinero confirmado por cada 1.000 envíos (sección 1) | Sí para las tasas; no dice qué es "retorno" |
+| Efecto del descuento sobre la conversión, controlando por segmento | Conversión por nivel de descuento y regresión con segmento y tipo; comprobación con compras reales (sección 2) | Pide controlar por segmento; no dice el método |
+| Segmento que recibe campañas y no convierte, con hipótesis desde el CRM y las devoluciones | Perfil del segmento y prueba de cada hipótesis con regresión (sección 3) | No dice el método |
+| ROI de cada tipo de campaña: monto convertido contra costo implícito del descuento | ROI sobre ventas (el del enunciado), sobre margen e incremental (sección 4) | Da la idea, no la fórmula exacta |
+
+### Decisiones
+
+#### A4.1 Tipo de campaña y canal se analizan juntos
+
+**Qué pasa:** cada tipo de campaña sale siempre por el mismo canal (por ejemplo, `push_reactivacion` siempre por la app).
+
+**Qué hicimos:** damos las dos tablas, como pide el enunciado, pero las combinaciones las buscamos entre tipo y segmento. Para saber si una combinación es "especial" comparamos una regresión con interacción tipo × segmento con otra sin ella.
+
+**Por qué:** con los datos no se puede separar el efecto del tipo del efecto del canal. Resultado: no hay combinaciones especiales (p = 0,79); lo que cambia la conversión es el segmento.
+
+#### A4.2 El efecto del descuento se puede leer como causal
+
+**Qué pasa:** normalmente, comparar la conversión con y sin descuento solo da una correlación: la empresa podría dar más descuento a quien ya iba a comprar.
+
+**Qué hicimos:** comprobamos cómo se repartió el descuento. Los seis niveles (0% a 25%) tienen casi los mismos envíos y no dependen del segmento (p = 0,46), del tipo (p = 0,19), del canal (p = 0,20) ni del año. Medimos el efecto con una regresión que controla segmento y tipo.
+
+**Por qué:** si el descuento se reparte como en un sorteo, la diferencia de conversión entre niveles es efecto del descuento. Es lo más parecido a un experimento que tenemos, y responde a la rúbrica, que penaliza las correlaciones sin investigar la causa. Resultado: +2,7 puntos de conversión por cada 10 de descuento, hasta el 20%.
+
+**A confirmar con el profesor:** que el reparto del descuento se puede tratar como aleatorio.
+
+#### A4.3 Comprobamos la conversión con las compras reales
+
+**Qué pasa:** en A1.2 vimos que solo 179 de las 797 conversiones tienen una compra detrás.
+
+**Qué hicimos:** para cada envío miramos si el cliente compró en los 30 días después y en los 30 días antes (solo envíos con 30 días de datos a cada lado). Repetimos con eso el análisis del descuento y de la caída de la conversión.
+
+**Por qué:** si las campañas funcionan, debería haber más compras después del envío que antes, y más con más descuento. No pasa ninguna de las dos cosas: 20,8% compra después y 21,4% antes; el descuento no cambia la compra real (+0,1 puntos por cada 10; IC 95%: −0,8 a 1,1). Y la conversión marcada cae a la mitad en 2024, mientras las compras tras una campaña se mantienen.
+
+**Consecuencia:** con estos datos no se puede demostrar que las campañas generen ventas. O la marca de conversión registra algo que no está en el archivo de transacciones, o no es fiable. Lo presentamos como limitación, no como prueba de que el marketing no sirve.
+
+**A confirmar con el profesor:** ¿la conversión puede venir de compras que no están en `transacciones.csv`? ¿Cuál de las dos lecturas usamos en la presentación?
+
+#### A4.4 Cómo probamos las hipótesis sobre el segmento que no convierte
+
+**Qué pasa:** el enunciado pide hipótesis basadas en el CRM y en las devoluciones para el segmento que no convierte (Inactivo: 5,5%).
+
+**Qué hicimos:** para cada envío marcamos si el cliente había tenido antes una queja, una queja sin resolver o una devolución, y medimos su efecto en la conversión con una regresión. Primero controlando segmento y descuento; después agregando cuántas compras llevaba el cliente y la fecha.
+
+**Por qué:** la devolución previa parece bajar la conversión (odds ratio 0,71), pero quien devolvió es quien más compra, y la conversión cae con el tiempo. Al controlarlo, el efecto desaparece (odds ratio 0,85; p = 0,15). Ninguna de las tres hipótesis se sostiene. Lo que sí distingue a los Inactivo es que compraron una vez como mucho y que solo convierten con descuentos grandes. Por eso proponemos otra hipótesis: son clientes poco fieles y sensibles al precio.
+
+#### A4.5 Cómo calculamos el ROI
+
+**Qué pasa:** el enunciado pide el ROI con el monto convertido contra el costo implícito del descuento, pero no da la fórmula.
+
+**Qué hicimos:**
+- **Monto convertido:** solo compras confirmadas (A1.2). **Costo del descuento:** descuento ofrecido × monto de esa compra.
+- **ROI sobre ventas** = (monto − costo) / costo. Es el que pide el enunciado: 5,80 en total.
+- **ROI sobre margen** = (margen bruto de esas compras − costo) / costo: 0,59 en total, con IC *bootstrap* por tipo.
+- **ROI incremental:** el margen de las conversiones que no habría sin descuento (frente al 0%), contra el descuento que se regala a todas las conversiones. Valoramos cada conversión con el ticket medio (355) y el margen (23,4%) de las compras confirmadas. Resultado: −31%.
+
+**Por qué:**
+- El ROI sobre ventas sale casi igual a (1 − d) / d, con d = descuento medio. Mide el descuento, no la campaña. Por eso agregamos el de margen.
+- Ninguno de los dos tiene en cuenta que esas compras quizá habrían ocurrido igual. El incremental sí, y es el que sirve para decidir: aunque aceptemos la marca de conversión, solo el descuento de 5% se paga solo.
+- Usamos el descuento ofrecido y no el de la transacción porque es lo que pide el enunciado, y porque no coinciden (correlación de 0,04).
+
+**A confirmar con el profesor:** las tres versiones del ROI y cuál presentar como principal.
+
 ## Columnas que agrega `cargar_limpio()`
 
 | Tabla | Columnas nuevas |

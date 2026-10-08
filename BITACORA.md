@@ -143,3 +143,27 @@ La regla es simple: no aceptamos nada que no podamos explicar nosotros mismos.
 **Lo que no esperábamos:** las quejas sin resolver no cambian las compras posteriores, aunque el enunciado lo sugiere. Lo presentamos tal cual, con el intervalo de confianza.
 
 **Falta:** que Federico Celis, responsable de A3, revise el notebook 03 y pueda explicar la simulación de devoluciones, la diferencia en diferencias y la prueba hacia atrás sin ayuda.
+
+---
+
+## 8 de octubre: A4, efectividad del marketing
+
+**Qué le pedimos:** hacer A4 con el mismo criterio que A2 y A3: seguir el enunciado, comprobar cada hallazgo con una prueba y anotar para el profesor lo que el enunciado no especifica.
+
+**Qué propuso:**
+- Comprobar primero cómo se repartió el descuento. Como no depende del segmento, del tipo, del canal ni del año, el efecto del descuento se puede leer como en un experimento.
+- No quedarse con la marca de conversión: repetir el análisis con las compras reales del cliente en los 30 días antes y después de cada envío.
+- Probar cada hipótesis sobre el segmento que no convierte (quejas, quejas sin resolver, devoluciones) con una regresión, en vez de solo comparar promedios.
+- Dar el ROI de tres formas: el del enunciado (sobre ventas), sobre margen e incremental.
+
+**Qué hicimos:**
+- **Aceptamos** el análisis con compras reales. Es lo que más cambia la historia: el descuento dobla la conversión marcada, pero no cambia las compras.
+- **Aceptamos** presentar ese resultado como limitación de los datos (no sabemos qué registra la marca de conversión), no como prueba de que el marketing no sirve.
+- **Dejamos anotado** para el profesor todo lo que el enunciado no especifica (`DECISIONES.md`, A4.1 a A4.5, y `FEEDBACK_PROFESOR.md`).
+
+**Errores y ajustes al revisar los resultados:**
+- La devolución previa parecía bajar la conversión (odds ratio 0,71, muy significativa). Al tener en cuenta cuántas compras llevaba el cliente y la fecha del envío, el efecto desapareció. Habría sido una correlación presentada como causa.
+- El ROI sobre ventas resultó ser casi una función del descuento medio, (1 − d) / d. Por eso agregamos el ROI sobre margen y el incremental.
+- Tipo de campaña y canal resultaron ser lo mismo (cada tipo sale por un solo canal). Lo dejamos explicado en vez de presentarlos como dos hallazgos separados.
+
+**Falta:** que Fernando Álvarez, responsable de A4, revise el notebook 04 y pueda explicar por qué el descuento se puede tratar como un experimento, la comparación con las compras reales y las tres versiones del ROI sin ayuda.
