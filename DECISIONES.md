@@ -337,6 +337,55 @@ Cifras de `notebooks/04_marketing.ipynb`.
 
 **A confirmar con el profesor:** las tres versiones del ROI y cuál presentar como principal.
 
+## A5 – Recomendaciones
+
+Cifras de `notebooks/05_recomendaciones.ipynb`. El entregable de A5 es un dashboard de Power BI (`docs/dashboard.md`) y un informe escrito.
+
+### Decisiones
+
+#### A5.1 Cómo cuantificamos las recomendaciones
+
+**Qué pasa:** el enunciado pide cada recomendación como "Si hacemos X, esperamos Y% en Z, equivalente a [monto] en ingresos", pero el impacto de una medida que no se ha aplicado no se puede medir con los datos.
+
+**Qué hicimos:** cada recomendación sale de un hallazgo de A2–A4 y depende de un supuesto explícito. Damos un escenario central y un rango, en cifras anuales con base 2024, y siempre ingresos **y** margen.
+
+| | Qué hacemos | Supuesto | Ingresos al año | Margen al año |
+|---|---|---|---|---|
+| R1 | Tope de 4,7% al descuento por venta online (iguala el descuento medio de tienda y app) | Las unidades no cambian (A2.5) | +141.067 (72.232 a 141.067) | +141.067 |
+| R2 | Guía de tallas en Ropa, mejores fichas en Electrónica, control de proveedores | Se recorta el 50% del exceso de devoluciones (25% a 75%) | +185.082 (92.541 a 277.623) | +80.824 |
+| R3 | Campaña de reactivación a Esporádicos en riesgo, con 20% de grupo de control | Se recupera el 10% de lo que está en riesgo (5% a 20%) | +33.954 (16.977 a 67.909) | +8.456 |
+| R4 | Tope de 5% al descuento de las campañas | Lectura de la marca de conversión (A4.5) | −21.737 | +7.197 |
+
+Total central: 237.544 de margen al año, el 11,0% del margen bruto de 2024.
+
+**Por qué:** dar un solo número sin decir de qué depende sería presentar una suposición como un hallazgo. Ordenamos por margen y no por ingresos porque el problema de la empresa es el margen.
+
+**A confirmar con el profesor:** si los escenarios con rango son aceptables como "impacto esperado".
+
+#### A5.2 R1: por qué creemos que el descuento online se puede bajar
+
+**Qué pasa:** si al bajar el descuento online se vendiera menos, la cifra de R1 sería falsa.
+
+**Qué hicimos:** nos apoyamos en A2.5 (el descuento no mueve las unidades, también comparando el mismo producto en distintos meses) y calculamos cuánto podría caer la venta online antes de que la medida deje de compensar: un 16%.
+
+**Por qué:** A2.5 no es un experimento. Por eso recomendamos aplicar R1 primero en una parte de los productos y medir.
+
+#### A5.3 R3: por qué la recomendación de reactivación lleva grupo de control
+
+**Qué pasa:** en A4.3 vimos que no hay pruebas de que las campañas actuales generen compras. Recomendar "más campañas" sin poder medirlas no tendría base.
+
+**Qué hicimos:** la recomendación incluye dejar un 20% de los clientes, elegidos al azar, sin la campaña. Las cifras son escenarios (5%, 10% y 20% de lo que está en riesgo), no una estimación.
+
+**Por qué:** el valor seguro de R3 es que la empresa podrá saber, por primera vez, si una campaña genera ventas.
+
+#### A5.4 R4: por qué una recomendación que baja los ingresos
+
+**Qué pasa:** con la lectura más favorable al descuento (la marca de conversión), un tope de 5% hace que haya menos conversiones: los ingresos registrados bajan 21.737, pero el margen sube 7.197, porque se deja de regalar descuento que no se paga.
+
+**Qué hicimos:** lo presentamos con las dos cifras y avisamos que la conversión registrada bajará (de 10,6% a 6,9% en esos envíos).
+
+**Por qué:** el problema de la empresa es el margen. Con la lectura de las compras reales (A4.3), el beneficio sería mayor, porque el descuento de campaña no cambia las compras.
+
 ## Columnas que agrega `cargar_limpio()`
 
 | Tabla | Columnas nuevas |

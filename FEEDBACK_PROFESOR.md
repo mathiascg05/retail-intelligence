@@ -29,6 +29,10 @@
 - **Conversión contra compras reales (A4.3):** según la marca, el descuento dobla la conversión; según las transacciones, ni las campañas ni el descuento cambian las compras. ¿La conversión puede venir de compras que no están en `transacciones.csv`? ¿Cuál de las dos lecturas presentamos?
 - **ROI (A4.5):** damos tres versiones (sobre ventas, la del enunciado; sobre margen; e incremental). ¿Cuál presentamos como principal?
 
+**Qué le vamos a pedir que confirme (A5):**
+- **Recomendaciones (A5.1):** cada una con su supuesto, un escenario central y un rango, en ingresos y margen. ¿Le parece bien dar rangos como "impacto esperado"?
+- **Informe:** ¿qué extensión y estructura espera? ¿El dashboard de Power BI se entrega como archivo .pbix?
+
 **Qué respondió:**
 
 ## Semana 4

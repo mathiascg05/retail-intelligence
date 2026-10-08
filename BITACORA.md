@@ -167,3 +167,26 @@ La regla es simple: no aceptamos nada que no podamos explicar nosotros mismos.
 - Tipo de campaña y canal resultaron ser lo mismo (cada tipo sale por un solo canal). Lo dejamos explicado en vez de presentarlos como dos hallazgos separados.
 
 **Falta:** que Fernando Álvarez, responsable de A4, revise el notebook 04 y pueda explicar por qué el descuento se puede tratar como un experimento, la comparación con las compras reales y las tres versiones del ROI sin ayuda.
+
+---
+
+## 8 de octubre: A5, recomendaciones y datos para Power BI
+
+**Qué le pedimos:** cuantificar al menos tres recomendaciones en el formato del enunciado y preparar los datos para el dashboard de Power BI. El profesor pide un dashboard de Power BI y un informe escrito, así que no hicimos diapositivas.
+
+**Qué propuso:**
+- Cuatro recomendaciones, cada una apoyada en un hallazgo de A2–A4: bajar el descuento online, reducir el exceso de devoluciones de Ropa y Electrónica, una campaña de reactivación con grupo de control y un tope al descuento de las campañas.
+- Dar cada una con su supuesto, un escenario central y un rango, en ingresos y en margen.
+- Exportar el modelo estrella a CSV y guardar desde cada notebook las tablas de resultados, para que el dashboard muestre las mismas cifras que el informe. Y una guía (`docs/dashboard.md`) con las relaciones, las medidas DAX y las 10 visualizaciones.
+
+**Qué hicimos:**
+- **Aceptamos** las cuatro recomendaciones y ordenarlas por margen.
+- **Aceptamos** guardar los CSV de Power BI en el repositorio, para que quien arme el dashboard no tenga que correr Python.
+- **Dejamos fuera del dashboard** las quejas y el ROI por tipo de campaña (no muestran diferencias) para no pasar de 10 visualizaciones. Van en el informe.
+
+**Errores y ajustes al revisar los resultados:**
+- R4 se presentaba solo como ahorro. Al calcular los ingresos, con menos descuento hay menos conversiones y los ingresos registrados bajan (−21.737) aunque el margen suba (+7.197). Ahora se dan las dos cifras.
+- La etiqueta de R1 redondeaba el tope a 5%; es 4,7%.
+- Al agregar la exportación a los notebooks 02, 03 y 04 los volvimos a ejecutar y comprobamos que todas sus salidas siguen siendo idénticas.
+
+**Falta:** armar el dashboard en Power BI siguiendo `docs/dashboard.md`, escribir el informe y que Leonardo Reyes, responsable de A5, pueda explicar de dónde sale cada cifra de las recomendaciones y de qué supuesto depende.
