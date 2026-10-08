@@ -17,9 +17,12 @@
 - **Declive (A2.3):** un segmento está en declive si su CLV baja de 2023 a 2024 y el intervalo de confianza de la caída no incluye el 0. Usamos el segmento que trae el archivo.
 - **Estacionalidad (A2.4):** además de nombrar picos y valles, comprobamos si se repiten entre años. Resultado: no se repiten. ¿Le parece suficiente decir que no hay estacionalidad?
 
-**Qué le vamos a preguntar (A3):**
-- ¿Desde cuántos días sin comprar consideramos que un cliente se fue? Ojo: el 52% de los que llegan a 180 días vuelve después (ver A1).
-- ¿Cómo demostramos que las quejas sin resolver hacen que los clientes compren menos, y no que simplemente coinciden?
+**Qué le vamos a pedir que confirme (A3):** lo hicimos así por ahora (detalle en `DECISIONES.md`, A3):
+- **Tasas anómalas (A3.1):** prueba binomial con corrección por número de pruebas; cada producto se compara con su categoría. Resultado: solo Ropa y Calzado y Electrónica se salen de lo normal.
+- **Clientes recurrentes (A3.2):** comparamos con una simulación de lo que daría el azar. Resultado: no hay devolvedores habituales.
+- **Quejas (A3.3):** compras 90 días antes y después, sin resolver contra resueltas. Resultado: no hay efecto. ¿Le parece suficiente para decir que las quejas sin resolver no espantan clientes en estos datos?
+- **En riesgo (A3.4):** más de 180 días sin comprar, con una probabilidad de volver por segmento sacada de una foto pasada (en la prueba acierta: 41% previsto, 41% real).
+- **Ingresos perdidos (A3.5):** (1 − probabilidad de volver) × gasto semestral del cliente, más las devoluciones aparte. ¿"Ingresos perdidos" debe incluir las devoluciones?
 
 **Qué respondió:**
 

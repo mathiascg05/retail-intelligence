@@ -14,7 +14,7 @@ El enunciado completo está en `data/raw/Proyecto_01_Retail_Intelligence.pdf`.
 |---|---|---|---|
 | A1 | Calidad y limpieza de los datos | Mathias Carstens | en revisión (PR #2) |
 | A2 | Qué productos, clientes y canales dejan más margen | Mikel Muñoz | en revisión (PR #3) |
-| A3 | Dónde se pierde dinero: devoluciones, clientes que se van, quejas | Federico Celis | pendiente |
+| A3 | Dónde se pierde dinero: devoluciones, clientes que se van, quejas | Federico Celis | en revisión (PR #4) |
 | A4 | Qué tan bien funcionan las campañas de marketing | Fernando Álvarez | pendiente |
 | A5 | Historia final, gráficos y presentación | Leonardo Reyes | pendiente |
 

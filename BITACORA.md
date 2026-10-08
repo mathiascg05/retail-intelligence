@@ -117,3 +117,29 @@ La regla es simple: no aceptamos nada que no podamos explicar nosotros mismos.
 - Una frase mezclaba la tendencia de ventas de Electrónica con la de su margen. La separamos.
 
 **Falta:** que Mikel Muñoz, responsable de A2, revise el notebook 02 y pueda explicar el CLV, el *bootstrap* y la regresión sin ayuda.
+
+---
+
+## 8 de octubre: A3, fugas de ingresos
+
+**Qué le pedimos:** hacer A3 con el mismo criterio que A2: seguir el enunciado, comprobar cada hallazgo con una prueba y dejar anotado para el profesor todo lo que el enunciado no especifica.
+
+**Qué propuso:**
+- Llamar "anómala" a una tasa de devolución solo si sobrevive a la corrección por número de pruebas, y simular cuántas devoluciones por cliente serían normales antes de hablar de clientes "recurrentes".
+- Medir el efecto de las quejas comparando el cambio en compras de las quejas sin resolver con el de las resueltas (antes y después de la queja), no solo el "después".
+- No tratar como perdido a todo cliente con más de 180 días sin comprar, sino estimar su probabilidad de volver con una foto pasada de los datos, y probar esa estimación hacia atrás.
+
+**Qué hicimos:**
+- **Aceptamos** el plan de las cuatro partes y el umbral de 180 días de A1 para "en riesgo".
+- **Aceptamos** dar las fugas por separado (clientes, devoluciones, quejas) y no solo un total.
+- **Dejamos anotado** para el profesor todo lo que el enunciado no especifica (`DECISIONES.md`, A3.1 a A3.5, y `FEEDBACK_PROFESOR.md`).
+
+**Errores y ajustes al revisar los resultados:**
+- Comparando cada producto con la tasa global salían 51 productos "anómalos". Al compararlos con su propia categoría no quedó ninguno: eran el reflejo de Ropa y Electrónica. Cambiamos la referencia.
+- La primera fórmula de ingresos perdidos (probabilidad de no volver × gasto semestral, con un modelo logístico) dio problemas: el modelo no convergía con el segmento "Inactivo", porque ninguno vuelve. La cambiamos por proporciones simples por segmento y tramo.
+- La versión que multiplicaba el gasto por cuánto gastan los que vuelven fallaba un 19% en la prueba hacia atrás, y un 12% después de corregirla. Por eso la cifra principal usa el gasto que el cliente venía teniendo, y esa versión queda solo como tope del rango.
+- Al cruzar el resumen con las salidas del notebook, una cifra del intervalo estaba mal copiada (153.684 en vez de 153.683) y otra mal redondeada. Las corregimos y ahora el notebook imprime todas las cifras del resumen.
+
+**Lo que no esperábamos:** las quejas sin resolver no cambian las compras posteriores, aunque el enunciado lo sugiere. Lo presentamos tal cual, con el intervalo de confianza.
+
+**Falta:** que Federico Celis, responsable de A3, revise el notebook 03 y pueda explicar la simulación de devoluciones, la diferencia en diferencias y la prueba hacia atrás sin ayuda.

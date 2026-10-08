@@ -186,6 +186,87 @@ Cifras de `notebooks/02_rentabilidad.ipynb`.
 
 **Límite:** no tenemos un experimento (un grupo con descuento y otro sin él elegidos al azar), así que no podemos descartar todas las explicaciones. Lo decimos así en la presentación.
 
+## A3 – Fugas de ingresos
+
+Cifras de `notebooks/03_fugas.ipynb`.
+
+### Qué pide el enunciado y cómo lo cubrimos
+
+| Qué pide el enunciado | Cómo lo cubrimos | ¿El enunciado dice cómo hacerlo? |
+|---|---|---|
+| Productos, categorías o segmentos con tasas de devolución anómalas, y clientes recurrentes en devoluciones | Tasa por categoría, subcategoría, producto, segmento, canal y medio de pago, con pruebas; simulación de cuántas devoluciones por cliente serían normales (sección 1) | No dice qué es "anómala" ni "recurrente" |
+| ¿Los clientes con quejas no resueltas disminuyeron su frecuencia de compra? | Compras 90 días antes y después de cada queja, comparando quejas sin resolver con quejas resueltas (sección 2) | No dice el método |
+| Una métrica de inactividad y el segmento de mayor valor en riesgo | Días sin comprar; probabilidad de volver estimada con la historia; valor en riesgo por segmento (sección 3) | Pide definir la métrica, no dice cuál |
+| Impacto económico de las fugas en ingresos perdidos a 6 meses | Clientes que no vuelven + devoluciones + quejas, cada uno por separado (sección 4) | No dice el método |
+
+### Decisiones
+
+#### A3.1 Cuándo una tasa de devolución es "anómala"
+
+**Qué pasa:** con 318 productos, algunos van a tener tasas altas o bajas por pura casualidad. Si probamos cada uno al 5%, unos 16 saldrían "anómalos" aunque no lo sean.
+
+**Qué hicimos:** una tasa es anómala si una prueba binomial dice que se aleja de la tasa de referencia y sigue siéndolo después de corregir por el número de pruebas (Benjamini-Hochberg). Mostramos también el intervalo de confianza del 95% (Wilson). Para productos y subcategorías la referencia es la tasa **de su propia categoría**, no la global.
+
+**Por qué:** comparando con la global salen 51 productos anómalos, pero son solo el reflejo de su categoría (32 son de ropa). Comparando con su categoría no queda ninguno. Así el hallazgo es claro: el problema está en Ropa y Calzado (21,8%) y en Electrónica (17,7%) completas, no en productos sueltos. Todos los productos tienen al menos 115 ventas, así que no hay grupos demasiado pequeños para probarlos.
+
+**A confirmar con el profesor:** la corrección por número de pruebas y comparar los productos con su categoría.
+
+#### A3.2 Qué es un cliente "recurrente en devoluciones"
+
+**Qué pasa:** un cliente que compra mucho tiene más devoluciones aunque se comporte como cualquier otro. Contar devoluciones no basta.
+
+**Qué hicimos:** simulamos 1.000 veces las devoluciones de cada cliente con sus compras reales y la tasa de devolución de la categoría de cada compra. Comparamos cuántos clientes tienen 0, 1, 2, 3… devoluciones en los datos y en las simulaciones.
+
+**Por qué:** si hubiera "devolvedores" habituales, habría más clientes con muchas devoluciones de lo que da el azar. No los hay: 793 clientes tienen 3 o más, y por azar se esperarían 785. Todas las cifras caen dentro del rango simulado. Solo 5 clientes repiten fraude.
+
+**A confirmar con el profesor:** el método. Es la forma de no confundir "compra mucho" con "devuelve mucho".
+
+#### A3.3 Cómo medimos el efecto de las quejas sin resolver
+
+**Qué pasa:** el enunciado pregunta si los clientes con quejas no resueltas compran menos después. Mirar solo el "después" no sirve: tras cualquier contacto podría haber una caída normal.
+
+**Qué hicimos:**
+- Para cada queja, las compras del cliente en los 90 días antes y en los 90 días después. Solo quejas con 90 días de datos a cada lado (1.517).
+- Comparamos el cambio de las quejas sin resolver con el cambio de las resueltas (diferencia en diferencias), con intervalo de confianza *bootstrap* por cliente y con una regresión que deja fijo el segmento.
+- Como comprobación, si el cliente vuelve a comprar en 180 días, y si influye el tiempo de respuesta.
+
+**Por qué:** es la forma más directa de responder la pregunta que se puede hacer con estos datos, y descarta la caída "normal" tras cualquier contacto. Resultado: no hay efecto. Tras una queja sin resolver se pasa de 0,98 a 0,92 compras; tras una resuelta, de 0,97 a 0,95. La diferencia (−0,03) tiene un IC 95% de −0,21 a +0,13. A 180 días vuelve el 67% contra el 71% (p = 0,35).
+
+**Límite:** no es un experimento; la resolución no se asigna al azar. Pero como no aparece ni siquiera una asociación, no hay nada que explicar con otras causas.
+
+**A confirmar con el profesor:** la ventana de 90 días y la comparación con las quejas resueltas.
+
+#### A3.4 Cuándo un cliente está en riesgo de fuga
+
+**Qué pasa:** el enunciado pide definir una medida de inactividad. En A1.4 vimos que pasar de 180 días sin comprar es poco normal, pero que el 52% de los que llegan a 180 días vuelve. Llamar "perdido" a todo el que pasa de 180 días exageraría la fuga.
+
+**Qué hicimos:**
+- **Medida:** días sin comprar al cierre de los datos (31-dic-2024). **En riesgo:** más de 180 días, el mismo umbral de A1.4. Son 2.647 clientes, el 35% de los que alguna vez compraron.
+- **Probabilidad de volver:** nos ponemos en una fecha pasada con 6 meses de datos por delante (30-jun-2024) y contamos qué parte de los clientes volvió en esos 6 meses, por segmento y por tramo de días sin comprar (91–180, 181–270, más de 270). Esa proporción es la probabilidad de volver de cada cliente en riesgo de hoy.
+- **Prueba:** con la foto del 31-dic-2023 predijimos el primer semestre de 2024. Previmos que volvería el 41% de los clientes en riesgo, y volvió el 41%.
+
+**Por qué:** la probabilidad depende sobre todo del segmento. Los Frecuentes y Premium en riesgo vuelven casi siempre (90% a 100%), los Esporádicos la mitad, los Nuevos el 18% y los "Inactivo" del archivo nunca (en el archivo, "Inactivo" son clientes con una compra como mucho). Usar una sola probabilidad para todos mezclaría grupos muy distintos.
+
+**Nota sobre el 52% de A1:** el 52% cuenta cada vez que un cliente cumple 180 días sin comprar. Aquí miramos una foto en una fecha, y el grupo de "más de 180 días" incluye a clientes que llevan mucho más tiempo, que vuelven menos. Por eso en la foto vuelve el 41-45%.
+
+**A confirmar con el profesor:** el umbral de 180 días y estimar la probabilidad de volver con una foto pasada.
+
+#### A3.5 Cómo calculamos los ingresos perdidos a 6 meses
+
+**Qué pasa:** el enunciado pide el impacto en "ingresos perdidos proyectados a 6 meses", pero no dice cómo proyectarlos.
+
+**Qué hicimos:** cada fuga por separado:
+- **Clientes en riesgo:** (1 − probabilidad de volver) × lo que el cliente venía gastando por semestre desde su primera compra. Total: 365.781 (8,4% de las ventas de un semestre). Rango: desde el IC 2,5% *bootstrap* de esa cifra hasta el IC 97,5% de una versión alta, en la que el cliente gastaría como los que sí vuelven (341.539 a 844.619).
+- **Devoluciones:** la tasa y las ventas del último semestre (jul–dic 2024). 645.677 en ingresos reembolsados y 288.132 de margen perdido (regla de A2.1). Aparte damos el **exceso** de Ropa y Electrónica sobre la tasa de las otras categorías: 169.423 en ingresos, que es la parte que se podría recuperar.
+- **Quejas sin resolver:** 0, porque en A3.3 no hay efecto.
+
+**Por qué:**
+- La cifra principal de clientes es prudente a propósito. En la prueba hacia atrás, los clientes que volvieron gastaron 1,41 veces lo que venían gastando, pero esa estimación fallaba un 12% en el gasto. Preferimos no inflar la cifra principal con ella y la dejamos como tope.
+- No hay doble conteo: la fuga de clientes son ventas que no ocurren; las devoluciones son ventas que ocurren y se reembolsan.
+- Total: 1.011.458 en 6 meses, el 23,2% de las ventas de un semestre.
+
+**A confirmar con el profesor:** si "ingresos perdidos" debe incluir las devoluciones (nosotros las damos aparte) y el supuesto de gasto de los clientes que se van.
+
 ## Columnas que agrega `cargar_limpio()`
 
 | Tabla | Columnas nuevas |
