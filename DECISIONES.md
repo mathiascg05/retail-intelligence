@@ -153,7 +153,9 @@ Cifras de `notebooks/02_rentabilidad.ipynb`.
 
 **Por qué:** sin el margen neto no se ve el efecto de las devoluciones, que se llevan el 27,5% del margen bruto. Y separar por motivo es más realista que suponer que todo se revende (subestima la pérdida) o que todo se pierde (la exagera).
 
-**A confirmar con el profesor:** si le parece bien este supuesto sobre qué se revende.
+**Cuánto pesa el supuesto:** explica el 66% de lo que se llevan las devoluciones. Si el proveedor repone los defectuosos (solo se pierde el margen de la venta), las devoluciones se llevan el 13,5% del margen bruto en vez del 27,5%. Damos las dos cifras.
+
+**A confirmar con el profesor:** si le parece bien este supuesto sobre qué se revende, y si el proveedor asume los defectuosos.
 
 #### A2.2 Cómo calculamos el CLV
 
@@ -166,10 +168,12 @@ Cifras de `notebooks/02_rentabilidad.ipynb`.
 
 **Por qué:**
 - Con un horizonte fijo, el CLV no se vuelve infinito en los segmentos que casi nunca se pierden (Premium retiene al 99%).
-- No usamos tasa de descuento porque habría que justificar cuál, y en Venezuela, con inflación, es muy discutible.
+- En la cifra principal no usamos tasa de descuento: en Venezuela, con inflación alta, no hay una tasa de referencia fácil de justificar. Pero la inflación pide una tasa alta, no cero. Por eso damos también el CLV con 10% y 20% anual: los valores bajan (Premium pasa de 1.828 a 1.478 con 20%), pero el orden no cambia.
 - Usamos semestres y no años porque con 2 años de datos solo hay un paso de un año al siguiente, y así no se puede ver si el CLV cae. Con semestres hay tres. La versión anual (con el paso 2023 → 2024) da el mismo orden de segmentos.
 
-**A confirmar con el profesor:** la fórmula, el horizonte de 3 años y no usar tasa de descuento.
+**El segmento exagera las distancias.** El segmento del archivo se definió contando las compras de los 24 meses (A1.4), así que su retención está en parte decidida de antemano (Inactivo 0%, Premium 99%). Por eso calculamos también el CLV con grupos que se conocen en el semestre base: cuántas veces compró el cliente en ese semestre. El orden es el mismo. Quien compra 4–6 veces deja unas 13 veces más que quien compra una vez (1.535 contra 122 u. m.). En el dashboard usamos esta versión, porque no depende de cómo se definió el segmento.
+
+**A confirmar con el profesor:** la fórmula, el horizonte de 3 años y la tasa de descuento.
 
 #### A2.3 Cuándo decimos que un segmento está "en declive"
 
@@ -177,7 +181,9 @@ Cifras de `notebooks/02_rentabilidad.ipynb`.
 
 **Qué hicimos:** comparamos el CLV de 2023 (S1 → S2) con el de 2024 (S1 → S2). Solo hablamos de declive si el CLV baja y la caída se mantiene al remuestrear los clientes 1.000 veces (*bootstrap*), es decir, si el intervalo de confianza del 95% de la caída no incluye el 0.
 
-**Por qué:** la rúbrica penaliza sacar conclusiones de diferencias que pueden ser casualidad. Con este criterio, ningún segmento está en declive: todos los cambios caben dentro de lo que podría ser azar.
+**Por qué:** la rúbrica penaliza sacar conclusiones de diferencias que pueden ser casualidad. Con este criterio, ningún segmento está en declive: todos los cambios caben dentro de lo que podría ser azar. Con los grupos de compras del semestre (A2.2) tampoco.
+
+**Cómo lo decimos:** "no hay declive detectable", no "no hay declive". El intervalo deja pasar caídas de hasta 8–10% en Premium y Frecuente y de 25% en Esporádico. En Nuevo e Inactivo, los grupos son pequeños y solo se detectarían caídas muy grandes.
 
 **A confirmar con el profesor:** el criterio de declive y que se use el segmento que trae el archivo (el segmento calculado en A1 queda solo como contraste).
 
@@ -190,7 +196,7 @@ Cifras de `notebooks/02_rentabilidad.ipynb`.
 - si algún mes vende distinto a los demás (prueba de Kruskal-Wallis),
 - si el intervalo de confianza de la tendencia incluye el 0.
 
-**Por qué:** decir "marzo es el pico de Ropa" sin comprobar que se repite sería presentar ruido como un hallazgo. Resultado: los picos y valles no se repiten entre años y no hay estacionalidad.
+**Por qué:** decir "marzo es el pico de Ropa" sin comprobar que se repite sería presentar ruido como un hallazgo. Resultado: los picos y valles no se repiten entre años. Con solo dos años es una prueba débil: basta para decir que no hay una estacionalidad marcada, no para descartar una pequeña.
 
 #### A2.5 Cómo medimos el efecto de los descuentos
 
@@ -199,11 +205,15 @@ Cifras de `notebooks/02_rentabilidad.ipynb`.
 **Qué hicimos:**
 - Calculamos cuánto volumen extra haría falta para ganar lo mismo (d / (g − d), donde g es el margen a precio de lista y d el descuento) y lo comparamos con el volumen extra real.
 - Hicimos una regresión de las unidades por compra según el descuento, dejando fijos la categoría, el canal y el segmento.
-- Miramos si el mismo producto vende más en los meses con más descuento, y si los clientes con más descuento compran más veces.
+- Miramos si los clientes con más descuento compran más veces.
+- **Recompra:** si una compra con más descuento hace que el cliente vuelva a comprar en los 90 días siguientes, dentro de cada combinación de canal y segmento. Es la pregunta que importa para bajar un descuento: si el cliente se va.
+- Comprobamos si hay promociones (un producto rebajado un mes entero) comparando cuánto varía el descuento de cada producto entre meses con 200 repartos al azar.
 
-**Por qué:** la rúbrica penaliza presentar correlaciones sin investigar la causa. Comparar el mismo producto en distintos meses y controlar categoría, canal y segmento descarta las explicaciones más obvias. Además, el margen de lista es igual en todas las bandas de descuento (34%), así que los descuentos no se reparten según el tipo de producto. Resultado: los descuentos no generan volumen.
+**Por qué:** la rúbrica penaliza presentar correlaciones sin investigar la causa. Comparar el mismo producto en distintos meses y controlar categoría, canal y segmento descarta las explicaciones más obvias. Además, el margen de lista es igual en todas las bandas de descuento (34%), así que los descuentos no se reparten según el tipo de producto. Resultado: los descuentos no generan volumen, y una compra con más descuento no hace volver antes al cliente (+0,2 puntos de recompra por cada 10 de descuento; IC 95%: −0,4 a +0,9).
 
-**Límite:** no tenemos un experimento (un grupo con descuento y otro sin él elegidos al azar), así que no podemos descartar todas las explicaciones. Lo decimos así en la presentación.
+**Lo que descartamos:** no hay promociones; el descuento cambia venta a venta como si fuera al azar (p = 0,3). Por eso la comparación "mismo producto en meses con más descuento" no aporta: no hay meses con más descuento. La quitamos como evidencia. La correlación débil entre descuento y número de compras en Esporádico y Nuevo (0,05 a 0,08) no se explica por el canal, pero tampoco aparece compra a compra. No la usamos.
+
+**Límite:** no tenemos un experimento (un grupo con descuento y otro sin él elegidos al azar), así que no podemos descartar todas las explicaciones. Y solo vemos las ventas que ocurrieron: si un descuento menor hiciera que alguien no comprara nunca, no lo veríamos. Por eso la recomendación de A5 sobre el descuento se propone como piloto.
 
 ## Columnas que agrega `cargar_limpio()`
 
