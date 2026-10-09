@@ -64,6 +64,8 @@ En las métricas de calidad, la consistencia de ventas baja a 50% solo por esta 
 
 Esto hay que mencionarlo como limitación en la presentación.
 
+**Lo que vimos después (A4.3):** esas 179 compras son sobre todo **coincidencias**. El 22,5% de las conversiones tiene una compra en 30 días, y el 20–21% de cualquier envío también la tiene, con o sin conversión marcada. Desde A4 las llamamos "compras coincidentes".
+
 #### A1.3 Ventas por debajo del costo
 
 **Qué pasa:** en 711 ventas, el cliente pagó menos de lo que le costó el producto a la empresa.
@@ -347,6 +349,8 @@ Cifras de `notebooks/04_marketing.ipynb`.
 
 **Por qué:** si las campañas funcionan, debería haber más compras después del envío que antes, y más con más descuento. No pasa ninguna de las dos cosas: 20,8% compra después y 21,4% antes; el descuento no cambia la compra real (+0,1 puntos por cada 10; IC 95%: −0,8 a 1,1). Y la conversión marcada cae a la mitad en 2024, mientras las compras tras una campaña se mantienen.
 
+**Las 179 compras "confirmadas" de A1.2 son coincidencias:** el 22,5% de las conversiones tiene una compra en 30 días, casi lo mismo que cualquier envío (20–21%). Además, los clientes "Inactivo" que nunca compraron nada aparecen "convertidos" igual que los que sí compraron (5,6% contra 5,5%). Desde aquí las llamamos "compras coincidentes".
+
 **Consecuencia:** con estos datos no se puede demostrar que las campañas generen ventas. O la marca de conversión registra algo que no está en el archivo de transacciones, o no es fiable. Lo presentamos como limitación, no como prueba de que el marketing no sirve.
 
 **A confirmar con el profesor:** ¿la conversión puede venir de compras que no están en `transacciones.csv`? ¿Cuál de las dos lecturas usamos en la presentación?
@@ -357,14 +361,16 @@ Cifras de `notebooks/04_marketing.ipynb`.
 
 **Qué hicimos:** para cada envío marcamos si el cliente había tenido antes una queja, una queja sin resolver o una devolución, y medimos su efecto en la conversión con una regresión. Primero controlando segmento y descuento; después agregando cuántas compras llevaba el cliente y la fecha.
 
-**Por qué:** la devolución previa parece bajar la conversión (odds ratio 0,71), pero quien devolvió es quien más compra, y la conversión cae con el tiempo. Al controlarlo, el efecto desaparece (odds ratio 0,85; p = 0,15). Ninguna de las tres hipótesis se sostiene. Lo que sí distingue a los Inactivo es que compraron una vez como mucho y que solo convierten con descuentos grandes. Por eso proponemos otra hipótesis: son clientes poco fieles y sensibles al precio.
+**Por qué:** la devolución previa parece bajar la conversión (odds ratio 0,71), pero quien devolvió es quien más compra, y la conversión cae con el tiempo. Al controlarlo, el efecto desaparece (odds ratio 0,85; p = 0,15). Ninguna de las tres hipótesis se sostiene. Lo que sí distingue a los Inactivo es que compraron una vez como mucho. Proponemos una hipótesis débil: son clientes poco fieles. No decimos "sensibles al precio", aunque la marca solo se active con descuentos grandes. Los que nunca compraron nada también aparecen "convertidos", así que la marca no mide compras y no permite sacar conclusiones sobre cómo reaccionan al precio.
+
+**Sobre el segmento:** que Premium convierta 2,5 veces más que Inactivo describe a quién le funciona la marca. No dice que el segmento sea la causa, porque el segmento es una franja de compras (A1.4).
 
 #### A4.5 Cómo calculamos el ROI
 
 **Qué pasa:** el enunciado pide el ROI con el monto convertido contra el costo implícito del descuento, pero no da la fórmula.
 
 **Qué hicimos:**
-- **Monto convertido:** solo compras confirmadas (A1.2). **Costo del descuento:** descuento ofrecido × monto de esa compra.
+- **Monto convertido:** solo compras coincidentes (A1.2 y A4.3). **Costo del descuento:** descuento ofrecido × monto de esa compra.
 - **ROI sobre ventas** = (monto − costo) / costo. Es el que pide el enunciado: 5,80 en total.
 - **ROI sobre margen** = (margen bruto de esas compras − costo) / costo: 0,59 en total, con IC *bootstrap* por tipo.
 - **ROI incremental:** el margen de las conversiones que no habría sin descuento (frente al 0%), contra el descuento que se regala a todas las conversiones. Valoramos cada conversión con el ticket medio (355) y el margen (23,4%) de las compras confirmadas. Resultado: −31%.
@@ -373,6 +379,8 @@ Cifras de `notebooks/04_marketing.ipynb`.
 - El ROI sobre ventas sale casi igual a (1 − d) / d, con d = descuento medio. Mide el descuento, no la campaña. Por eso agregamos el de margen.
 - Ninguno de los dos tiene en cuenta que esas compras quizá habrían ocurrido igual. El incremental sí, y es el que sirve para decidir: aunque aceptemos la marca de conversión, solo el descuento de 5% se paga solo.
 - Usamos el descuento ofrecido y no el de la transacción porque es lo que pide el enunciado, y porque no coinciden (correlación de 0,04).
+
+**Cómo lo presentamos:** el ROI sobre ventas **total** (5,80) es la cifra que pide el enunciado, presentada como cálculo formal: se apoya en compras coincidentes. La tabla **por tipo** va como anexo, porque hay tipos con solo 13 compras y los intervalos se solapan. Para decidir usamos el ROI incremental.
 
 **A confirmar con el profesor:** las tres versiones del ROI y cuál presentar como principal.
 

@@ -26,7 +26,7 @@
 
 **Qué le vamos a pedir que confirme (A4):** detalle en `DECISIONES.md`, A4:
 - **Descuento (A4.2):** el descuento se repartió como en un sorteo (no depende del segmento, del tipo, del canal ni del año). ¿Podemos leer su efecto como causal?
-- **Conversión contra compras reales (A4.3):** según la marca, el descuento dobla la conversión; según las transacciones, ni las campañas ni el descuento cambian las compras. ¿La conversión puede venir de compras que no están en `transacciones.csv`? ¿Cuál de las dos lecturas presentamos?
+- **Conversión contra compras reales (A4.3):** según la marca, el descuento dobla la conversión; según las transacciones, ni las campañas ni el descuento cambian las compras. ¿La conversión puede venir de compras que no están en `transacciones.csv`? ¿Cuál de las dos lecturas presentamos? (Las 179 compras "confirmadas" resultan ser coincidencias: cualquier envío tiene una compra en 30 días el 21% de las veces.)
 - **ROI (A4.5):** damos tres versiones (sobre ventas, la del enunciado; sobre margen; e incremental). ¿Cuál presentamos como principal?
 
 **Qué respondió:**
