@@ -18,7 +18,7 @@ La regla es simple: no aceptamos nada que no podamos explicar nosotros mismos.
 **Qué hicimos:**
 - **Aceptamos** la estructura del repositorio y que todos carguen los datos desde `src/carga.py`. Así las cifras no dependen de quién corrió el código.
 - **Aceptamos** el calendario de 4 semanas. Lo armamos para la semana 6, que es la fecha que dio el profesor, no para la semana 15 del PDF.
-- **Decidimos** no usar Power BI como entrega principal. Los gráficos salen de los notebooks, así se pueden regenerar si cambia algún dato.
+- **Decidimos** no usar Power BI como entrega principal. Los gráficos salen de los notebooks, así se pueden regenerar si cambia algún dato. *(Nota del 9 de octubre: esto cambió. El 8 de octubre el profesor pidió un dashboard de Power BI y un informe escrito. Ver las entradas del 8 y el 9 de octubre.)*
 - **Falta validar:** la revisión dice que no hay errores en montos ni márgenes. Alguien del equipo tiene que recalcular a mano unas cuantas filas para confirmarlo. Anotar aquí quién lo hizo y qué encontró.
 
 ---
@@ -190,3 +190,73 @@ La regla es simple: no aceptamos nada que no podamos explicar nosotros mismos.
 - Al agregar la exportación a los notebooks 02, 03 y 04 los volvimos a ejecutar y comprobamos que todas sus salidas siguen siendo idénticas.
 
 **Falta:** armar el dashboard en Power BI siguiendo `docs/dashboard.md`, escribir el informe y que Leonardo Reyes, responsable de A5, pueda explicar de dónde sale cada cifra de las recomendaciones y de qué supuesto depende.
+
+---
+
+## 9 de octubre: revisión externa de todo el trabajo y correcciones
+
+**Qué le pedimos:** antes de escribir el informe, pedimos a otra sesión de Claude (en claude.ai) una revisión crítica de A1–A5. Le dimos el PDF del enunciado, un resumen de todo lo hecho y acceso al repositorio. Este es el prompt, tal cual:
+
+> Te adjunto dos archivos de un proyecto universitario de análisis de datos:
+> 1. Proyecto_01_Retail_Intelligence.pdf: el enunciado del profesor, con la rúbrica.
+> 2. REVISION_retail_intelligence.md: el resumen de todo lo que hizo mi equipo (fases A1 a A5), con decisiones, cifras y recomendaciones.
+> (Si también ves el repositorio, el trabajo está en la rama a5-storytelling. Úsalo para comprobar que el resumen dice la verdad.)
+>
+> Antes de escribir el informe final, necesito una revisión crítica, no una confirmación. Actúa como el profesor más exigente posible, buscando por qué este trabajo no merece la nota máxima según la rúbrica.
+>
+> Revisa, en este orden:
+> 1. Cobertura: compara punto por punto lo que pide el enunciado (A1–A5 y los 5 criterios de la rúbrica) con lo que hicimos. Señala lo que falta o está a medias.
+> 2. Solidez: ¿qué conclusión no se sostiene con la evidencia descrita? ¿Dónde presentamos correlación como causalidad?
+> 3. Coherencia: ¿hay contradicciones entre fases o cifras que no cuadran entre sí?
+> 4. Decisiones: de las marcadas "A confirmar", ¿cuál cambiarías y por qué?
+> 5. Relato: ¿funciona como historia (situación actual → hallazgos → recomendaciones) para una gerencia que no sabe estadística?
+> 6. Los 11 puntos débiles de la sección 4 del resumen: para cada uno, dime si es grave, menor o no es problema, y qué harías.
+> 7. Defensa oral: las 10 preguntas más difíciles que haría el profesor, y cuáles nos costaría responder.
+>
+> Reglas:
+> - Ordena los problemas por impacto en la nota, del más grave al menos grave.
+> - Si algo está bien, dilo en una línea y sigue.
+> - No puedes recalcular las cifras: dalas por buenas, pero marca cualquiera que te parezca inverosímil o incoherente con otra.
+> - Sé concreto: en vez de "falta profundidad", di qué análisis falta y cómo se haría.
+> - Responde en español.
+
+**Qué encontró (lo más grave):**
+1. **El segmento del archivo es circular.** Es una franja del número de compras de los 24 meses (Inactivo 0–1, Premium 4–34). Lo usábamos para predecir la vuelta de los clientes y el CLV, así que "los Inactivo nunca vuelven" era una tautología.
+2. **Las 179 conversiones "confirmadas" son coincidencias:** el 22,5% de las conversiones tiene una compra en 30 días, casi igual que cualquier envío.
+3. **El margen no cae** (24,7% → 24,9%) y no lo decíamos. El relato no explicaba "por qué".
+4. Sumábamos todos los reembolsos como "ingresos perdidos", lo que contradecía A2.1.
+5. R1 era casi todo el beneficio y se apoyaba en una prueba débil. R2 suponía una causa en Electrónica que los datos no muestran. R3 anualizaba mal.
+6. Faltaban: atípicos en todos los campos, las 158 devoluciones del 31-dic y decir "no detectable" en vez de "no hay efecto".
+
+**Cómo lo comprobamos:** antes de cambiar nada, recalculamos cada afirmación marcada como comprobada sobre nuestros datos:
+- los rangos de compras por segmento;
+- el margen por año;
+- las 158 devoluciones del 31-dic;
+- la tasa de las coincidencias (22,5% contra 20,3%);
+- la permutación del descuento;
+- la recompra a 90 días.
+
+Todas se confirmaron.
+
+**Qué hicimos:**
+- **Aceptamos** casi todo. Los cambios están en `DECISIONES.md` (A1.1, A1.4, A1.8, A2.1–A2.5, A3.3–A3.5, A4.3–A4.5 y A5.1–A5.5).
+- **Ajustamos** la estimación de la vuelta de los clientes. La revisión proponía estimarla con datos conocidos en la fecha de corte. Lo hicimos, pero esa versión predice peor en la prueba hacia atrás: 49% previsto contra 41% real. La causa es que el archivo tiene clientes fijos y los de una sola compra son cada vez más los que no vuelven. No lo escondimos: damos la versión tal cual y una calibrada con ese error. También probamos una regresión logística con el ritmo de compra y la antigüedad, y no mejoró. La descartamos por ser más difícil de explicar sin ganar nada.
+- **Ajustamos** la lectura de las devoluciones. La revisión decía que por fecha de devolución el último trimestre sube a 15,8%. Comprobamos que esa subida se debe solo a las 158 devoluciones fechadas el 31-dic (sin ellas, 13,3%). Así que "no hubo subida" se mantiene, midiendo por fecha de compra.
+- **Ajustamos** la fecha de registro. La revisión decía que el registro es casi uniforme. Hay un pico en el último trimestre de 2024 (1.538 altas), pero la conclusión es la misma: no es un alta en un sistema nuevo y no la usamos.
+- **Ajustamos** la recomendación para Electrónica. En vez de crear una recomendación aparte, sumamos a R1 que ninguna venta quede bajo costo (+5.093 al año). Casi la mitad del beneficio de R1 viene de Electrónica.
+- **Rechazamos** cambiar el ticket con el que R4 valora las conversiones. La revisión decía que usa el ticket de las 179 coincidencias, pero ese ticket (355) es casi el de cualquier compra (344), así que el resultado no cambia.
+
+**Cómo cambiaron las cifras principales:**
+
+| Cifra | Antes | Ahora |
+|---|---|---|
+| Fugas a 6 meses | 1.011.458 (todo sumado) | 372.680 evitables (350.773 a 446.562); reembolsos aparte |
+| Segmento de mayor valor en riesgo | Esporádico, 169.772 | Esporádico, 148.811 (solo clientes recurrentes) |
+| Recomendaciones (margen central) | 237.544 al año, 11% | 163.329, 7,6% (R1 es el 89%) |
+| CLV en el dashboard | Premium 13 veces Esporádico (segmento circular) | Quien compra 4–6 veces por semestre, 13 veces quien compra una (grupos conocidos de antemano) |
+
+**Falta, y lo tiene que hacer el equipo (no la IA):**
+- Revisar estos cambios en los PR de cada fase.
+- Cerrar los "Falta validar" del 22 de septiembre: recalcular a mano unas filas de montos y márgenes y anotar quién lo hizo.
+- Que cada responsable pueda explicar sin ayuda los métodos de su fase. Para eso está `docs/metodos.md`.
+

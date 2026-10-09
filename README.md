@@ -37,7 +37,8 @@ El enunciado completo está en `data/raw/Proyecto_01_Retail_Intelligence.pdf`.
 | `notebooks/` | un notebook por fase |
 | `docs/modelo.md` | cómo se relacionan las tablas |
 | `docs/dashboard.md` | cómo armar el dashboard de Power BI |
-| `data/powerbi/` | datos para Power BI (modelo estrella y resultados de los notebooks) |
+| `docs/metodos.md` | cada método explicado, para preparar la defensa |
+| `data/powerbi/` | datos para Power BI (tablas del modelo y resultados de los notebooks) |
 | `figures/` | gráficos para la presentación |
 | `DECISIONES.md` | qué hicimos con cada problema de los datos y por qué |
 | `BITACORA.md` | cómo usamos la IA (lo pide la rúbrica) |

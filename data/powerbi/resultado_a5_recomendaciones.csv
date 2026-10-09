@@ -1,5 +1,5 @@
-﻿id,qué hacemos,métrica,cambio en la métrica,ingresos al año (central),desde,hasta,margen al año (central)
-R1,"Alinear el descuento online con el de tienda y app (tope de 4,7% por venta)",margen bruto online,0.1904200567399081,141067.46058,72231.5255,141067.46058,141067.46058
-R2,"Guía de tallas en Ropa, mejores fichas en Electrónica y control de proveedores",monto devuelto,-0.14339418708887822,185082.12228606892,92541.06114303446,277623.18342910334,80823.74607480373
-R3,"Campaña de reactivación a Esporádicos en riesgo, con 20% de grupo de control",ventas del segmento Esporádico,0.025171877737758818,33954.4,16977.2,67908.8,8455.827604071224
-R4,Tope de 5% al descuento de las campañas,descuento regalado en campañas,-0.7254204770001378,-21736.556639876144,-21736.556639876144,-21736.556639876144,7196.889977389377
+﻿id,qué hacemos,métrica,cambio en la métrica,ingresos (central),desde,hasta,margen (central),periodo
+R1,"Piloto: tope de 4,7% al descuento online y ninguna venta bajo costo",margen bruto total,0.06758048505888743,146160.57058,77324.6355,146160.57058,146160.57058,al año
+R4,Tope de 5% al descuento de las campañas,descuento regalado en campañas,-0.7254204770001378,-21736.556639876144,-21736.556639876144,-21736.556639876144,7196.889977389377,al año
+R2,Guía de tallas en Ropa (y diagnóstico de las devoluciones de Electrónica),devoluciones de Ropa,-0.08331352296602273,13366.645,6683.3225,20049.9675,5299.635,al año
+R3,"Campaña de reactivación a los clientes recurrentes en riesgo, con 20% de grupo de control",ingresos de los clientes recurrentes en riesgo,0.1,18759.74982884234,9379.87491442117,37519.49965768468,4671.830762675691,"en 6 meses, una vez"

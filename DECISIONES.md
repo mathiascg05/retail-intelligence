@@ -316,7 +316,7 @@ Cifras de `notebooks/04_marketing.ipynb`.
 
 | Qué pide el enunciado | Cómo lo cubrimos | ¿El enunciado dice cómo hacerlo? |
 |---|---|---|
-| Conversión por tipo de campaña, canal y segmento, y las combinaciones con más retorno | Tasas con IC, prueba de si hay combinaciones especiales y dinero confirmado por cada 1.000 envíos (sección 1) | Sí para las tasas; no dice qué es "retorno" |
+| Conversión por tipo de campaña, canal y segmento, y las combinaciones con más retorno | Tasas con IC, prueba de si hay combinaciones especiales y dinero de las compras coincidentes por cada 1.000 envíos (sección 1) | Sí para las tasas; no dice qué es "retorno" |
 | Efecto del descuento sobre la conversión, controlando por segmento | Conversión por nivel de descuento y regresión con segmento y tipo; comprobación con compras reales (sección 2) | Pide controlar por segmento; no dice el método |
 | Segmento que recibe campañas y no convierte, con hipótesis desde el CRM y las devoluciones | Perfil del segmento y prueba de cada hipótesis con regresión (sección 3) | No dice el método |
 | ROI de cada tipo de campaña: monto convertido contra costo implícito del descuento | ROI sobre ventas (el del enunciado), sobre margen e incremental (sección 4) | Da la idea, no la fórmula exacta |
@@ -373,7 +373,7 @@ Cifras de `notebooks/04_marketing.ipynb`.
 - **Monto convertido:** solo compras coincidentes (A1.2 y A4.3). **Costo del descuento:** descuento ofrecido × monto de esa compra.
 - **ROI sobre ventas** = (monto − costo) / costo. Es el que pide el enunciado: 5,80 en total.
 - **ROI sobre margen** = (margen bruto de esas compras − costo) / costo: 0,59 en total, con IC *bootstrap* por tipo.
-- **ROI incremental:** el margen de las conversiones que no habría sin descuento (frente al 0%), contra el descuento que se regala a todas las conversiones. Valoramos cada conversión con el ticket medio (355) y el margen (23,4%) de las compras confirmadas. Resultado: −31%.
+- **ROI incremental:** el margen de las conversiones que no habría sin descuento (frente al 0%), contra el descuento que se regala a todas las conversiones. Valoramos cada conversión con el ticket medio (355) y el margen (23,4%) de las compras coincidentes. Resultado: −31%.
 
 **Por qué:**
 - El ROI sobre ventas sale casi igual a (1 − d) / d, con d = descuento medio. Mide el descuento, no la campaña. Por eso agregamos el de margen.
@@ -384,54 +384,81 @@ Cifras de `notebooks/04_marketing.ipynb`.
 
 **A confirmar con el profesor:** las tres versiones del ROI y cuál presentar como principal.
 
-## A5 – Recomendaciones
+## A5 – Relato y recomendaciones
 
 Cifras de `notebooks/05_recomendaciones.ipynb`. El entregable de A5 es un dashboard de Power BI (`docs/dashboard.md`) y un informe escrito.
 
 ### Decisiones
 
-#### A5.1 Cómo cuantificamos las recomendaciones
+#### A5.1 El relato: un nivel de pérdidas, no una caída
+
+**Qué pasa:** el enunciado cuenta una empresa que empeora: el ticket cae, las devoluciones suben, la conversión se hunde y el margen está bajo presión. Los datos solo confirman lo último, y a medias (A1). El margen está plano.
+
+**Qué hicimos:** el relato arranca de lo que dicen los datos: **"RetailVenture no está empeorando: lleva dos años perdiendo margen siempre en los mismos tres sitios"**. Esos sitios son el descuento online, las devoluciones de dos categorías y un marketing que no se puede medir. El primer visual del dashboard muestra justo eso: las cuatro cifras del enunciado, trimestre a trimestre.
+
+**Por qué:** contar una caída que no está en los datos sería construir el relato sobre algo falso. Y la conclusión sirve igual a la gerencia: si las pérdidas son estables, se pueden atacar una por una.
+
+#### A5.2 Cómo cuantificamos las recomendaciones
 
 **Qué pasa:** el enunciado pide cada recomendación como "Si hacemos X, esperamos Y% en Z, equivalente a [monto] en ingresos", pero el impacto de una medida que no se ha aplicado no se puede medir con los datos.
 
-**Qué hicimos:** cada recomendación sale de un hallazgo de A2–A4 y depende de un supuesto explícito. Damos un escenario central y un rango, en cifras anuales con base 2024, y siempre ingresos **y** margen.
+**Qué hicimos:** cada recomendación sale de un hallazgo de A2–A4 y depende de un supuesto explícito. Damos un escenario central y un rango, siempre en ingresos **y** margen. Las cifras son anuales con base 2024, salvo R3, que actúa una sola vez sobre los clientes en riesgo de hoy. Solo cuantificamos lo que tiene una causa visible en los datos.
 
-| | Qué hacemos | Supuesto | Ingresos al año | Margen al año |
+| | Qué hacemos | Supuesto | Ingresos (rango) | Margen |
 |---|---|---|---|---|
-| R1 | Tope de 4,7% al descuento por venta online (iguala el descuento medio de tienda y app) | Las unidades no cambian (A2.5) | +141.067 (72.232 a 141.067) | +141.067 |
-| R2 | Guía de tallas en Ropa, mejores fichas en Electrónica, control de proveedores | Se recorta el 50% del exceso de devoluciones (25% a 75%) | +185.082 (92.541 a 277.623) | +80.824 |
-| R3 | Campaña de reactivación a Esporádicos en riesgo, con 20% de grupo de control | Se recupera el 10% de lo que está en riesgo (5% a 20%) | +33.954 (16.977 a 67.909) | +8.456 |
-| R4 | Tope de 5% al descuento de las campañas | Lectura de la marca de conversión (A4.5) | −21.737 | +7.197 |
+| R1 | Piloto: tope de 4,7% al descuento online y ninguna venta bajo costo | Las ventas no cambian (A2.5) | +146.161 al año (77.325 a 146.161) | +146.161 |
+| R4 | Tope de 5% al descuento de las campañas | Lectura de la marca de conversión (A4.5) | −21.737 al año | +7.197 |
+| R2 | Guía de tallas en Ropa (y diagnóstico de Electrónica) | Se evita el 50% de las devoluciones por talla (25% a 75%) | +13.367 al año (6.683 a 20.050) | +5.300 |
+| R3 | Reactivación de los clientes recurrentes en riesgo, con 20% de grupo de control | Se recupera el 10% de lo que está en riesgo (5% a 20%) | +18.760 en 6 meses, una vez (9.380 a 37.519) | +4.672 |
 
-Total central: 237.544 de margen al año, el 11,0% del margen bruto de 2024.
+Total central: **163.329 de margen, el 7,6% del margen bruto de 2024**. Lo presentamos como "podrían recuperar hasta", no como "recuperan". R1 es el 89% del total.
 
-**Por qué:** dar un solo número sin decir de qué depende sería presentar una suposición como un hallazgo. Ordenamos por margen y no por ingresos porque el problema de la empresa es el margen.
+**Por qué:** dar un solo número sin decir de qué depende sería presentar una suposición como un hallazgo. Ordenamos por margen y no por ingresos porque lo que importa a la empresa es el margen.
+
+**Lo que cambió después de la revisión** (ver `BITACORA.md`):
+- **Antes el total era 237.544 de margen (11%).** Bajó por R2 y R3.
+- **R2:** antes suponía recortar el 50% de todo el exceso de devoluciones con fichas y control de proveedores, pero los datos no muestran una causa en Electrónica.
+- **R3:** antes se anualizaba multiplicando por dos un grupo fijo de clientes, y se basaba en el segmento del archivo.
 
 **A confirmar con el profesor:** si los escenarios con rango son aceptables como "impacto esperado".
 
-#### A5.2 R1: por qué creemos que el descuento online se puede bajar
+#### A5.3 R1: por qué creemos que el descuento online se puede bajar, y por qué es un piloto
 
-**Qué pasa:** si al bajar el descuento online se vendiera menos, la cifra de R1 sería falsa.
+**Qué pasa:** si al bajar el descuento online se vendiera menos, la cifra de R1 sería falsa. Y R1 es casi todo el beneficio.
 
-**Qué hicimos:** nos apoyamos en A2.5 (el descuento no mueve las unidades, también comparando el mismo producto en distintos meses) y calculamos cuánto podría caer la venta online antes de que la medida deje de compensar: un 16%.
+**Qué hicimos:** nos apoyamos en A2.5:
+- el descuento no mueve las unidades por compra;
+- tampoco la recompra a 90 días;
+- no hay promociones, el descuento cambia venta a venta.
 
-**Por qué:** A2.5 no es un experimento. Por eso recomendamos aplicar R1 primero en una parte de los productos y medir.
+Calculamos cuánto podría caer la venta online antes de que la medida deje de compensar: un 16%. Sumamos a R1 que ninguna venta quede bajo costo en tienda y app (+5.093 al año), lo que da a Electrónica una medida propia: casi la mitad del beneficio de R1 viene de esa categoría.
 
-#### A5.3 R3: por qué la recomendación de reactivación lleva grupo de control
+**Por qué es un piloto:** A2.5 no es un experimento, y los datos solo tienen las ventas que ocurrieron. Si alguien deja de comprar online por tener menos descuento, no lo veríamos. Por eso recomendamos aplicarla primero en una parte de los productos online y comparar con el resto.
+
+#### A5.4 R2: solo cuantificamos la parte con causa
+
+**Qué pasa:** Ropa y Electrónica devuelven mucho más que el resto, pero solo Ropa tiene un motivo propio (la talla). En Electrónica, el reparto de motivos es igual al del resto y ningún producto tiene más defectuosos de lo normal (A3.1).
+
+**Qué hicimos:**
+- R2 cuantifica solo la guía de tallas: evitar el 25%, 50% o 75% de las devoluciones por talla. Es poco dinero: eliminarlas todas daría 10.599 de margen al año.
+- El resto del exceso de Ropa y Electrónica va como **techo**, no como estimación: 370.164 en ingresos al año y entre 70.467 y 161.647 de margen, según quién asuma los defectuosos.
+- El primer paso que proponemos es un diagnóstico: revisar una muestra de devoluciones y preguntar al cliente.
+
+**Por qué:** prometer que "mejores fichas" o "control de proveedores" reducen el exceso de Electrónica sería inventar una causa que los datos no muestran.
+
+#### A5.5 R3 y R4: medir antes de gastar
 
 **Qué pasa:** en A4.3 vimos que no hay pruebas de que las campañas actuales generen compras. Recomendar "más campañas" sin poder medirlas no tendría base.
 
-**Qué hicimos:** la recomendación incluye dejar un 20% de los clientes, elegidos al azar, sin la campaña. Las cifras son escenarios (5%, 10% y 20% de lo que está en riesgo), no una estimación.
+**Qué hicimos:**
+- **R3:** la campaña de reactivación incluye dejar un 20% de los clientes, elegidos al azar, sin la campaña.
+  - Se dirige a los clientes recurrentes en riesgo (2 o más compras, más de 180 días sin comprar), que la empresa puede identificar hoy sin usar el segmento del archivo. El 79% del valor en riesgo está en el segmento Esporádico.
+  - Las cifras son escenarios a 6 meses, sobre los clientes en riesgo de hoy.
+- **R4:** usa la lectura más favorable al descuento (la marca de conversión). Con las compras reales, el beneficio sería mayor. La conversión registrada bajará (de 10,6% a 6,9% en esos envíos), y hay que avisarlo para que no se lea como un fracaso.
 
-**Por qué:** el valor seguro de R3 es que la empresa podrá saber, por primera vez, si una campaña genera ventas.
+**Costos:** R2 y R3 tienen costos que no conocemos. Damos el costo máximo con el que cada una sigue compensando: 5.300 al año para la guía de tallas y 4.672 para la campaña.
 
-#### A5.4 R4: por qué una recomendación que baja los ingresos
-
-**Qué pasa:** con la lectura más favorable al descuento (la marca de conversión), un tope de 5% hace que haya menos conversiones: los ingresos registrados bajan 21.737, pero el margen sube 7.197, porque se deja de regalar descuento que no se paga.
-
-**Qué hicimos:** lo presentamos con las dos cifras y avisamos que la conversión registrada bajará (de 10,6% a 6,9% en esos envíos).
-
-**Por qué:** el problema de la empresa es el margen. Con la lectura de las compras reales (A4.3), el beneficio sería mayor, porque el descuento de campaña no cambia las compras.
+**Por qué:** el valor seguro de R3 es que la empresa podrá saber, por primera vez, si una campaña genera ventas. Es la respuesta a "¿recortamos el marketing?": antes de decidir, hay que poder medirlo.
 
 ## Columnas que agrega `cargar_limpio()`
 
