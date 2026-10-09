@@ -20,9 +20,9 @@
 **Qué le vamos a pedir que confirme (A3):** lo hicimos así por ahora (detalle en `DECISIONES.md`, A3):
 - **Tasas anómalas (A3.1):** prueba binomial con corrección por número de pruebas; cada producto se compara con su categoría. Resultado: solo Ropa y Calzado y Electrónica se salen de lo normal.
 - **Clientes recurrentes (A3.2):** comparamos con una simulación de lo que daría el azar. Resultado: no hay devolvedores habituales.
-- **Quejas (A3.3):** compras 90 días antes y después, sin resolver contra resueltas. Resultado: no hay efecto. ¿Le parece suficiente para decir que las quejas sin resolver no espantan clientes en estos datos?
-- **En riesgo (A3.4):** más de 180 días sin comprar, con una probabilidad de volver por segmento sacada de una foto pasada (en la prueba acierta: 41% previsto, 41% real).
-- **Ingresos perdidos (A3.5):** (1 − probabilidad de volver) × gasto semestral del cliente, más las devoluciones aparte. ¿"Ingresos perdidos" debe incluir las devoluciones?
+- **Quejas (A3.3):** compras 90 días antes y después, sin resolver contra resueltas. Resultado: no se detecta efecto (como mucho, 19.159 a 6 meses). ¿Le parece suficiente para decir que las quejas sin resolver no espantan clientes en estos datos?
+- **En riesgo (A3.4):** más de 180 días sin comprar. La probabilidad de volver se estima con una foto pasada, agrupando solo con datos de esa fecha (compras y días sin comprar), no con el segmento del archivo, que se definió con datos posteriores. En la prueba hacia atrás la estimación se pasa (49% previsto, 41% real), así que damos también una versión calibrada.
+- **Ingresos perdidos (A3.5):** cifra principal = clientes recurrentes que no vuelven + exceso de devoluciones de Ropa y Electrónica (372.680 a 6 meses). Los reembolsos totales (645.361) van aparte como costo estructural, y los clientes de una sola compra no cuentan como fuga. ¿Le parece bien así, o "ingresos perdidos" debe incluir todos los reembolsos?
 
 **Qué respondió:**
 
