@@ -55,7 +55,7 @@ def _limpiar(d):
     crm = d["interacciones_crm"].copy()
     cam = d["campanas_marketing"].copy()
 
-    # Hoy no hay duplicados, pero si el profesor cambia los archivos no queremos contar dos veces
+    # Hoy no hay duplicados (esto elimina 0 filas); está por si el profesor cambia los archivos
     for t, id_ in [(cli, "cliente_id"), (trx, "transaccion_id"), (prd, "producto_id"),
                    (dev, "devolucion_id"), (crm, "interaccion_id"), (cam, "campana_id")]:
         t.drop_duplicates(subset=id_, inplace=True)
@@ -109,6 +109,8 @@ def _limpiar(d):
     dev = dev.merge(trx[["transaccion_id", "fecha", "producto_id", "categoria", "canal", "monto_neto"]],
                     on="transaccion_id", how="left").rename(columns={"fecha": "fecha_compra"})
     dev["dias_a_devolucion"] = (dev["fecha_devolucion"] - dev["fecha_compra"]).dt.days
+    # #8: el último día acumula las devoluciones que en realidad pasaron después del cierre
+    dev["fecha_dev_recortada"] = dev["fecha_devolucion"] == fin
 
     # --- CRM (A1.6)
     crm["respuesta_atipica"] = _iqr_alto(crm["tiempo_respuesta_hrs"])
