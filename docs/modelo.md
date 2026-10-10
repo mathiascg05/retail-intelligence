@@ -7,14 +7,16 @@ Hay cuatro tablas de hechos. Cada una registra un tipo de evento y tiene su prop
 | Hecho | Una fila es… | Se conecta con |
 |---|---|---|
 | Ventas (`transacciones`) | un producto que un cliente compró en una fecha | cliente, producto, fecha |
-| Devoluciones | la devolución de una venta (como mucho una por venta) | la venta que se devuelve, cliente, fecha de devolución |
+| Devoluciones | la devolución de una venta (como mucho una por venta) | la venta que se devuelve, cliente, producto, fecha de devolución |
 | Campañas (`campanas_marketing`) | un envío de campaña a un cliente | cliente, fecha de envío |
 | Atención al cliente (`interacciones_crm`) | un contacto de un cliente con la empresa | cliente, fecha |
 
 Las dimensiones son **clientes**, **productos** y **fecha**.
 
-- Devoluciones llega al producto a través de la venta.
+- Devoluciones se conecta con la venta que se devuelve y, además, directamente con cliente, producto y fecha. El cliente viene en el archivo; el producto lo agrega `cargar_limpio()` copiándolo de la venta. Los dos coinciden siempre con los de la venta (comprobado en el notebook 01). Así se pueden filtrar las devoluciones por categoría o por segmento sin pasar por las ventas, y es como se relacionan en Power BI (`docs/dashboard.md`).
 - Campañas y atención al cliente solo se conectan con el cliente, no con una venta. Por eso los datos no dicen qué campaña generó qué compra, y hay que deducirlo por las fechas (ver `DECISIONES.md`, decisión A1.2).
+
+El diagrama también está como imagen en `figures/modelo_constelacion.png`.
 
 ```mermaid
 erDiagram
@@ -22,6 +24,8 @@ erDiagram
     PRODUCTOS ||--o{ TRANSACCIONES : "se vende en"
     FECHA ||--o{ TRANSACCIONES : fecha
     TRANSACCIONES ||--o| DEVOLUCIONES : "puede tener"
+    CLIENTES ||--o{ DEVOLUCIONES : devuelve
+    PRODUCTOS ||--o{ DEVOLUCIONES : "se devuelve"
     CLIENTES ||--o{ CAMPANAS_MARKETING : recibe
     CLIENTES ||--o{ INTERACCIONES_CRM : contacta
     FECHA ||--o{ DEVOLUCIONES : fecha_devolucion
@@ -68,6 +72,7 @@ erDiagram
         string devolucion_id PK
         string transaccion_id FK
         string cliente_id FK
+        string producto_id FK
         string motivo
         float monto_devuelto
         date fecha_devolucion FK
@@ -96,5 +101,5 @@ erDiagram
 ## Notas
 
 - La tabla de fechas no viene en los archivos. Se arma con las fechas de las demás tablas.
-- Devoluciones trae también el código del cliente. Es un dato repetido: siempre coincide con el cliente de la venta (lo comprobamos en el notebook 01). En Power BI, la relación con clientes se hace a través de la venta, para no tener dos caminos.
+- Devoluciones trae también el código del cliente, y `cargar_limpio()` le agrega el del producto. Son datos repetidos que siempre coinciden con los de la venta (lo comprobamos en el notebook 01). Por eso es seguro relacionarlos directamente.
 - Las relaciones "uno a muchos" están comprobadas en el notebook 01, sección 6.
