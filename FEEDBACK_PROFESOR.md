@@ -24,6 +24,11 @@
 - **En riesgo (A3.4):** más de 180 días sin comprar. La probabilidad de volver se estima con una foto pasada, agrupando solo con datos de esa fecha (si el cliente ya era recurrente y días sin comprar), no con el segmento del archivo. En la prueba hacia atrás, con los recurrentes: 58% previsto, 56% real.
 - **Ingresos perdidos (A3.5):** cifra principal = clientes recurrentes que no vuelven + devoluciones de Ropa y Electrónica por encima de lo normal (412.423 a 6 meses). Los reembolsos totales (645.361) van aparte como costo estructural, y los clientes de una sola compra no cuentan como fuga. ¿Le parece bien así, o "ingresos perdidos" debe incluir todos los reembolsos?
 
+**Qué le vamos a pedir que confirme (A4):** detalle en `DECISIONES.md`, A4:
+- **Descuento (A4.2):** el descuento se repartió como en un sorteo (no depende del segmento, del tipo, del canal ni del año). ¿Podemos leer su efecto como causal?
+- **Conversión contra compras reales (A4.3):** según la marca, el descuento dobla la conversión; según las transacciones, ni las campañas ni el descuento cambian las compras. ¿La conversión puede venir de compras que no están en `transacciones.csv`? ¿Cuál de las dos lecturas presentamos? (Las 179 compras "confirmadas" resultan ser coincidencias: cualquier envío tiene una compra en 30 días el 21% de las veces.)
+- **ROI (A4.5):** damos tres versiones (sobre ventas, la del enunciado; sobre margen; e incremental). ¿Cuál presentamos como principal?
+
 **Qué respondió:**
 
 ## Semana 4
