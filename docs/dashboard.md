@@ -49,6 +49,7 @@ Margen bruto = SUM ( fact_ventas[margen_bruto] )
 Margen neto = SUM ( fact_ventas[margen_neto] )
 Margen bruto % = DIVIDE ( [Margen bruto], [Ventas] )
 % de las ventas = DIVIDE ( [Ventas], CALCULATE ( [Ventas], ALL ( dim_producto[categoria] ) ) )
+% del margen bruto = DIVIDE ( [Margen bruto], CALCULATE ( [Margen bruto], ALL ( dim_producto[categoria] ) ) )
 % del margen neto = DIVIDE ( [Margen neto], CALCULATE ( [Margen neto], ALL ( dim_producto[categoria] ) ) )
 Unidades por compra = AVERAGE ( fact_ventas[cantidad] )
 Descuento medio = AVERAGE ( fact_ventas[descuento] )
@@ -64,13 +65,13 @@ El orden sigue el relato del informe: **inicio** (qué cambia y qué no), **nudo
 | # | Parte | Título (insight) | Objeto de Power BI | Datos |
 |---|---|---|---|---|
 | 1 | Inicio | El margen, el ticket y las devoluciones no se mueven en dos años; solo cae la conversión registrada | Gráfico de líneas | `resultado_a5_situacion_trimestre`: eje `trimestre`, valor `índice (2023 T1 = 100)`, leyenda `métrica`. Información sobre herramientas: `valor` |
-| 2 | Nudo: margen | Electrónica es el 44% de las ventas, pero solo el 16% del margen neto | Barras agrupadas horizontales | Eje: `dim_producto[categoria]`. Valores: `% de las ventas`, `% del margen neto` |
+| 2 | Nudo: margen | Electrónica es el 44% de las ventas, pero solo el 24% del margen | Barras agrupadas horizontales | Eje: `dim_producto[categoria]`. Valores: `% de las ventas`, `% del margen bruto`. Nota al pie: "en margen neto, entre 16% y 23% según quién asuma los defectuosos" |
 | 3 | Nudo: margen | Online descuenta el doble (7,5% contra 3,7%) y tiene el menor margen | Gráfico combinado de columnas y líneas | Eje: `fact_ventas[canal]`. Columnas: `Descuento medio`. Línea: `Margen bruto %`. Filtro: año 2024 |
 | 4 | Nudo: margen | Con más descuento el margen cae de 29% a 7%, pero la gente compra las mismas unidades | Gráfico combinado de columnas y líneas | Eje: `fact_ventas[banda_descuento]` (ordenar por banda). Columnas: `Margen bruto %`. Línea: `Unidades por compra` |
-| 5 | Nudo: clientes | Pasar de 1 a 2–3 compras por semestre multiplica por 4 el valor del cliente en 3 años | Barras horizontales | `resultado_a2_clv_grupos`: eje `grupo`, valor `CLV 2024` |
+| 5 | Nudo: clientes | Quien compra 2–3 veces por semestre deja 4 veces más margen en 3 años que quien compra una | Barras horizontales | `resultado_a2_clv_grupos`: eje `grupo`, valor `CLV 2024` |
 | 6 | Nudo: fugas | Ropa devuelve el doble que el resto de categorías y Electrónica, 1,7 veces | Barras horizontales con línea de referencia en la media (13,4%) | Eje: `dim_producto[categoria]`. Valor: `Tasa de devolución` |
-| 7 | Nudo: fugas | Tras 6 meses sin comprar, vuelve el 37% de quien compró una vez en el último año y el 91% de quien compró de 4 a 6 veces | Gráfico de líneas | `resultado_a3_retorno_compras_tramo`: eje `tramo`, valor `vuelve`, leyenda `compras` (compras en los 12 meses anteriores) |
-| 8 | Nudo: fugas | Los Esporádicos recurrentes concentran la mayor fuga: 172.819 en 6 meses | Barras horizontales | `resultado_a3_fuga_segmento`: eje `segmento`, valor `calibrado`; información sobre herramientas: `en_riesgo`, `ingreso_perdido` (sin calibrar) |
+| 7 | Nudo: fugas | Tras 6 meses sin comprar, vuelve el 38% de quien compró una vez en el último año y el 91% de quien compró de 4 a 6 veces | Barras horizontales | `resultado_a3_retorno_compras`: eje `compras` (compras en los 12 meses anteriores; quitar "7 o más", que tiene 4 clientes), valor `vuelve`; información sobre herramientas: `clientes` |
+| 8 | Nudo: fugas | Los Esporádicos recurrentes concentran la mayor fuga: 146.990 en 6 meses | Barras horizontales | `resultado_a3_fuga_segmento`: eje `segmento`, valor `ingreso_perdido`; información sobre herramientas: `en_riesgo`, `p_vuelve` |
 | 9 | Nudo: marketing | El descuento dobla la conversión registrada, pero no cambia las compras reales | Gráfico de líneas (dos series) | `resultado_a4_descuento_marcada_vs_real`: eje `descuento_ofrecido`, valores `conversion_marcada` y `compra_despues` |
 | 10 | Desenlace | Bajar el descuento online recuperaría 146.161 de margen al año; las otras tres medidas sirven sobre todo para medir | Barras horizontales | `resultado_a5_recomendaciones`: eje `qué hacemos`, valor `margen (central)`; información sobre herramientas: `periodo`, `ingresos (central)`, `desde`, `hasta`. Ojo: R3 es a 6 meses y una sola vez; las demás, al año. Va dicho en la etiqueta |
 

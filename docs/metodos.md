@@ -107,7 +107,7 @@ Si te preguntan por un método, la respuesta corta es la primera línea de su ap
 **En una frase:** antes de usar un método para predecir el futuro, comprobar si habría acertado en el pasado.
 
 - **Cómo funciona:** con lo que sabíamos el 31-dic-2023, predecimos qué parte de los clientes en riesgo volvió en el primer semestre de 2024 y lo comparamos con lo que pasó.
-- **Resultado:** previmos 45% y volvió el 41%. Por grupo casi acierta (1 compra en el último año: 38% y 38%; 2–3: 54% y 52%; 4–6: 95% y 91%). Agrupamos por compras en los **últimos 12 meses** porque una foto de 2023 tiene 12 meses de historia y una de 2024, 18; con todas las compras la prueba fallaba más (49%). Con los recurrentes se queda corta (49% contra 56%), así que la cifra central está calibrada (A3.4).
+- **Resultado:** agrupando solo por "recurrente o no" y días sin comprar, con los recurrentes previmos 58% y volvió el 56%. Versiones más complejas (todas las compras, compras de 12 meses, calibración, regresión logística) no la mejoraban, así que nos quedamos con la que se explica en una frase (A3.4).
 - **Por qué no usamos el segmento del archivo para esto:** con él la prueba "acierta" (41% y 41%), pero solo porque el segmento se definió con las compras de los 24 meses, incluidas las posteriores. Es como predecir un partido sabiendo el resultado.
 
 ---
@@ -123,7 +123,7 @@ Si te preguntan por un método, la respuesta corta es la primera línea de su ap
 | ¿Recorto el presupuesto de marketing? | No se puede saber con estos datos. Primero hay que medir con grupo de control (R3). Lo que sí: ningún descuento de campaña por encima de 5% (R4). | A4, A5.5 |
 | Si lo devuelto se revende, ¿por qué los reembolsos son ingresos perdidos? | No los sumamos como fuga. Son un costo estructural y van aparte; la cifra principal solo incluye lo que Ropa y Electrónica devuelven por encima de lo normal. | A3.5 |
 | ¿Por qué controlaban por segmento en la recompra? | Fue un error: el segmento es circular. Lo cambiamos por comparar a cada cliente consigo mismo, y la conclusión se mantiene (+0,0 puntos). | A2.5, bitácora |
-| Si saben que la estimación de la vuelta falla, ¿por qué la usan? | La cifra central es la calibrada con el error de la prueba hacia atrás, y el rango incluye la otra versión. Con 12 meses de historia el error total es pequeño (45% contra 41%). | A3.4 |
+| ¿Cómo saben que la estimación de la vuelta funciona? | La probamos hacia atrás: con los recurrentes, 58% previsto contra 56% real. Con los de una sola compra falla más, pero no entran en la cifra principal. | A3.4 |
 | R2 a R4 suman poco: ¿son recomendaciones o notas al pie? | R1 trae el dinero. R2 y R3 sirven para medir antes de gastar: R2 tiene un techo de hasta 161.647 de margen si el diagnóstico encuentra la causa, y R3 permitirá saber por fin si el marketing funciona. R4 evita regalar descuento sin retorno. | A5.2 |
 | ¿Por qué dicen "evitable" si no conocen la causa? | Ya no lo decimos: es "por encima de lo normal". Solo la parte de la talla tiene causa conocida. | A3.5, A5.4 |
 | ¿En qué moneda está el CLV? ¿Por qué sin tasa de descuento? | En unidades monetarias del archivo. Con 10% y 20% de tasa los valores bajan, pero el orden no cambia. | A2.2 |

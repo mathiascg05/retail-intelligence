@@ -173,7 +173,7 @@ Cifras de `notebooks/02_rentabilidad.ipynb`.
 - En la cifra principal no usamos tasa de descuento: en Venezuela, con inflación alta, no hay una tasa de referencia fácil de justificar. Pero la inflación pide una tasa alta, no cero. Por eso damos también el CLV con 10% y 20% anual: los valores bajan (Premium pasa de 1.828 a 1.478 con 20%), pero el orden no cambia.
 - Usamos semestres y no años porque con 2 años de datos solo hay un paso de un año al siguiente, y así no se puede ver si el CLV cae. Con semestres hay tres. La versión anual (con el paso 2023 → 2024) da el mismo orden de segmentos.
 
-**El segmento exagera las distancias.** El segmento del archivo se definió contando las compras de los 24 meses (A1.4), así que su retención está en parte decidida de antemano (Inactivo 0%, Premium 99%). Por eso calculamos también el CLV con grupos que se conocen en el semestre base: cuántas veces compró el cliente en ese semestre. El orden es el mismo. Quien compra 4–6 veces deja unas 13 veces más que quien compra una vez (1.535 contra 122 u. m.). En el dashboard usamos esta versión, porque no depende de cómo se definió el segmento, con el salto más útil para la empresa: pasar de 1 a 2–3 compras por semestre multiplica por 4 el valor (513 contra 122).
+**El segmento exagera las distancias.** El segmento del archivo se definió contando las compras de los 24 meses (A1.4), así que su retención está en parte decidida de antemano (Inactivo 0%, Premium 99%). Por eso calculamos también el CLV con grupos que se conocen en el semestre base: cuántas veces compró el cliente en ese semestre. El orden es el mismo. Quien compra 4–6 veces deja unas 13 veces más que quien compra una vez (1.535 contra 122 u. m.). En el dashboard usamos esta versión, porque no depende de cómo se definió el segmento: quien compra 2–3 veces por semestre deja 4 veces más que quien compra una (513 contra 122). Es una comparación entre clientes, no una promesa de que hacer comprar más a alguien multiplique su valor.
 
 **A confirmar con el profesor:** la fórmula, el horizonte de 3 años y la tasa de descuento.
 
@@ -418,10 +418,10 @@ El relato abre por lo que sí confirmamos del enunciado: las devoluciones están
 |---|---|---|---|---|---|
 | R1 | Piloto: tope de 4,7% al descuento online y ninguna venta bajo costo | dinero | Las ventas no cambian (A2.5) | +146.161 al año (77.325 a 146.161) | +146.161 |
 | R4 | Tope de 5% al descuento de las campañas | higiene | Lectura de la marca de conversión (A4.5) | −21.737 al año en ingresos *registrados* por campañas | +7.197 |
-| R3 | Reactivación de los clientes recurrentes en riesgo, con 20% de grupo de control | medición | Se recupera el 10% de lo que está en riesgo (5% a 20%) | +23.249 en 6 meses, una vez (11.624 a 46.497) | +5.790 |
+| R3 | Reactivación de los clientes recurrentes en riesgo, con 20% de grupo de control | medición | Se recupera el 10% de lo que está en riesgo (5% a 20%) | +22.734 en 6 meses, una vez (11.367 a 45.468) | +5.662 |
 | R2 | Guía de tallas en Ropa (y diagnóstico de Electrónica) | medición | Se evita el 50% de las devoluciones por talla (25% a 75%) | +13.367 al año (6.683 a 20.050) | +5.300 |
 
-Margen al año (R1, R2 y R4): **158.657, el 7,3% del margen bruto de 2024**, más 5.790 de R3 en 6 meses y una sola vez. No sumamos cifras anuales con la de R3. Lo presentamos como "podrían recuperar", no como "recuperan". R1 es el 92% de lo anual. Al lado de R2 damos su techo: entre 70.467 y 161.647 de margen al año, si el diagnóstico encuentra la causa del resto del exceso de devoluciones.
+Margen al año (R1, R2 y R4): **158.657, el 7,3% del margen bruto de 2024**, más 5.662 de R3 en 6 meses y una sola vez. No sumamos cifras anuales con la de R3. Lo presentamos como "podrían recuperar", no como "recuperan". R1 es el 92% de lo anual. Al lado de R2 damos su techo: entre 70.467 y 161.647 de margen al año, si el diagnóstico encuentra la causa del resto del exceso de devoluciones.
 
 **Por qué:** dar un solo número sin decir de qué depende sería presentar una suposición como un hallazgo. Ordenamos por margen y no por ingresos porque lo que importa a la empresa es el margen.
 
@@ -468,11 +468,11 @@ En el peor caso compatible con los datos (la cota alta del efecto online de la r
 
 **Qué hicimos:**
 - **R3:** la campaña de reactivación incluye dejar un 20% de los clientes, elegidos al azar, sin la campaña.
-  - Se dirige a los clientes recurrentes en riesgo (2 o más compras, más de 180 días sin comprar), que la empresa puede identificar hoy sin usar el segmento del archivo. Son 1.388 clientes y unas 232.500 u. m. en riesgo a 6 meses; el 74% está en el segmento Esporádico.
+  - Se dirige a los clientes recurrentes en riesgo (2 o más compras, más de 180 días sin comprar), que la empresa puede identificar hoy sin usar el segmento del archivo. Son 1.388 clientes y unas 227.300 u. m. en riesgo a 6 meses; el 65% está en el segmento Esporádico.
   - Las cifras son escenarios a 6 meses, sobre los clientes en riesgo de hoy.
 - **R4:** usa la lectura más favorable al descuento (la marca de conversión). Con las compras reales, el beneficio sería mayor. La conversión registrada bajará (de 10,6% a 6,9% en esos envíos), y con ella los ingresos *registrados* por campañas (−21.737), que no son compras reales (A4.3). Hay que avisarlo para que no se lea como un fracaso.
 
-**Costos:** R2 y R3 tienen costos que no conocemos. Damos el costo máximo con el que cada una sigue compensando: 5.300 al año para la guía de tallas y 5.790 para la campaña.
+**Costos:** R2 y R3 tienen costos que no conocemos. Damos el costo máximo con el que cada una sigue compensando: 5.300 al año para la guía de tallas y 5.662 para la campaña.
 
 **Por qué:** el valor seguro de R3 es que la empresa podrá saber, por primera vez, si una campaña genera ventas. Es la respuesta a "¿recortamos el marketing?": antes de decidir, hay que poder medirlo.
 
@@ -493,7 +493,7 @@ Está en el notebook 05 (sección 7) y en `data/powerbi/resultado_a5_tabla_perdi
 | Descuentos en ventas | 485.000 al año | 141.067 (online por encima de tienda y app) + 5.093 (bajo costo) | R1 | 146.161 |
 | Descuento de las campañas | 16.415 al año | 11.908 (lo que pasa de 5%) | R4 | 7.197 |
 | Devoluciones | 295.415 a 600.679 al año | 70.467 a 161.647 por encima de lo normal; con causa conocida, 10.599 (talla) | R2 | 5.300 |
-| Clientes recurrentes que se van | 52.546 a 70.785 en 6 meses | desconocida (no se puede medir qué recupera una campaña) | R3 | 5.790 |
+| Clientes recurrentes que se van | 50.958 a 61.437 en 6 meses | desconocida (no se puede medir qué recupera una campaña) | R3 | 5.662 |
 | Quejas sin resolver | no detectable (tope 4.748 en 6 meses) | — | ninguna | 0 |
 
 **Por qué:** es la forma más directa de responder "qué está pasando y qué hacemos". Y deja claro por qué R1 pesa tanto: el descuento online es el único sitio grande donde la parte atacable tiene una causa clara y no requiere inversión.

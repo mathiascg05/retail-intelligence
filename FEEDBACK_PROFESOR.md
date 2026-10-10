@@ -5,7 +5,7 @@
 Son las cuatro respuestas que más mueven las cifras y el relato del informe. Si no responde antes de la entrega, el informe lleva una sección de supuestos con las dos versiones de cada cifra.
 
 1. **Las cifras del enunciado (A1):** ¿es a propósito que el ticket (−8%), las devoluciones (14%) y la conversión (22% → 11%) no coincidan con los datos? Nuestro relato se basa en los datos: el margen no cae y solo la conversión registrada se cae a la mitad. (Lo preguntamos desde la semana 2.)
-2. **Reembolsos (A3.5):** ¿los "ingresos perdidos a 6 meses" deben incluir todos los reembolsos por devoluciones? Nosotros damos como cifra principal las fugas identificadas (clientes recurrentes que no vuelven + devoluciones de Ropa y Electrónica por encima de lo normal: 417.569) y los reembolsos totales (645.361) aparte, como costo estructural.
+2. **Reembolsos (A3.5):** ¿los "ingresos perdidos a 6 meses" deben incluir todos los reembolsos por devoluciones? Nosotros damos como cifra principal las fugas identificadas (clientes recurrentes que no vuelven + devoluciones de Ropa y Electrónica por encima de lo normal: 412.423) y los reembolsos totales (645.361) aparte, como costo estructural.
 3. **Conversión (A4.3):** la marca `convertido` no coincide con las compras de `transacciones.csv`. Las 179 compras tras una conversión son coincidencias, y hay clientes sin ninguna compra marcados como convertidos. ¿La marca puede venir de otro sistema? ¿Presentamos la lectura de la marca o la de las compras reales?
 4. **Productos defectuosos (A2.1):** ¿suponemos que la empresa pierde el costo del producto defectuoso, o que lo repone el proveedor? Cambia cuánto margen se llevan las devoluciones: 27,5% o 13,5%.
 
