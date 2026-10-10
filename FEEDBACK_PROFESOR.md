@@ -17,9 +17,12 @@
 - **Declive (A2.3):** un segmento está en declive si su CLV baja de 2023 a 2024 y el intervalo de confianza de la caída no incluye el 0. Usamos el segmento que trae el archivo.
 - **Estacionalidad (A2.4):** además de nombrar picos y valles, comprobamos si se repiten entre años. Resultado: no se repiten. ¿Le parece suficiente decir que no hay estacionalidad?
 
-**Qué le vamos a preguntar (A3):**
-- ¿Desde cuántos días sin comprar consideramos que un cliente se fue? Ojo: el 52% de los que llegan a 180 días vuelve después (ver A1).
-- ¿Cómo demostramos que las quejas sin resolver hacen que los clientes compren menos, y no que simplemente coinciden?
+**Qué le vamos a pedir que confirme (A3):** lo hicimos así por ahora (detalle en `DECISIONES.md`, A3):
+- **Tasas anómalas (A3.1):** prueba binomial con corrección por número de pruebas; cada producto se compara con su categoría. Resultado: solo Ropa y Calzado y Electrónica se salen de lo normal.
+- **Clientes recurrentes (A3.2):** comparamos con una simulación de lo que daría el azar. Resultado: no hay devolvedores habituales.
+- **Quejas (A3.3):** compras 90 días antes y después, sin resolver contra resueltas. Resultado: no se detecta efecto (como mucho, 19.159 a 6 meses). ¿Le parece suficiente para decir que las quejas sin resolver no espantan clientes en estos datos?
+- **En riesgo (A3.4):** más de 180 días sin comprar. La probabilidad de volver se estima con una foto pasada, agrupando solo con datos de esa fecha (si el cliente ya era recurrente y días sin comprar), no con el segmento del archivo. En la prueba hacia atrás, con los recurrentes: 58% previsto, 56% real.
+- **Ingresos perdidos (A3.5):** cifra principal = clientes recurrentes que no vuelven + devoluciones de Ropa y Electrónica por encima de lo normal (412.423 a 6 meses). Los reembolsos totales (645.361) van aparte como costo estructural, y los clientes de una sola compra no cuentan como fuga. ¿Le parece bien así, o "ingresos perdidos" debe incluir todos los reembolsos?
 
 **Qué respondió:**
 
