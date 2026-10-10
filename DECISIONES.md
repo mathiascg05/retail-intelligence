@@ -228,7 +228,7 @@ Cifras de `notebooks/03_fugas.ipynb`.
 | Productos, categorías o segmentos con tasas de devolución anómalas, y clientes recurrentes en devoluciones | Tasa por categoría, subcategoría, producto, segmento, canal y medio de pago, con pruebas; simulación de cuántas devoluciones por cliente serían normales (sección 1) | No dice qué es "anómala" ni "recurrente" |
 | ¿Los clientes con quejas no resueltas disminuyeron su frecuencia de compra? | Compras 90 días antes y después de cada queja, comparando quejas sin resolver con quejas resueltas (sección 2) | No dice el método |
 | Una métrica de inactividad y el segmento de mayor valor en riesgo | Días sin comprar; probabilidad de volver estimada con datos conocidos en la fecha de corte; valor en riesgo por segmento y por número de compras (sección 3) | Pide definir la métrica, no dice cuál |
-| Impacto económico de las fugas en ingresos perdidos a 6 meses | Fugas evitables (clientes recurrentes que no vuelven + exceso de devoluciones); reembolsos totales, compradores de una sola vez y quejas, aparte (sección 4) | No dice el método |
+| Impacto económico de las fugas en ingresos perdidos a 6 meses | Fugas identificadas (clientes recurrentes que no vuelven + devoluciones por encima de lo normal); reembolsos totales, compradores de una sola vez y quejas, aparte (sección 4) | No dice el método |
 
 ### Decisiones
 
@@ -275,14 +275,15 @@ Cifras de `notebooks/03_fugas.ipynb`.
 
 **Qué hicimos:**
 - **Medida:** días sin comprar al cierre de los datos (31-dic-2024). **En riesgo:** más de 180 días, el mismo umbral de A1.4. Son 2.647 clientes, el 35% de los que alguna vez compraron.
-- **Probabilidad de volver:** nos ponemos en una fecha pasada con 6 meses de datos por delante (30-jun-2024) y contamos qué parte de los clientes volvió en esos 6 meses. Agrupamos **solo con datos conocidos en esa fecha**: cuántas compras llevaba el cliente (1, 2–3, 4–6, 7 o más) y cuántos días llevaba sin comprar (91–180, 181–270, más de 270). Esa proporción es la probabilidad de volver de cada cliente en riesgo de hoy.
-- **Prueba:** con la foto del 31-dic-2023 predijimos el primer semestre de 2024. Previmos que volvería el 49% de los clientes en riesgo y volvió el 41%. Por eso damos también una versión **calibrada**: la probabilidad multiplicada por 41/49.
+- **Probabilidad de volver:** nos ponemos en una fecha pasada con 6 meses de datos por delante (30-jun-2024) y contamos qué parte de los clientes volvió en esos 6 meses. Agrupamos **solo con datos conocidos en esa fecha**: cuántas compras hizo el cliente en los 12 meses anteriores (ninguna, 1, 2–3, 4–6, 7 o más) y cuántos días llevaba sin comprar (91–180, 181–270, más de 270). Esa proporción es la probabilidad de volver de cada cliente en riesgo de hoy.
+- **Prueba:** con la foto del 31-dic-2023 predijimos el primer semestre de 2024. Previmos que volvería el 45% de los clientes en riesgo y volvió el 41%. Por grupo casi acierta (1 compra: 38% previsto, 38% real; 2–3: 54% y 52%; 4–6: 95% y 91%). El error está en quienes no compraron nada en los 12 meses anteriores: ese grupo no existe en la foto de 2023, así que para ellos se usa un promedio.
+- **Calibración:** la medimos solo con los clientes recurrentes, que son los que entran en la cifra principal. Con ellos la estimación se queda corta (49% previsto, 56% real), así que la versión calibrada multiplica la probabilidad por 1,14. **La cifra central es la calibrada**, porque corrige un error conocido; la sin calibrar es el otro extremo del rango.
 
 **Por qué no usamos el segmento del archivo:** el segmento se asignó contando las compras de los 24 meses (A1.4), incluidas las posteriores a la foto. Con él, "los Inactivo nunca vuelven" sale por definición, y la prueba hacia atrás acierta (41% previsto, 41% real) porque usa información del futuro. Una versión anterior de este análisis lo usaba; la cambiamos después de una revisión (ver `BITACORA.md`).
 
-**Por qué la estimación se pasa:** el archivo tiene 8.000 clientes fijos. Con el tiempo, los que siguen con una sola compra son cada vez más los que nunca vuelven: el 38% volvía en la foto de 2023 y el 29% en la de 2024. Lo aprendido en el pasado sobreestima la vuelta de hoy. La versión calibrada corrige eso de forma aproximada.
+**Por qué 12 meses y no todas las compras:** una foto de 2023 tiene 12 meses de historia y una de 2024 tiene 18, así que "compras hasta la fecha" no es comparable entre fotos. Con todas las compras, la prueba se pasaba más: 49% previsto contra 41% real. Lo cambiamos en la segunda revisión (ver `BITACORA.md`).
 
-**Qué la predice:** sobre todo el número de compras. Tras más de 180 días sin comprar, vuelve el 29% de quien compró una vez y casi todos los que compraron 7 o más. Dentro de cada grupo, llevar más tiempo sin comprar casi no cambia la probabilidad.
+**Qué la predice:** sobre todo el número de compras del último año. Tras más de 180 días sin comprar, vuelve alrededor del 38% de quien compró una vez y más del 90% de quien compró 4 veces o más. Dentro de cada grupo, llevar más tiempo sin comprar casi no cambia la probabilidad.
 
 **Nota sobre el 52% de A1:** el 52% cuenta cada vez que un cliente cumple 180 días sin comprar. Aquí miramos una foto en una fecha, y el grupo de "más de 180 días" incluye a clientes que llevan mucho más tiempo, que vuelven menos. Por eso en la foto vuelve el 41–45%.
 
@@ -292,17 +293,18 @@ Cifras de `notebooks/03_fugas.ipynb`.
 
 **Qué pasa:** el enunciado pide el impacto en "ingresos perdidos proyectados a 6 meses", pero no dice cómo proyectarlos ni qué cuenta como fuga.
 
-**Qué hicimos:** separamos lo que se puede recuperar de lo que es un costo estable. Todo con base 2024, expresado a 6 meses (medio año).
-- **Cifra principal, fugas evitables: 372.680 u. m. (rango 350.773 a 446.562), el 8,6% de las ventas de un semestre.**
-  - **Clientes recurrentes en riesgo** (2 o más compras): (1 − probabilidad de volver) × lo que venían gastando por semestre. 187.597; rango desde el IC 2,5% *bootstrap* de la estimación tal cual hasta el IC 97,5% de la calibrada (165.690 a 261.480). Es el mismo modelo en los dos extremos.
-  - **Exceso de devoluciones de Ropa y Electrónica** sobre la tasa de las otras cuatro categorías: 185.082 en ingresos; en margen, 35.233 si el proveedor asume los defectuosos y 80.824 si los pierde la empresa (A2.1).
+**Qué hicimos:** separamos lo que tiene un responsable claro de lo que es un costo estable. Todo con base 2024, expresado a 6 meses (medio año).
+- **Cifra principal, fugas identificadas: 417.569 u. m. (rango 397.117 a 470.712), el 9,6% de las ventas de un semestre.**
+  - **Clientes recurrentes en riesgo** (2 o más compras): (1 − probabilidad de volver) × lo que venían gastando por semestre. Central (calibrada): 232.487; rango de 212.035 a 285.630, de los IC *bootstrap* de las versiones calibrada y sin calibrar. Es el mismo modelo en los dos extremos.
+  - **Devoluciones de Ropa y Electrónica por encima de lo normal** (sobre la tasa de las otras cuatro categorías): 185.082 en ingresos; en margen, 35.233 si el proveedor asume los defectuosos y 80.824 si los pierde la empresa (A2.1). No lo llamamos "evitable": en Ropa una parte tiene causa (la talla), pero en Electrónica los datos no muestran por qué (A5.4).
 - **Aparte, como referencia:**
-  - **Clientes con una sola compra en riesgo:** 147.002. No los sumamos: nunca fueron clientes recurrentes, así que su gasto por semestre no es un ritmo que se pierda.
+  - **Clientes con una sola compra en riesgo:** 131.909. No los sumamos: nunca fueron clientes recurrentes, así que su gasto por semestre no es un ritmo que se pierda.
   - **Reembolsos totales:** 645.361 en ingresos (14,9% de las ventas); en margen, de 147.707 a 300.340 según A2.1. Es un costo estructural: está igual desde 2023.
   - **Quejas sin resolver:** no detectable; tope de 19.159 (A3.3).
+  - **Descuentos:** no son una pérdida de ingresos, pero se llevan el 18,3% del margen (A2). Aparecen en la tabla de pérdidas de A5.
 
 **Por qué:**
-- Sumar todos los reembolsos como "ingresos perdidos" mezclaba un costo de siempre con lo que se puede recuperar, y contradecía A2.1, donde la mayoría de lo devuelto se revende. Una versión anterior daba 1.011.458; la cambiamos después de la revisión (ver `BITACORA.md`).
+- Sumar todos los reembolsos como "ingresos perdidos" mezclaba un costo de siempre con lo que se puede recuperar, y contradecía A2.1, donde la mayoría de lo devuelto se revende. Una versión anterior daba 1.011.458; la cambiamos después de la primera revisión, y la segunda la ajustó (ver `BITACORA.md`).
 - No hay doble conteo: la fuga de clientes son ventas que no ocurren; el exceso de devoluciones son ventas que ocurren y se reembolsan.
 - Las devoluciones usan la misma base (2024) que la recomendación R2 de A5.
 
