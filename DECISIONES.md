@@ -276,16 +276,20 @@ Cifras de `notebooks/03_fugas.ipynb`.
 **Qué pasa:** el enunciado pide definir una medida de inactividad. En A1.4 vimos que pasar de 180 días sin comprar es poco normal, pero que el 52% de los que llegan a 180 días vuelve. Llamar "perdido" a todo el que pasa de 180 días exageraría la fuga.
 
 **Qué hicimos:**
-- **Medida:** días sin comprar al cierre de los datos (31-dic-2024). **En riesgo:** más de 180 días, el mismo umbral de A1.4. Son 2.647 clientes, el 35% de los que alguna vez compraron.
-- **Probabilidad de volver:** nos ponemos en una fecha pasada con 6 meses de datos por delante (30-jun-2024) y contamos qué parte de los clientes volvió en esos 6 meses. Agrupamos **solo con datos conocidos en esa fecha**: cuántas compras hizo el cliente en los 12 meses anteriores (ninguna, 1, 2–3, 4–6, 7 o más) y cuántos días llevaba sin comprar (91–180, 181–270, más de 270). Esa proporción es la probabilidad de volver de cada cliente en riesgo de hoy.
-- **Prueba:** con la foto del 31-dic-2023 predijimos el primer semestre de 2024. Previmos que volvería el 45% de los clientes en riesgo y volvió el 41%. Por grupo casi acierta (1 compra: 38% previsto, 38% real; 2–3: 54% y 52%; 4–6: 95% y 91%). El error está en quienes no compraron nada en los 12 meses anteriores: ese grupo no existe en la foto de 2023, así que para ellos se usa un promedio.
-- **Calibración:** la medimos solo con los clientes recurrentes, que son los que entran en la cifra principal. Con ellos la estimación se queda corta (49% previsto, 56% real), así que la versión calibrada multiplica la probabilidad por 1,14. **La cifra central es la calibrada**, porque corrige un error conocido; la sin calibrar es el otro extremo del rango.
+- **Medida:** días sin comprar al cierre de los datos (31-dic-2024). **En riesgo:** más de 180 días, el mismo umbral de A1.4. Son 2.647 clientes, el 35% de los que alguna vez compraron: 1.388 recurrentes (2 o más compras) y 1.259 de una sola compra.
+- **Probabilidad de volver:** nos ponemos en una fecha pasada con 6 meses de datos por delante (30-jun-2024) y contamos qué parte de los clientes volvió en esos 6 meses. Agrupamos **solo con datos conocidos en esa fecha** y de la forma más simple: si el cliente ya era recurrente o había comprado una sola vez, y cuántos días llevaba sin comprar (91–180, 181–270, más de 270). Esa proporción es la probabilidad de volver de cada cliente en riesgo de hoy.
+- **Prueba:** con la foto del 31-dic-2023 predijimos el primer semestre de 2024. Con los recurrentes, que son los que entran en la cifra principal, previmos que volvería el 58% y volvió el 56%. Con los de una sola compra se pasa (38% contra 29%), pero esos clientes no entran en la cifra principal (A3.5).
 
-**Por qué no usamos el segmento del archivo:** el segmento se asignó contando las compras de los 24 meses (A1.4), incluidas las posteriores a la foto. Con él, "los Inactivo nunca vuelven" sale por definición, y la prueba hacia atrás acierta (41% previsto, 41% real) porque usa información del futuro. Una versión anterior de este análisis lo usaba; la cambiamos después de una revisión (ver `BITACORA.md`).
+**Por qué la versión simple:** probamos versiones más detalladas, en este orden:
+1. por número de compras en toda la historia (49% previsto contra 41% real, todos los clientes);
+2. por compras en los últimos 12 meses, con y sin calibración;
+3. una regresión logística con el ritmo de compra y la antigüedad.
 
-**Por qué 12 meses y no todas las compras:** una foto de 2023 tiene 12 meses de historia y una de 2024 tiene 18, así que "compras hasta la fecha" no es comparable entre fotos. Con todas las compras, la prueba se pasaba más: 49% previsto contra 41% real. Lo cambiamos en la segunda revisión (ver `BITACORA.md`).
+Ninguna mejoraba la prueba con los recurrentes. La fuga que daban era parecida (232.487 la de 12 meses calibrada; esta da 227.341). Elegimos la que se explica en una frase. El cambio lo propuso la tercera revisión.
 
-**Qué la predice:** sobre todo el número de compras del último año. Tras más de 180 días sin comprar, vuelve alrededor del 38% de quien compró una vez y más del 90% de quien compró 4 veces o más. Dentro de cada grupo, llevar más tiempo sin comprar casi no cambia la probabilidad.
+**Por qué no usamos el segmento del archivo:** el segmento se asignó contando las compras de los 24 meses (A1.4), incluidas las posteriores a la foto. Con él, "los Inactivo nunca vuelven" sale por definición, y la prueba hacia atrás acierta (41% previsto, 41% real) porque usa información del futuro.
+
+**Qué predice la vuelta:** sobre todo si el cliente ya era recurrente. Tras más de 180 días sin comprar, vuelve alrededor del 55% de los recurrentes y el 29% de los de una sola compra. Por compras en el último año: 38% de quien compró una vez y 91% de quien compró de 4 a 6 veces.
 
 **Nota sobre el 52% de A1:** el 52% cuenta cada vez que un cliente cumple 180 días sin comprar. Aquí miramos una foto en una fecha, y el grupo de "más de 180 días" incluye a clientes que llevan mucho más tiempo, que vuelven menos. Por eso en la foto vuelve el 41–45%.
 
@@ -296,11 +300,11 @@ Cifras de `notebooks/03_fugas.ipynb`.
 **Qué pasa:** el enunciado pide el impacto en "ingresos perdidos proyectados a 6 meses", pero no dice cómo proyectarlos ni qué cuenta como fuga.
 
 **Qué hicimos:** separamos lo que tiene un responsable claro de lo que es un costo estable. Todo con base 2024, expresado a 6 meses (medio año).
-- **Cifra principal, fugas identificadas: 417.569 u. m. (rango 397.117 a 470.712), el 9,6% de las ventas de un semestre.**
-  - **Clientes recurrentes en riesgo** (2 o más compras): (1 − probabilidad de volver) × lo que venían gastando por semestre. Central (calibrada): 232.487; rango de 212.035 a 285.630, de los IC *bootstrap* de las versiones calibrada y sin calibrar. Es el mismo modelo en los dos extremos.
+- **Cifra principal, fugas identificadas: 412.423 u. m. (rango 390.707 a 432.992), el 9,5% de las ventas de un semestre.**
+  - **Clientes recurrentes en riesgo** (2 o más compras): (1 − probabilidad de volver) × lo que venían gastando por semestre. 227.341; rango de 205.625 a 247.909 (IC 95% *bootstrap*).
   - **Devoluciones de Ropa y Electrónica por encima de lo normal** (sobre la tasa de las otras cuatro categorías): 185.082 en ingresos; en margen, 35.233 si el proveedor asume los defectuosos y 80.824 si los pierde la empresa (A2.1). No lo llamamos "evitable": en Ropa una parte tiene causa (la talla), pero en Electrónica los datos no muestran por qué (A5.4).
 - **Aparte, como referencia:**
-  - **Clientes con una sola compra en riesgo:** 131.909. No los sumamos: nunca fueron clientes recurrentes, así que su gasto por semestre no es un ritmo que se pierda.
+  - **Clientes con una sola compra en riesgo:** 147.002. No los sumamos: nunca fueron clientes recurrentes, así que su gasto por semestre no es un ritmo que se pierda.
   - **Reembolsos totales:** 645.361 en ingresos (14,9% de las ventas); en margen, de 147.707 a 300.340 según A2.1. Es un costo estructural: está igual desde 2023.
   - **Quejas sin resolver:** no detectable; tope de 19.159 (A3.3).
   - **Descuentos:** no son una pérdida de ingresos, pero se llevan el 18,3% del margen (A2). Aparecen en la tabla de pérdidas de A5.
