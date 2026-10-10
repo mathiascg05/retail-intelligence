@@ -1,15 +1,20 @@
-# Decisiones sobre los datos
+# Decisiones del proyecto
 
-Este documento explica qué problemas encontramos en los datos y qué hicimos con cada uno.
-Las cifras salen de `notebooks/01_calidad.ipynb`. Los cambios están aplicados en `src/carga.py`, en la función `cargar_limpio()`.
+Este documento explica, fase por fase, qué decidimos y por qué. Las cifras salen de los notebooks de cada fase. Lo que cambia los datos está aplicado en `src/carga.py`, en la función `cargar_limpio()`.
 
-## Regla general: no borramos filas
+Las decisiones marcadas **"A confirmar con el profesor"** son supuestos nuestros: el enunciado no dice cómo hacerlo. Las aplicamos así por ahora y están en la agenda de `FEEDBACK_PROFESOR.md`.
+
+## A1 – Calidad de los datos
+
+Cifras de `notebooks/01_calidad.ipynb`.
+
+### Regla general: no borramos filas
 
 Los datos vienen limpios en la forma: no hay celdas vacías, filas repetidas ni códigos que apunten a registros inexistentes. Los problemas están en lo que significan algunos datos.
 
 Por eso no eliminamos nada. (El código descarta filas repetidas por si en el futuro llegan archivos nuevos con duplicados; hoy no elimina ninguna.) Cuando un registro es raro, le agregamos una columna que lo marca (verdadero/falso). Así cada análisis decide si lo incluye o no.
 
-## Lo que encontramos
+### Lo que encontramos
 
 - No hay celdas vacías ni filas repetidas en ninguna de las 6 tablas.
 - Todos los códigos de cliente, producto y transacción existen en su tabla.
@@ -35,9 +40,9 @@ Por eso no eliminamos nada. (El código descarta filas repetidas por si en el fu
 
 **Qué significa:** la empresa no está empeorando. El margen, el ticket y las devoluciones están estables desde hace dos años; lo único que cae es la conversión registrada de las campañas. El problema no es una caída, sino un nivel: la empresa lleva dos años perdiendo margen siempre en los mismos sitios. Así lo contamos en el relato (A5).
 
-## Decisiones
+### Decisiones
 
-### 1. Compras hechas antes de la fecha de registro del cliente
+#### A1.1 Compras hechas antes de la fecha de registro del cliente
 
 **Qué pasa:** la mitad de las compras (24.972) tiene una fecha anterior a la fecha en que el cliente se registró.
 
@@ -47,7 +52,7 @@ Por eso no eliminamos nada. (El código descarta filas repetidas por si en el fu
 
 En las métricas de calidad, la consistencia de ventas baja a 50% solo por esta regla. Damos también la cifra sin ella: 100%.
 
-### 2. Campañas marcadas como convertidas sin una compra que lo confirme
+#### A1.2 Campañas marcadas como convertidas sin una compra que lo confirme
 
 **Qué pasa:** hay 797 envíos de campaña marcados como convertidos. Los datos no dicen qué compra generó cada campaña, así que buscamos una compra del mismo cliente en los 30 días siguientes al envío. Solo la encontramos en 179 casos. En otros 102, la única compra cercana es anterior al envío.
 
@@ -59,7 +64,7 @@ En las métricas de calidad, la consistencia de ventas baja a 50% solo por esta 
 
 Esto hay que mencionarlo como limitación en la presentación.
 
-### 3. Ventas por debajo del costo
+#### A1.3 Ventas por debajo del costo
 
 **Qué pasa:** en 711 ventas, el cliente pagó menos de lo que le costó el producto a la empresa.
 
@@ -67,7 +72,7 @@ Esto hay que mencionarlo como limitación en la presentación.
 
 **Por qué:** no es un error. 633 son de Electrónica, la categoría con menos margen: un producto típico de Electrónica deja 18,6% de su precio de lista. Con descuentos de entre 9% y 34,5%, la venta termina en pérdida. Es un hallazgo para A2.
 
-### 4. Qué mide el segmento del cliente
+#### A1.4 Qué mide el segmento del cliente
 
 **Qué pasa:** el segmento que trae el archivo es una franja del número de compras del cliente en los **24 meses completos**: "Inactivo" tiene 0 o 1 compra, "Nuevo" hasta 3, "Esporádico" hasta 6, y "Frecuente" (1 a 24) y "Premium" (4 a 34) tienen más. Coincide con el comportamiento en frecuencia, pero no en recencia: 108 clientes "Inactivo" compraron en los últimos 90 días, y muchos "Esporádico" y "Nuevo" llevan más de 180 días sin comprar.
 
@@ -90,7 +95,7 @@ Las reglas se aplican en ese orden: a cada cliente le toca la primera que cumpla
 
 **Ojo:** eso no significa que el cliente se haya perdido. De los clientes que llegan a 180 días sin comprar, el 52% vuelve en los 180 días siguientes. "Inactivo" quiere decir "en riesgo", no "perdido". En A3 hay que tenerlo en cuenta al definir qué es un cliente perdido.
 
-### 5. Clientes que nunca compraron
+#### A1.5 Clientes que nunca compraron
 
 **Qué pasa:** 392 clientes no tienen ninguna compra.
 
@@ -98,7 +103,7 @@ Las reglas se aplican en ese orden: a cada cliente le toca la primera que cumpla
 
 **Por qué:** no se puede perder a un cliente que nunca compró. Pero 242 de ellos reciben campañas, y eso cuenta para medir si el marketing funciona.
 
-### 6. Tiempos de respuesta muy altos en atención al cliente
+#### A1.6 Tiempos de respuesta muy altos en atención al cliente
 
 **Qué pasa:** 352 contactos tardaron más de 48,9 horas en recibir respuesta, y 15 tardaron más de una semana. Las 48,9 horas son el límite a partir del cual un valor se considera fuera de lo normal en estos datos (regla del rango intercuartílico).
 
@@ -106,7 +111,7 @@ Las reglas se aplican en ese orden: a cada cliente le toca la primera que cumpla
 
 **Por qué:** una respuesta lenta no es un error de los datos. Es justo lo que queremos estudiar en A3.
 
-### 7. Ventas con montos muy altos
+#### A1.7 Ventas con montos muy altos
 
 **Qué pasa:** si buscamos montos fuera de lo normal mirando todas las ventas juntas, salen 4.138. Dos tercios (2.672) son de Electrónica.
 
@@ -114,7 +119,7 @@ Las reglas se aplican en ese orden: a cada cliente le toca la primera que cumpla
 
 **Por qué:** Electrónica sale "fuera de lo normal" solo porque sus productos son más caros. Es más justo comparar cada venta con las de su propia categoría. Y aun así son ventas reales, con montos que cuadran.
 
-### 8. Devoluciones fechadas el último día
+#### A1.8 Devoluciones fechadas el último día
 
 **Qué pasa:** el 31 de diciembre de 2024 tiene 158 devoluciones; un día normal tiene 9. Son compras de diciembre (mediana: 8 días antes) cuya devolución llegó después del cierre de los datos y quedó fechada el último día disponible.
 
@@ -122,14 +127,104 @@ Las reglas se aplican en ese orden: a cada cliente le toca la primera que cumpla
 
 **Por qué:** por fecha de devolución, estas 158 hacen que el último trimestre suba de 13,3% a 15,8%. Parece un empeoramiento, pero es un efecto del corte de los datos. Por fecha de compra, cada devolución cuenta en el trimestre de su venta y el corte no la mueve.
 
+## A2 – Rentabilidad y comportamiento de compra
+
+Cifras de `notebooks/02_rentabilidad.ipynb`.
+
+### Qué pide el enunciado y cómo lo cubrimos
+
+| Qué pide el enunciado | Cómo lo cubrimos | ¿El enunciado dice cómo hacerlo? |
+|---|---|---|
+| Segmentos, categorías y canales con mayor y menor contribución al **margen bruto** total | Tablas con el % de las ventas, del margen bruto y del margen neto de cada uno (sección 2) | Sí: pide margen bruto. El margen neto es un agregado nuestro |
+| CLV estimado por segmento y qué segmentos están en declive | CLV a 3 años por segmento y comparación 2023 contra 2024 (sección 3) | No: ni la fórmula, ni el horizonte, ni qué es "declive" |
+| Estacionalidad: picos, valles y tendencias por categoría y canal | Mes pico, mes valle y tendencia de cada categoría y canal, y pruebas de si se repiten (sección 4) | No dice el método |
+| ¿Los descuentos generan volumen suficiente para compensar la pérdida de margen? | Volumen necesario contra volumen real y una regresión (sección 5) | No dice el método |
+
+### Decisiones
+
+#### A2.1 Margen neto: qué pasa con una venta devuelta
+
+**Qué pasa:** el enunciado pide el margen bruto, pero las devoluciones reembolsan el 100% de la venta y se llevan una parte grande del margen. No hay ningún dato que diga si el producto devuelto se puede volver a vender.
+
+**Qué hicimos:** el margen bruto es la medida principal, como pide el enunciado. Además calculamos un margen neto:
+- Si la venta no se devolvió, el margen neto es igual al bruto.
+- Si se devolvió y el producto vuelve bien (cambio de opinión, talla, no cumple expectativas, demora o error en el pedido), se revende: la venta se deshace y su margen neto es 0.
+- Si se devolvió por producto defectuoso o fraude, no se puede revender: se pierde también lo que costó. El margen neto es el costo, en negativo.
+
+**Por qué:** sin el margen neto no se ve el efecto de las devoluciones, que se llevan el 27,5% del margen bruto. Y separar por motivo es más realista que suponer que todo se revende (subestima la pérdida) o que todo se pierde (la exagera).
+
+**Cuánto pesa el supuesto:** explica el 66% de lo que se llevan las devoluciones. Si el proveedor repone los defectuosos (solo se pierde el margen de la venta), las devoluciones se llevan el 13,5% del margen bruto en vez del 27,5%. Damos las dos cifras.
+
+**A confirmar con el profesor:** si le parece bien este supuesto sobre qué se revende, y si el proveedor asume los defectuosos.
+
+#### A2.2 Cómo calculamos el CLV
+
+**Qué pasa:** el enunciado pide el CLV por segmento, pero no dice cómo calcularlo.
+
+**Qué hicimos:** CLV = margen neto de un semestre × (1 + r + r² + … + r⁵).
+- **Margen de un semestre:** margen neto promedio de los clientes del segmento que compraron en ese semestre.
+- **r:** retención semestral, es decir, qué porcentaje de esos clientes vuelve a comprar el semestre siguiente.
+- **Horizonte:** 3 años (6 semestres), sin tasa de descuento.
+
+**Por qué:**
+- Con un horizonte fijo, el CLV no se vuelve infinito en los segmentos que casi nunca se pierden (Premium retiene al 99%).
+- En la cifra principal no usamos tasa de descuento: en Venezuela, con inflación alta, no hay una tasa de referencia fácil de justificar. Pero la inflación pide una tasa alta, no cero. Por eso damos también el CLV con 10% y 20% anual: los valores bajan (Premium pasa de 1.828 a 1.478 con 20%), pero el orden no cambia.
+- Usamos semestres y no años porque con 2 años de datos solo hay un paso de un año al siguiente, y así no se puede ver si el CLV cae. Con semestres hay tres. La versión anual (con el paso 2023 → 2024) da el mismo orden de segmentos.
+
+**El segmento exagera las distancias.** El segmento del archivo se definió contando las compras de los 24 meses (A1.4), así que su retención está en parte decidida de antemano (Inactivo 0%, Premium 99%). Por eso calculamos también el CLV con grupos que se conocen en el semestre base: cuántas veces compró el cliente en ese semestre. El orden es el mismo. Quien compra 4–6 veces deja unas 13 veces más que quien compra una vez (1.535 contra 122 u. m.). En el dashboard usamos esta versión, porque no depende de cómo se definió el segmento.
+
+**A confirmar con el profesor:** la fórmula, el horizonte de 3 años y la tasa de descuento.
+
+#### A2.3 Cuándo decimos que un segmento está "en declive"
+
+**Qué pasa:** el enunciado pide detectar los segmentos en declive, pero no dice qué cuenta como declive.
+
+**Qué hicimos:** comparamos el CLV de 2023 (S1 → S2) con el de 2024 (S1 → S2). Solo hablamos de declive si el CLV baja y la caída se mantiene al remuestrear los clientes 1.000 veces (*bootstrap*), es decir, si el intervalo de confianza del 95% de la caída no incluye el 0.
+
+**Por qué:** la rúbrica penaliza sacar conclusiones de diferencias que pueden ser casualidad. Con este criterio, ningún segmento está en declive: todos los cambios caben dentro de lo que podría ser azar. Con los grupos de compras del semestre (A2.2) tampoco.
+
+**Cómo lo decimos:** "no hay declive detectable", no "no hay declive". El intervalo deja pasar caídas de hasta 8–10% en Premium y Frecuente y de 25% en Esporádico. En Nuevo e Inactivo, los grupos son pequeños y solo se detectarían caídas muy grandes.
+
+**A confirmar con el profesor:** el criterio de declive y que se use el segmento que trae el archivo (el segmento calculado en A1 queda solo como contraste).
+
+#### A2.4 Cómo comprobamos la estacionalidad
+
+**Qué pasa:** el enunciado pide picos, valles y tendencias, pero cualquier serie de 24 meses tiene un mes más alto y uno más bajo, aunque sea por casualidad.
+
+**Qué hicimos:** nombramos el mes pico, el mes valle y la tendencia de cada categoría y canal, como pide el enunciado. Además comprobamos si son reales:
+- si el patrón mensual de 2023 se repite en 2024 (correlación entre los dos años),
+- si algún mes vende distinto a los demás (prueba de Kruskal-Wallis),
+- si el intervalo de confianza de la tendencia incluye el 0.
+
+**Por qué:** decir "marzo es el pico de Ropa" sin comprobar que se repite sería presentar ruido como un hallazgo. Resultado: los picos y valles no se repiten entre años. Con solo dos años es una prueba débil: basta para decir que no hay una estacionalidad marcada, no para descartar una pequeña.
+
+#### A2.5 Cómo medimos el efecto de los descuentos
+
+**Qué pasa:** que las ventas con descuento tengan menos margen es obvio. La pregunta es si generan volumen suficiente para compensarlo.
+
+**Qué hicimos:**
+- Calculamos cuánto volumen extra haría falta para ganar lo mismo (d / (g − d), donde g es el margen a precio de lista y d el descuento) y lo comparamos con el volumen extra real.
+- Hicimos una regresión de las unidades por compra según el descuento, dejando fijos la categoría, el canal y el segmento.
+- Miramos si los clientes con más descuento compran más veces.
+- **Recompra:** si una compra con más descuento hace que el cliente vuelva a comprar en los 90 días siguientes. Comparamos las compras de **cada cliente consigo mismo** (sus compras con más descuento contra sus compras con menos), así no influye qué tipo de cliente es. Es la pregunta que importa para bajar un descuento: si el cliente se va.
+- Comprobamos si hay promociones (un producto rebajado un mes entero) comparando cuánto varía el descuento de cada producto entre meses con 200 repartos al azar.
+
+**Por qué:** la rúbrica penaliza presentar correlaciones sin investigar la causa. Comparar el mismo producto en distintos meses y controlar categoría, canal y segmento descarta las explicaciones más obvias. Además, el margen de lista es igual en todas las bandas de descuento (34%), así que los descuentos no se reparten según el tipo de producto. Resultado: los descuentos no generan volumen, y una compra con más descuento no hace volver antes al cliente: +0,0 puntos de recompra por cada 10 de descuento (IC 95%: −0,6 a +0,7); solo online, +1,0 (IC 95%: −0,2 a +2,1).
+
+**Por qué cada cliente consigo mismo:** comparando clientes distintos, el resultado cambia según qué se controle. Sin controles, más descuento parece *bajar* la recompra (−2,5 puntos por cada 10), porque los clientes que más compran (Premium) reciben menos descuento: online, 6,3% contra 8,1–8,4% del resto. Una primera versión controlaba por el segmento del archivo y daba +0,2. Pero el segmento es circular (A1.4), así que la descartamos (ver `BITACORA.md`, ronda 2).
+
+**Lo que descartamos:** no hay promociones; entre productos y meses, el descuento cambia venta a venta como si fuera al azar (p = 0,3). Entre clientes no es así (ver arriba). Por eso la comparación "mismo producto en meses con más descuento" no aporta: no hay meses con más descuento. La quitamos como evidencia. La correlación débil entre descuento y número de compras en Esporádico y Nuevo (0,05 a 0,08) no se explica por el canal, pero tampoco aparece compra a compra. No la usamos.
+
+**Límite:** no tenemos un experimento (un grupo con descuento y otro sin él elegidos al azar), así que no podemos descartar todas las explicaciones. Y solo vemos las ventas que ocurrieron: si un descuento menor hiciera que alguien no comprara nunca, no lo veríamos. Por eso la recomendación de A5 sobre el descuento se propone como piloto.
+
 ## Columnas que agrega `cargar_limpio()`
 
 | Tabla | Columnas nuevas |
 |---|---|
-| transacciones | `categoria`, `subcategoria`, `costo_total`, `margen_bruto`, `bajo_costo`, `outlier_cat`, `devuelta`, `mes`, `trimestre` |
-| clientes | `primera_compra`, `ultima_compra`, `n_compras`, `gasto_total`, `margen_total`, `sin_compras`, `dias_sin_comprar`, `segmento_rfm` |
+| transacciones | `categoria`, `subcategoria`, `costo_total`, `margen_bruto`, `bajo_costo`, `outlier_cat`, `devuelta`, `mes`, `trimestre` (A1); `costo_descuento`, `motivo_devolucion`, `margen_neto` (A2) |
+| clientes | `primera_compra`, `ultima_compra`, `n_compras`, `gasto_total`, `margen_total`, `sin_compras`, `dias_sin_comprar`, `segmento_rfm` (A1); `margen_neto_total` (A2) |
 | devoluciones | `fecha_compra`, `producto_id`, `categoria`, `canal`, `monto_neto`, `dias_a_devolucion`, `fecha_dev_recortada` |
 | interacciones_crm | `respuesta_atipica` |
 | campanas_marketing | `compra_en_ventana`, `conversion_respaldada`, `monto_respaldado` |
 
-Los umbrales (30, 90 y 180 días, y 8 compras) están al principio de `src/carga.py`. Si el profesor pide otros valores, se cambian ahí.
+Los umbrales (30, 90 y 180 días, y 8 compras) y los motivos de devolución en los que el producto se pierde están al principio de `src/carga.py`. Si el profesor pide otros valores, se cambian ahí.
