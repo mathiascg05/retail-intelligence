@@ -338,3 +338,55 @@ Todo se confirmó.
 - Que cada responsable repase `docs/metodos.md` para su fase.
 - Revisar los cambios en los PR.
 
+---
+
+## 9 de octubre: tercera revisión externa
+
+**Qué le pedimos:** una evaluación como la haría el profesor, con una nota estimada por criterio, errores, lo que falta para Excelente, una estructura para el informe y las preguntas probables de la defensa. Queríamos que fuera independiente, pero se pegó en el mismo chat de las rondas anteriores, y la propia IA avisó de que no lo era. Este es el prompt, tal cual:
+
+> Te adjunto dos archivos de un proyecto universitario de análisis de datos:
+> 1. Proyecto_01_Retail_Intelligence.pdf: el enunciado del profesor, con la rúbrica.
+> 2. REVISION_retail_final.md: el estado actual del trabajo.
+> El repositorio está en mathiascg05/retail-intelligence, rama a5-storytelling. Úsalo para comprobar lo que dice el resumen: notebooks ejecutados, DECISIONES.md, docs/dashboard.md, docs/metodos.md y BITACORA.md.
+>
+> Quiero una evaluación independiente antes de escribir el informe final y armar el Power BI. Actúa como el profesor que va a corregirlo, exigente pero justo.
+>
+> 1. Nota estimada: para cada uno de los 5 criterios de la rúbrica, ¿qué nivel le pondrías hoy (Excelente / Bien / Regular / Deficiente) y por qué? Ten en cuenta que el informe y el Power BI aún no existen: evalúa el análisis y la guía del dashboard.
+> 2. Errores: ¿hay algún error de análisis, cifra incoherente entre documentos o conclusión que no se sostenga? Compruébalo en el repo, no solo en el resumen.
+> 3. Lo que falta para Excelente en cada criterio, ordenado por impacto en la nota.
+> 4. El informe: propón la estructura (secciones, qué va en cada una y qué gráficos usar), pensando en una gerencia que no sabe estadística y en un profesor que sí.
+> 5. Defensa: las 10 preguntas más probables del profesor y qué contestar en una o dos frases cada una.
+> 6. Las tres preocupaciones de la sección 3 del resumen: respóndelas.
+>
+> Reglas:
+> - Ordena por impacto en la nota.
+> - Si algo ya está bien, dilo en una línea y no busques problemas donde no los hay.
+> - Sé concreto: qué cambiar, dónde y cómo.
+> - Responde en español.
+
+**Qué dijo:**
+- Estima unos 17/20: calidad de datos y profundidad, Excelente; storytelling y bitácora, Bien; la defensa no se puede evaluar todavía.
+- No encontró errores de análisis. Sí tres problemas de presentación:
+  1. el título del visual 2 dependía del supuesto de los defectuosos;
+  2. el del visual 5 sonaba causal;
+  3. el visual 7 no funcionaba como gráfico de líneas.
+- Propuso un modelo de vuelta más simple.
+
+**Cómo lo comprobamos:**
+- Electrónica es el 15,6% del margen neto, o el 23,1% si el proveedor asume los defectuosos. Del margen bruto es el 24,3%, que no depende de ningún supuesto.
+- El modelo simple ("recurrente o no" × días sin comprar), con los recurrentes, da 58% previsto contra 56% real, y una fuga de 227.341.
+
+Las dos cosas se confirmaron.
+
+**Qué hicimos:**
+- **Aceptamos** los tres cambios de títulos y gráficos.
+- **Aceptamos** el modelo simple: predice igual de bien con los recurrentes, no necesita calibración y se explica en una frase. Es el tercer cambio de este modelo: el primero quitó el segmento circular, el segundo usó las compras de 12 meses con calibración y este lo simplifica. La cifra principal casi no se movió (372.680 → 417.569 → 412.423).
+- **No hicimos** dos cosas que vuelve a pedir:
+  - Pegar los prompts anteriores al 9 de octubre: siguen como resumen, con la nota del principio.
+  - Cerrar los "Falta": es trabajo del equipo (`docs/validacion_manual.md`).
+
+**Falta, y lo tiene que hacer el equipo:**
+- Completar la validación manual y anotar aquí quién la hizo.
+- Aprobar los PR.
+- Un simulacro de defensa con preguntas repartidas al azar (las preguntas difíciles, con su respuesta, están en `docs/metodos.md`).
+
