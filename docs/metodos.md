@@ -72,7 +72,14 @@ Si te preguntan por un método, la respuesta corta es la primera línea de su ap
 
 - **Cómo funciona:** se estima cuánto cambian las unidades por compra cuando sube el descuento, comparando solo ventas de la misma categoría, el mismo canal y el mismo segmento.
 - **Sin ella:** si online da más descuento y además vende distinto, confundiríamos el efecto del canal con el del descuento.
-- **Ejemplo:** +10 puntos de descuento → +0,004 unidades (IC: −0,012 a +0,020). Es decir, nada (A2.5). Lo mismo con la recompra a 90 días: +0,2 puntos (IC: −0,4 a +0,9).
+- **Ejemplo:** +10 puntos de descuento → +0,004 unidades (IC: −0,012 a +0,020). Es decir, nada (A2.5).
+
+## Comparar a cada cliente consigo mismo (recompra)
+
+**En una frase:** para saber si el descuento hace volver al cliente, comparamos las compras de **un mismo cliente** con más y con menos descuento.
+
+- **Sin ella:** comparando clientes distintos, más descuento parece *bajar* la recompra (−2,5 puntos por cada 10). Pero es mezcla: los que más compran (Premium) reciben menos descuento. Controlar por el segmento del archivo tampoco sirve, porque el segmento es circular.
+- **Ejemplo:** cada cliente contra sí mismo, +0,0 puntos de recompra por cada 10 de descuento (IC: −0,6 a +0,7); solo online, +1,0 (IC: −0,2 a +2,1) (A2.5).
 
 ## Prueba de permutación (¿hay promociones?)
 
@@ -100,7 +107,7 @@ Si te preguntan por un método, la respuesta corta es la primera línea de su ap
 **En una frase:** antes de usar un método para predecir el futuro, comprobar si habría acertado en el pasado.
 
 - **Cómo funciona:** con lo que sabíamos el 31-dic-2023, predecimos qué parte de los clientes en riesgo volvió en el primer semestre de 2024 y lo comparamos con lo que pasó.
-- **Resultado:** previmos 49% y volvió el 41%. La estimación se pasa, porque en un archivo de clientes fijos los de una sola compra son cada vez más los que no vuelven. Por eso damos también una versión calibrada (A3.4).
+- **Resultado:** previmos 45% y volvió el 41%. Por grupo casi acierta (1 compra en el último año: 38% y 38%; 2–3: 54% y 52%; 4–6: 95% y 91%). Agrupamos por compras en los **últimos 12 meses** porque una foto de 2023 tiene 12 meses de historia y una de 2024, 18; con todas las compras la prueba fallaba más (49%). Con los recurrentes se queda corta (49% contra 56%), así que la cifra central está calibrada (A3.4).
 - **Por qué no usamos el segmento del archivo para esto:** con él la prueba "acierta" (41% y 41%), pero solo porque el segmento se definió con las compras de los 24 meses, incluidas las posteriores. Es como predecir un partido sabiendo el resultado.
 
 ---
@@ -110,10 +117,14 @@ Si te preguntan por un método, la respuesta corta es la primera línea de su ap
 | Pregunta | Respuesta corta | Dónde |
 |---|---|---|
 | ¿Cómo era "Inactivo" un cliente en enero de 2023 si la etiqueta depende de lo que compró hasta 2024? | No lo era: la etiqueta usa información posterior. Por eso no la usamos para predecir. | A1.4, A3.4 |
-| Si bajan el descuento online, ¿cómo saben que los clientes no se van? | No lo sabemos del todo: solo vemos las ventas que ocurrieron. Ni las unidades ni la recompra cambian con el descuento, pero por eso proponemos un piloto. Compensa mientras online no pierda más del 16% de sus ventas. | A2.5, A5.3 |
+| Si bajan el descuento online, ¿cómo saben que los clientes no se van? | No lo sabemos del todo: solo vemos las ventas que ocurrieron. Ni las unidades ni la recompra (cada cliente contra sí mismo) cambian con el descuento. En el peor caso compatible con los datos se perdería un 1,2% de las recompras, y R1 compensa hasta que online pierda el 16% de sus ventas. Aun así, es un piloto. | A2.5, A5.3 |
 | Si nada empeora, ¿qué explica la presión en el margen? | El margen no baja, pero lleva dos años perdiendo lo mismo en tres sitios: descuento online, devoluciones de dos categorías y un marketing sin medir. | A1, A5.1 |
 | ¿Qué tamaño de efecto podían detectar en las quejas? | Caídas de más de 0,21 compras en 90 días. Como mucho, 19.159 en 6 meses. | A3.3 |
 | ¿Recorto el presupuesto de marketing? | No se puede saber con estos datos. Primero hay que medir con grupo de control (R3). Lo que sí: ningún descuento de campaña por encima de 5% (R4). | A4, A5.5 |
-| Si lo devuelto se revende, ¿por qué los reembolsos son ingresos perdidos? | No los sumamos como fuga. Son un costo estructural y van aparte; la cifra principal solo incluye el exceso de Ropa y Electrónica. | A3.5 |
+| Si lo devuelto se revende, ¿por qué los reembolsos son ingresos perdidos? | No los sumamos como fuga. Son un costo estructural y van aparte; la cifra principal solo incluye lo que Ropa y Electrónica devuelven por encima de lo normal. | A3.5 |
+| ¿Por qué controlaban por segmento en la recompra? | Fue un error: el segmento es circular. Lo cambiamos por comparar a cada cliente consigo mismo, y la conclusión se mantiene (+0,0 puntos). | A2.5, bitácora |
+| Si saben que la estimación de la vuelta falla, ¿por qué la usan? | La cifra central es la calibrada con el error de la prueba hacia atrás, y el rango incluye la otra versión. Con 12 meses de historia el error total es pequeño (45% contra 41%). | A3.4 |
+| R2 a R4 suman poco: ¿son recomendaciones o notas al pie? | R1 trae el dinero. R2 y R3 sirven para medir antes de gastar: R2 tiene un techo de hasta 161.647 de margen si el diagnóstico encuentra la causa, y R3 permitirá saber por fin si el marketing funciona. R4 evita regalar descuento sin retorno. | A5.2 |
+| ¿Por qué dicen "evitable" si no conocen la causa? | Ya no lo decimos: es "por encima de lo normal". Solo la parte de la talla tiene causa conocida. | A3.5, A5.4 |
 | ¿En qué moneda está el CLV? ¿Por qué sin tasa de descuento? | En unidades monetarias del archivo. Con 10% y 20% de tasa los valores bajan, pero el orden no cambia. | A2.2 |
 | ¿Por qué llaman estrella a un modelo con cuatro hechos? | Es una constelación de hechos: cuatro hechos que comparten dimensiones. | `docs/modelo.md` |

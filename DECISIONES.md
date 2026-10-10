@@ -173,7 +173,7 @@ Cifras de `notebooks/02_rentabilidad.ipynb`.
 - En la cifra principal no usamos tasa de descuento: en Venezuela, con inflación alta, no hay una tasa de referencia fácil de justificar. Pero la inflación pide una tasa alta, no cero. Por eso damos también el CLV con 10% y 20% anual: los valores bajan (Premium pasa de 1.828 a 1.478 con 20%), pero el orden no cambia.
 - Usamos semestres y no años porque con 2 años de datos solo hay un paso de un año al siguiente, y así no se puede ver si el CLV cae. Con semestres hay tres. La versión anual (con el paso 2023 → 2024) da el mismo orden de segmentos.
 
-**El segmento exagera las distancias.** El segmento del archivo se definió contando las compras de los 24 meses (A1.4), así que su retención está en parte decidida de antemano (Inactivo 0%, Premium 99%). Por eso calculamos también el CLV con grupos que se conocen en el semestre base: cuántas veces compró el cliente en ese semestre. El orden es el mismo. Quien compra 4–6 veces deja unas 13 veces más que quien compra una vez (1.535 contra 122 u. m.). En el dashboard usamos esta versión, porque no depende de cómo se definió el segmento.
+**El segmento exagera las distancias.** El segmento del archivo se definió contando las compras de los 24 meses (A1.4), así que su retención está en parte decidida de antemano (Inactivo 0%, Premium 99%). Por eso calculamos también el CLV con grupos que se conocen en el semestre base: cuántas veces compró el cliente en ese semestre. El orden es el mismo. Quien compra 4–6 veces deja unas 13 veces más que quien compra una vez (1.535 contra 122 u. m.). En el dashboard usamos esta versión, porque no depende de cómo se definió el segmento, con el salto más útil para la empresa: pasar de 1 a 2–3 compras por semestre multiplica por 4 el valor (513 contra 122).
 
 **A confirmar con el profesor:** la fórmula, el horizonte de 3 años y la tasa de descuento.
 
@@ -400,6 +400,8 @@ Cifras de `notebooks/05_recomendaciones.ipynb`. El entregable de A5 es un dashbo
 
 **Qué hicimos:** el relato arranca de lo que dicen los datos: **"RetailVenture no está empeorando: lleva dos años perdiendo margen siempre en los mismos tres sitios"**. Esos sitios son el descuento online, las devoluciones de dos categorías y un marketing que no se puede medir. El primer visual del dashboard muestra justo eso: las cuatro cifras del enunciado, trimestre a trimestre.
 
+El relato abre por lo que sí confirmamos del enunciado: las devoluciones están en torno al 14% (medidas en dinero) y la conversión registrada se cayó a la mitad. Después muestra lo que no se confirma.
+
 **Por qué:** contar una caída que no está en los datos sería construir el relato sobre algo falso. Y la conclusión sirve igual a la gerencia: si las pérdidas son estables, se pueden atacar una por una.
 
 #### A5.2 Cómo cuantificamos las recomendaciones
@@ -408,19 +410,19 @@ Cifras de `notebooks/05_recomendaciones.ipynb`. El entregable de A5 es un dashbo
 
 **Qué hicimos:** cada recomendación sale de un hallazgo de A2–A4 y depende de un supuesto explícito. Damos un escenario central y un rango, siempre en ingresos **y** margen. Las cifras son anuales con base 2024, salvo R3, que actúa una sola vez sobre los clientes en riesgo de hoy. Solo cuantificamos lo que tiene una causa visible en los datos.
 
-| | Qué hacemos | Supuesto | Ingresos (rango) | Margen |
-|---|---|---|---|---|
-| R1 | Piloto: tope de 4,7% al descuento online y ninguna venta bajo costo | Las ventas no cambian (A2.5) | +146.161 al año (77.325 a 146.161) | +146.161 |
-| R4 | Tope de 5% al descuento de las campañas | Lectura de la marca de conversión (A4.5) | −21.737 al año | +7.197 |
-| R2 | Guía de tallas en Ropa (y diagnóstico de Electrónica) | Se evita el 50% de las devoluciones por talla (25% a 75%) | +13.367 al año (6.683 a 20.050) | +5.300 |
-| R3 | Reactivación de los clientes recurrentes en riesgo, con 20% de grupo de control | Se recupera el 10% de lo que está en riesgo (5% a 20%) | +18.760 en 6 meses, una vez (9.380 a 37.519) | +4.672 |
+| | Qué hacemos | Tipo | Supuesto | Ingresos (rango) | Margen |
+|---|---|---|---|---|---|
+| R1 | Piloto: tope de 4,7% al descuento online y ninguna venta bajo costo | dinero | Las ventas no cambian (A2.5) | +146.161 al año (77.325 a 146.161) | +146.161 |
+| R4 | Tope de 5% al descuento de las campañas | higiene | Lectura de la marca de conversión (A4.5) | −21.737 al año en ingresos *registrados* por campañas | +7.197 |
+| R3 | Reactivación de los clientes recurrentes en riesgo, con 20% de grupo de control | medición | Se recupera el 10% de lo que está en riesgo (5% a 20%) | +23.249 en 6 meses, una vez (11.624 a 46.497) | +5.790 |
+| R2 | Guía de tallas en Ropa (y diagnóstico de Electrónica) | medición | Se evita el 50% de las devoluciones por talla (25% a 75%) | +13.367 al año (6.683 a 20.050) | +5.300 |
 
-Total central: **163.329 de margen, el 7,6% del margen bruto de 2024**. Lo presentamos como "podrían recuperar hasta", no como "recuperan". R1 es el 89% del total.
+Margen al año (R1, R2 y R4): **158.657, el 7,3% del margen bruto de 2024**, más 5.790 de R3 en 6 meses y una sola vez. No sumamos cifras anuales con la de R3. Lo presentamos como "podrían recuperar", no como "recuperan". R1 es el 92% de lo anual. Al lado de R2 damos su techo: entre 70.467 y 161.647 de margen al año, si el diagnóstico encuentra la causa del resto del exceso de devoluciones.
 
 **Por qué:** dar un solo número sin decir de qué depende sería presentar una suposición como un hallazgo. Ordenamos por margen y no por ingresos porque lo que importa a la empresa es el margen.
 
 **Lo que cambió después de la revisión** (ver `BITACORA.md`):
-- **Antes el total era 237.544 de margen (11%).** Bajó por R2 y R3.
+- **Antes el total era 237.544 de margen (11%).** Bajó por R2 y R3. En la segunda revisión, además, dejamos de sumar R3 (a 6 meses) con las cifras anuales.
 - **R2:** antes suponía recortar el 50% de todo el exceso de devoluciones con fichas y control de proveedores, pero los datos no muestran una causa en Electrónica.
 - **R3:** antes se anualizaba multiplicando por dos un grupo fijo de clientes, y se basaba en el segmento del archivo.
 
@@ -432,10 +434,16 @@ Total central: **163.329 de margen, el 7,6% del margen bruto de 2024**. Lo prese
 
 **Qué hicimos:** nos apoyamos en A2.5:
 - el descuento no mueve las unidades por compra;
-- tampoco la recompra a 90 días;
-- no hay promociones, el descuento cambia venta a venta.
+- tampoco la recompra a 90 días: comparando las compras de cada cliente consigo mismo, +0,0 puntos por cada 10 de descuento (IC 95%: −0,6 a +0,7); solo online, +1,0 (IC 95%: −0,2 a +2,1);
+- entre productos y meses no hay promociones; entre clientes el descuento no es igual (los Premium reciben menos).
 
-Calculamos cuánto podría caer la venta online antes de que la medida deje de compensar: un 16%. Sumamos a R1 que ninguna venta quede bajo costo en tienda y app (+5.093 al año), lo que da a Electrónica una medida propia: casi la mitad del beneficio de R1 viene de esa categoría.
+Calculamos cuánto podría caer la venta online antes de que la medida deje de compensar: un 16%. Y una tabla de sensibilidad:
+
+| Online pierde | 0% | 5% | 10% | 16% |
+|---|---|---|---|---|
+| Margen extra de R1 al año | 146.161 | 102.066 | 57.972 | 5.093 |
+
+En el peor caso compatible con los datos (la cota alta del efecto online de la recompra), bajar 3,8 puntos el descuento online quitaría un 1,2% de las recompras, muy lejos del 16%. Sumamos a R1 que ninguna venta quede bajo costo en tienda y app (+5.093 al año), lo que da a Electrónica una medida propia: casi la mitad del beneficio de R1 viene de esa categoría. Esto se debe sobre todo a que es el 44% de las ventas. Para sus devoluciones, la medida es el diagnóstico de R2.
 
 **Por qué es un piloto:** A2.5 no es un experimento, y los datos solo tienen las ventas que ocurrieron. Si alguien deja de comprar online por tener menos descuento, no lo veríamos. Por eso recomendamos aplicarla primero en una parte de los productos online y comparar con el resto.
 
@@ -456,13 +464,35 @@ Calculamos cuánto podría caer la venta online antes de que la medida deje de c
 
 **Qué hicimos:**
 - **R3:** la campaña de reactivación incluye dejar un 20% de los clientes, elegidos al azar, sin la campaña.
-  - Se dirige a los clientes recurrentes en riesgo (2 o más compras, más de 180 días sin comprar), que la empresa puede identificar hoy sin usar el segmento del archivo. El 79% del valor en riesgo está en el segmento Esporádico.
+  - Se dirige a los clientes recurrentes en riesgo (2 o más compras, más de 180 días sin comprar), que la empresa puede identificar hoy sin usar el segmento del archivo. Son 1.388 clientes y unas 232.500 u. m. en riesgo a 6 meses; el 74% está en el segmento Esporádico.
   - Las cifras son escenarios a 6 meses, sobre los clientes en riesgo de hoy.
-- **R4:** usa la lectura más favorable al descuento (la marca de conversión). Con las compras reales, el beneficio sería mayor. La conversión registrada bajará (de 10,6% a 6,9% en esos envíos), y hay que avisarlo para que no se lea como un fracaso.
+- **R4:** usa la lectura más favorable al descuento (la marca de conversión). Con las compras reales, el beneficio sería mayor. La conversión registrada bajará (de 10,6% a 6,9% en esos envíos), y con ella los ingresos *registrados* por campañas (−21.737), que no son compras reales (A4.3). Hay que avisarlo para que no se lea como un fracaso.
 
-**Costos:** R2 y R3 tienen costos que no conocemos. Damos el costo máximo con el que cada una sigue compensando: 5.300 al año para la guía de tallas y 4.672 para la campaña.
+**Costos:** R2 y R3 tienen costos que no conocemos. Damos el costo máximo con el que cada una sigue compensando: 5.300 al año para la guía de tallas y 5.790 para la campaña.
 
 **Por qué:** el valor seguro de R3 es que la empresa podrá saber, por primera vez, si una campaña genera ventas. Es la respuesta a "¿recortamos el marketing?": antes de decidir, hay que poder medirlo.
+
+#### A5.6 La tabla de pérdidas: el eje del informe
+
+**Qué pasa:** A3 cuantifica las fugas de ingresos (clientes y devoluciones), pero el 92% del beneficio de A5 viene del descuento, que no es una fuga de ingresos y se lleva el 18,3% del margen (A2). Sin una tabla que lo una, el relato y las recomendaciones parecen hablar de cosas distintas.
+
+**Qué hicimos:** una tabla con cada sitio por donde se va el margen. Para cada uno da:
+- cuánto se lleva;
+- qué parte tiene una causa concreta y se puede atacar;
+- qué recomendación lo ataca;
+- cuánto recupera en el escenario central.
+
+Está en el notebook 05 (sección 7) y en `data/powerbi/resultado_a5_tabla_perdidas.csv`.
+
+| Sitio | Margen que se lleva | Parte atacable | Recomendación | Recupera |
+|---|---|---|---|---|
+| Descuentos en ventas | 485.000 al año | 141.067 (online por encima de tienda y app) + 5.093 (bajo costo) | R1 | 146.161 |
+| Descuento de las campañas | 16.415 al año | 11.908 (lo que pasa de 5%) | R4 | 7.197 |
+| Devoluciones | 295.415 a 600.679 al año | 70.467 a 161.647 por encima de lo normal; con causa conocida, 10.599 (talla) | R2 | 5.300 |
+| Clientes recurrentes que se van | 52.546 a 70.785 en 6 meses | desconocida (no se puede medir qué recupera una campaña) | R3 | 5.790 |
+| Quejas sin resolver | no detectable (tope 4.748 en 6 meses) | — | ninguna | 0 |
+
+**Por qué:** es la forma más directa de responder "qué está pasando y qué hacemos". Y deja claro por qué R1 pesa tanto: el descuento online es el único sitio grande donde la parte atacable tiene una causa clara y no requiere inversión.
 
 ## Columnas que agrega `cargar_limpio()`
 

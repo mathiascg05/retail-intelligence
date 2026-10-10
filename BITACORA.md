@@ -4,6 +4,8 @@ Usamos Claude (de Anthropic) para ayudarnos a programar y para discutir decision
 
 La regla es simple: no aceptamos nada que no podamos explicar nosotros mismos.
 
+**Sobre los prompts:** hasta el 8 de octubre, "Qué le pedimos" es un resumen de lo que pedimos, no el texto exacto. Desde el 9 de octubre, el prompt va copiado tal cual.
+
 ---
 
 ## 22 de septiembre: arranque del proyecto
@@ -236,7 +238,7 @@ La regla es simple: no aceptamos nada que no podamos explicar nosotros mismos.
 - la permutación del descuento;
 - la recompra a 90 días.
 
-Todas se confirmaron.
+Todas se confirmaron. *(Nota de la ronda 2: las cifras se confirmaron, pero una de esas comprobaciones, la recompra a 90 días, controlaba por el segmento del archivo, que es circular. Ver la entrada de la ronda 2.)*
 
 **Qué hicimos:**
 - **Aceptamos** casi todo. Los cambios están en `DECISIONES.md` (A1.1, A1.4, A1.8, A2.1–A2.5, A3.3–A3.5, A4.3–A4.5 y A5.1–A5.5).
@@ -259,4 +261,80 @@ Todas se confirmaron.
 - Revisar estos cambios en los PR de cada fase.
 - Cerrar los "Falta validar" del 22 de septiembre: recalcular a mano unas filas de montos y márgenes y anotar quién lo hizo.
 - Que cada responsable pueda explicar sin ayuda los métodos de su fase. Para eso está `docs/metodos.md`.
+
+---
+
+## 9 de octubre: segunda revisión externa
+
+**Qué le pedimos:** a la misma sesión de Claude en claude.ai, que comprobara en el repositorio si las correcciones de la primera ronda estaban bien hechas y buscara problemas nuevos. Le dimos un resumen de lo corregido, de dónde no le hicimos caso y por qué. Este es el prompt, tal cual:
+
+> Segunda ronda de revisión del mismo proyecto. Te adjunto:
+> 1. Proyecto_01_Retail_Intelligence.pdf: el enunciado con la rúbrica.
+> 2. REVISION_retail_v2.md: qué corregimos tras tu revisión anterior, dónde no te hicimos caso (y por qué) y las cifras actuales.
+> El repositorio actualizado está en la rama a5-storytelling (mathiascg05/retail-intelligence). Úsalo para comprobar lo que dice el resumen.
+>
+> Sigue actuando como el profesor más exigente posible. Esta vez quiero:
+> 1. Verificación: para cada corrección de la sección 1 del resumen, dime si quedó bien resuelta, a medias o mal. Compruébalo en el repo (notebooks, DECISIONES.md, docs/dashboard.md), no solo en el resumen.
+> 2. Desacuerdos: en los puntos de la sección 2 donde no seguimos tu recomendación, ¿nuestro argumento se sostiene?
+> 3. Problemas nuevos: ¿las correcciones introdujeron errores, incoherencias entre fases o cifras que no cuadran?
+> 4. Nuestras dudas (sección 4): respóndelas una por una.
+> 5. Lo que falta para la nota máxima en cada criterio de la rúbrica, pensando ya en el entregable final: informe escrito + dashboard de Power BI de 10 visuales + defensa oral.
+>
+> Reglas:
+> - Ordena todo por impacto en la nota, del más grave al menos grave.
+> - Si algo está bien, dilo en una línea y sigue.
+> - Sé concreto: qué cambiar, dónde y cómo.
+> - Si algo te parece ya suficiente, dilo: no busques problemas donde no los hay.
+> - Responde en español.
+
+**Qué encontró (lo más importante):**
+1. **La recompra a 90 días que nos sugirió en la primera ronda controlaba por el segmento del archivo,** justo la circularidad que nos había criticado. La conclusión aguanta, pero la cifra estaba mal planteada.
+2. **El descuento no es aleatorio entre clientes:** los Premium reciben menos.
+3. **La estimación de la vuelta de los clientes podía mejorar** contando las compras de los últimos 12 meses en vez de todas.
+4. **La calibración usaba el factor de todos los clientes**, cuando la cifra principal solo incluye a los recurrentes.
+5. **Llamábamos "evitable" a un exceso de devoluciones sin causa conocida.**
+6. **El dashboard tenía 15 gráficos, no 10.**
+7. **Faltaba una tabla que uniera las pérdidas con las recomendaciones.**
+
+**Cómo lo comprobamos:** recalculamos sobre nuestros datos cada cifra que nos dio:
+- la recompra comparando a cada cliente consigo mismo (+0,0 puntos; online +1,0);
+- el descuento por segmento y canal (Premium 6,3% online contra 8,1–8,4%);
+- la prueba hacia atrás con 12 meses (45% previsto contra 41% real);
+- el factor de calibración con los recurrentes.
+
+Todo se confirmó.
+
+**Qué hicimos:**
+- **Aceptamos y rechazamos nuestra propia versión anterior** de la recompra. Usamos la comparación de cada cliente consigo mismo, que no depende del segmento. Fue un error nuestro haber aceptado sin más el control por segmento en la primera ronda: lo habíamos marcado como "confirmado" porque la cifra salía igual, sin revisar el método.
+- **Aceptamos** la ventana de 12 meses y calibrar solo con los recurrentes. Al hacerlo, la calibración cambió de dirección: con los recurrentes la estimación se queda corta (49% previsto, 56% real), así que la versión calibrada da menos fuga que la sin calibrar (232.487 contra 264.897).
+- **Aceptamos:**
+  - cambiar "evitables" por "fugas identificadas" y "por encima de lo normal";
+  - dejar el dashboard en 10 objetos (gráficos combinados y un índice);
+  - la tabla de pérdidas (A5.6);
+  - la sensibilidad de R1;
+  - no sumar R3 (6 meses) con las cifras anuales;
+  - los títulos 5 y 10;
+  - unificar el modelo con Power BI y regenerar el diagrama.
+- **No hicimos** dos cosas que pedía:
+  - "Pegar los prompts reales de cada entrada": las entradas anteriores quedan como resumen, con una nota que lo dice. No las reescribimos después.
+  - "Cerrar los 'Falta' con nombre": eso solo lo puede hacer una persona del equipo. Dejamos preparada la hoja `docs/validacion_manual.md`.
+
+**Errores nuestros al aplicar los cambios, y cómo los encontramos:**
+- **El promedio para el grupo "ninguna compra en 12 meses".** Ese grupo no existe en la foto de 2023, y el primer cálculo usó un promedio sin ponderar. Daba un 68% de vuelta, inflado por los grupos pequeños que vuelven casi siempre. Lo vimos porque la prueba hacia atrás salía peor que antes (53%). Con el promedio ponderado por clientes, 45%.
+- **El peor caso de la recompra para R1.** Al principio usamos la cota baja del intervalo, cuando bajar el descuento es peligroso si el descuento ayuda, es decir, en la cota alta. Corregido: en el peor caso se perdería un 1,2% de las recompras.
+
+**Cómo cambiaron las cifras principales:**
+
+| Cifra | Ronda 1 | Ronda 2 |
+|---|---|---|
+| Prueba hacia atrás de la vuelta | 49% previsto, 41% real | 45% previsto, 41% real |
+| Fugas a 6 meses (cifra principal) | 372.680 | 417.569 (397.117 a 470.712) |
+| Fuga de Esporádicos recurrentes | 148.811 | 172.819 |
+| Recompra según el descuento | +0,2 (control por segmento) | +0,0 (cada cliente consigo mismo) |
+| Margen de las recomendaciones | 163.329 (sumando R3) | 158.657 al año + 5.790 de R3 en 6 meses |
+
+**Falta, y lo tiene que hacer el equipo:**
+- Completar `docs/validacion_manual.md` y anotar aquí quién lo hizo.
+- Que cada responsable repase `docs/metodos.md` para su fase.
+- Revisar los cambios en los PR.
 
