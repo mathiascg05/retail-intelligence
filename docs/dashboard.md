@@ -21,7 +21,7 @@ Todo está en `data/powerbi/`. No hace falta correr Python para armar el dashboa
 El dashboard está en `powerbi/` en formato de proyecto de Power BI (PBIP): el modelo, las relaciones, las medidas y las 10 visualizaciones de este documento, en archivos de texto.
 
 1. Clonar el repositorio en Windows (cualquier carpeta) y pasarse a la rama del dashboard.
-2. Doble clic en `powerbi\abrir_dashboard.bat`. Apunta el parámetro `CarpetaDatos` a la carpeta `data\powerbi\` del repositorio y abre `RetailIntelligence.pbip` en Power BI Desktop.
+2. Con Power BI cerrado, doble clic en `powerbi\abrir_dashboard.bat`. Trae la última versión del repositorio (`git pull`; si no hay internet, usa la local), muestra qué versión abre, apunta el parámetro `CarpetaDatos` a la carpeta `data\powerbi\` del repositorio y abre `RetailIntelligence.pbip` en Power BI Desktop.
 3. En Power BI, pulsar **Actualizar** para cargar los CSV.
 4. Para entregar: **Archivo → Guardar como → .pbix**.
 
