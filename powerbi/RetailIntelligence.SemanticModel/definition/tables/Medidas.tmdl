@@ -61,11 +61,15 @@ table Medidas
 		displayFolder: Base
 		lineageTag: 91855551-5955-55e4-824f-f4494c48230b
 
-	measure 'Color categoría' = IF ( SELECTEDVALUE ( dim_producto[categoria] ) IN { "Ropa_y_Calzado", "Electrónica" }, "#eb6834", "#8a8984" )
+	measure 'Color categoría' = IF ( SELECTEDVALUE ( dim_producto[categoria] ) IN { "Ropa y Calzado", "Electrónica" }, "#eb6834", "#8a8984" )
 		displayFolder: Colores
 		lineageTag: fc579a37-c89c-5a3f-ba1c-5671ac8c14e2
 
-	measure 'Color canal' = IF ( SELECTEDVALUE ( fact_ventas[canal] ) = "online", "#eb6834", "#8a8984" )
+	measure 'Color acento' = "#eb6834"
+		displayFolder: Colores
+		lineageTag: 257ce135-31f1-5799-8132-a3d853c9edd1
+
+	measure 'Color canal' = IF ( SELECTEDVALUE ( fact_ventas[canal] ) = "Online", "#eb6834", "#8a8984" )
 		displayFolder: Colores
 		lineageTag: e95fadc4-4188-52c5-836a-fa78071fe685
 

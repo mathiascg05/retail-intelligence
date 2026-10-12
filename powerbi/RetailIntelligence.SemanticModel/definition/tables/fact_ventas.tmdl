@@ -196,7 +196,8 @@ table fact_ventas
 				    Origen = Csv.Document(File.Contents(CarpetaDatos & "fact_ventas.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
 				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
 				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"transaccion_id", type text}, {"cliente_id", type text}, {"fecha", type date}, {"producto_id", type text}, {"cantidad", Int64.Type}, {"precio_unitario", type number}, {"descuento", type number}, {"monto_neto", type number}, {"canal", type text}, {"metodo_pago", type text}, {"categoria", type text}, {"subcategoria", type text}, {"costo_total", type number}, {"margen_bruto", type number}, {"bajo_costo", type logical}, {"outlier_cat", type logical}, {"devuelta", type logical}, {"costo_descuento", type number}, {"motivo_devolucion", type text}, {"margen_neto", type number}, {"banda_descuento", type text}}, "en-US"),
-				    #"Agregar banda_orden" = Table.AddColumn(#"Tipos", "banda_orden", each List.PositionOf({"sin descuento", "hasta 5%", "5% a 10%", "10% a 20%", "más de 20%"}, [banda_descuento]), Int64.Type)
+				    #"Limpiar nombres" = Table.TransformColumns(#"Tipos", {{"canal", each Record.FieldOrDefault([tienda_fisica = "Tienda física", app_movil = "App móvil", online = "Online"], _, _), type text}}),
+				    #"Agregar banda_orden" = Table.AddColumn(#"Limpiar nombres", "banda_orden", each List.PositionOf({"sin descuento", "hasta 5%", "5% a 10%", "10% a 20%", "más de 20%"}, [banda_descuento]), Int64.Type)
 				in
 				    #"Agregar banda_orden"
 

@@ -87,6 +87,13 @@
                   "Value": "'Top'"
                 }
               }
+            },
+            "showTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
             }
           }
         }
@@ -195,7 +202,7 @@
             "displayName": {
               "expr": {
                 "Literal": {
-                  "Value": "'Media de todas las categorías'"
+                  "Value": "'Media'"
                 }
               }
             },
@@ -258,6 +265,20 @@
                       "Value": "'#5f5e5a'"
                     }
                   }
+                }
+              }
+            },
+            "dataLabelVerticalPosition": {
+              "expr": {
+                "Literal": {
+                  "Value": "'under'"
+                }
+              }
+            },
+            "dataLabelHorizontalPosition": {
+              "expr": {
+                "Literal": {
+                  "Value": "'right'"
                 }
               }
             }

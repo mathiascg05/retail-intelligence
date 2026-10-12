@@ -64,8 +64,9 @@ table dim_producto
 				let
 				    Origen = Csv.Document(File.Contents(CarpetaDatos & "dim_producto.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
 				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
-				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"producto_id", type text}, {"nombre", type text}, {"categoria", type text}, {"subcategoria", type text}, {"costo", type number}, {"precio_lista", type number}, {"margen_bruto_pct", type number}}, "en-US")
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"producto_id", type text}, {"nombre", type text}, {"categoria", type text}, {"subcategoria", type text}, {"costo", type number}, {"precio_lista", type number}, {"margen_bruto_pct", type number}}, "en-US"),
+				    #"Limpiar nombres" = Table.TransformColumns(#"Tipos", {{"categoria", each Text.Replace(_, "_", " "), type text}})
 				in
-				    #"Tipos"
+				    #"Limpiar nombres"
 
 	annotation PBI_ResultType = Table

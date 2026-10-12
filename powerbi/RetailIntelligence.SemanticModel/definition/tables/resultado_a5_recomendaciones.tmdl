@@ -102,7 +102,7 @@ table resultado_a5_recomendaciones
 				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a5_recomendaciones.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
 				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
 				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"id", type text}, {"qué hacemos", type text}, {"métrica", type text}, {"cambio en la métrica", type number}, {"ingresos (central)", type number}, {"desde", type number}, {"hasta", type number}, {"margen (central)", type number}, {"periodo", type text}, {"ingresos", type text}}, "en-US"),
-				    #"Agregar etiqueta" = Table.AddColumn(#"Tipos", "etiqueta", each Record.FieldOrDefault([R1 = "R1 · Tope de 4,7% al descuento online", R2 = "R2 · Guía de tallas en Ropa", R3 = "R3 · Reactivar recurrentes en riesgo (6 meses, una vez)", R4 = "R4 · Tope de 5% al descuento de campañas"], [id], [id]), type text)
+				    #"Agregar etiqueta" = Table.AddColumn(#"Tipos", "etiqueta", each Record.FieldOrDefault([R1 = "R1 · Descuento online ≤ 4,7%", R2 = "R2 · Guía de tallas (Ropa)", R3 = "R3 · Reactivación (6 meses, una vez)", R4 = "R4 · Descuento campañas ≤ 5%"], [id], [id]), type text)
 				in
 				    #"Agregar etiqueta"
 
