@@ -1,0 +1,51 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-US
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup Parametros
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup Dimensiones
+
+	annotation PBI_QueryGroupOrder = 1
+
+queryGroup Hechos
+
+	annotation PBI_QueryGroupOrder = 2
+
+queryGroup Resultados
+
+	annotation PBI_QueryGroupOrder = 3
+
+annotation PBI_QueryOrder = ["CarpetaDatos", "dim_cliente", "dim_fecha", "dim_producto", "fact_campanas", "fact_crm", "fact_devoluciones", "fact_ventas", "resultado_a2_clv_grupos", "resultado_a2_clv_segmento", "resultado_a2_margen_trimestre", "resultado_a3_clientes_en_riesgo", "resultado_a3_fuga_segmento", "resultado_a3_impacto_6_meses", "resultado_a3_quejas", "resultado_a3_retorno_compras", "resultado_a3_retorno_tipo_tramo", "resultado_a4_descuento_marcada_vs_real", "resultado_a4_roi_tipo", "resultado_a4_trimestre", "resultado_a5_recomendaciones", "resultado_a5_situacion_trimestre", "resultado_a5_tabla_perdidas", "Medidas"]
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+ref table dim_cliente
+ref table dim_fecha
+ref table dim_producto
+ref table fact_campanas
+ref table fact_crm
+ref table fact_devoluciones
+ref table fact_ventas
+ref table resultado_a2_clv_grupos
+ref table resultado_a2_clv_segmento
+ref table resultado_a2_margen_trimestre
+ref table resultado_a3_clientes_en_riesgo
+ref table resultado_a3_fuga_segmento
+ref table resultado_a3_impacto_6_meses
+ref table resultado_a3_quejas
+ref table resultado_a3_retorno_compras
+ref table resultado_a3_retorno_tipo_tramo
+ref table resultado_a4_descuento_marcada_vs_real
+ref table resultado_a4_roi_tipo
+ref table resultado_a4_trimestre
+ref table resultado_a5_recomendaciones
+ref table resultado_a5_situacion_trimestre
+ref table resultado_a5_tabla_perdidas
+ref table Medidas

@@ -1,0 +1,87 @@
+table resultado_a4_roi_tipo
+	lineageTag: 7c62537e-0f5e-59d5-a25e-718c802c088d
+
+	column tipo_campana
+		dataType: string
+		lineageTag: e58f8865-201f-5279-8c13-f96f0fca547d
+		summarizeBy: none
+		sourceColumn: tipo_campana
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'envíos'
+		dataType: double
+		lineageTag: 42c452a9-a4ed-51ee-b9e3-3218c25aa8e1
+		summarizeBy: sum
+		sourceColumn: envíos
+
+		annotation SummarizationSetBy = Automatic
+
+	column convertidos
+		dataType: double
+		lineageTag: 078ff4a2-4a02-542f-bd44-a6f2a8d0fee7
+		summarizeBy: sum
+		sourceColumn: convertidos
+
+		annotation SummarizationSetBy = Automatic
+
+	column coincidentes
+		dataType: double
+		lineageTag: fb1a2636-b6ae-52ed-918c-1b89ed92b20d
+		summarizeBy: sum
+		sourceColumn: coincidentes
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto
+		dataType: double
+		lineageTag: 1d5381db-4690-5668-8008-277ad8b6975a
+		summarizeBy: sum
+		sourceColumn: monto
+
+		annotation SummarizationSetBy = Automatic
+
+	column margen
+		dataType: double
+		lineageTag: 45f04ae7-698e-5920-9c34-b6a094ba0ec6
+		summarizeBy: sum
+		sourceColumn: margen
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'costo descuento'
+		dataType: double
+		lineageTag: a5c33945-49e7-5959-9b02-63c316cf5021
+		summarizeBy: sum
+		sourceColumn: costo descuento
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ROI ventas'
+		dataType: double
+		lineageTag: 54e8f8b2-1fe9-5685-b361-7cb44941ec18
+		summarizeBy: sum
+		sourceColumn: ROI ventas
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'ROI margen'
+		dataType: double
+		lineageTag: d8e70048-338f-5850-9c18-06609faf4fa7
+		summarizeBy: sum
+		sourceColumn: ROI margen
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a4_roi_tipo = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a4_roi_tipo.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"tipo_campana", type text}, {"envíos", type number}, {"convertidos", type number}, {"coincidentes", type number}, {"monto", type number}, {"margen", type number}, {"costo descuento", type number}, {"ROI ventas", type number}, {"ROI margen", type number}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,6 @@
+/// Carpeta con los CSV de data/powerbi (terminada en \). Cambiarla en Transformar datos → Editar parámetros.
+expression CarpetaDatos = "C:\retail-intelligence\data\powerbi\" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]
+	lineageTag: 111d51b5-73de-57a2-8777-aa6e33dc2906
+	queryGroup: Parametros
+
+	annotation PBI_ResultType = Text

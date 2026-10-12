@@ -1,0 +1,53 @@
+table resultado_a3_retorno_compras
+	lineageTag: 8b72b73d-805b-50de-95a1-7e276bef236a
+
+	column compras
+		dataType: string
+		lineageTag: 9dec50f4-4612-56f1-9919-0eda736ccc73
+		summarizeBy: none
+		sourceColumn: compras
+		sortByColumn: orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column clientes
+		dataType: int64
+		formatString: #,0
+		lineageTag: 3d23bc4c-634d-5bb5-9393-b0df5ba1ac1c
+		summarizeBy: sum
+		sourceColumn: clientes
+
+		annotation SummarizationSetBy = Automatic
+
+	column vuelve
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 90fd0270-aa15-520c-8864-d8f4f9707044
+		summarizeBy: sum
+		sourceColumn: vuelve
+
+		annotation SummarizationSetBy = Automatic
+
+	column orden
+		dataType: int64
+		formatString: 0
+		lineageTag: 06211d3d-695b-5653-80a1-99b551a77821
+		summarizeBy: none
+		sourceColumn: orden
+		isHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a3_retorno_compras = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a3_retorno_compras.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"compras", type text}, {"clientes", Int64.Type}, {"vuelve", type number}}, "en-US"),
+				    #"Agregar orden" = Table.AddIndexColumn(#"Tipos", "orden", 1, 1, Int64.Type)
+				in
+				    #"Agregar orden"
+
+	annotation PBI_ResultType = Table

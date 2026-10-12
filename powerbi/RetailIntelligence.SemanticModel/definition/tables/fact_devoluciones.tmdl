@@ -1,0 +1,127 @@
+table fact_devoluciones
+	lineageTag: f82ba979-f1f7-5f90-82d2-62b4e91c5b89
+
+	column devolucion_id
+		dataType: string
+		lineageTag: 0a2586cf-5759-5cb7-be77-51d69719a610
+		summarizeBy: none
+		sourceColumn: devolucion_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column transaccion_id
+		dataType: string
+		lineageTag: 48a4d125-3581-5442-93f4-532f6edee7c1
+		summarizeBy: none
+		sourceColumn: transaccion_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column cliente_id
+		dataType: string
+		lineageTag: fda9707e-2c57-5385-9d73-b66c13dbe5dc
+		summarizeBy: none
+		sourceColumn: cliente_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column motivo
+		dataType: string
+		lineageTag: 79f9fca4-606d-5e57-94a2-ca055a388e9c
+		summarizeBy: none
+		sourceColumn: motivo
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_devuelto
+		dataType: double
+		lineageTag: 209edf59-8f9f-532a-833b-c7c26016fe16
+		summarizeBy: sum
+		sourceColumn: monto_devuelto
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_devolucion
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 182f7563-4c29-5141-b076-a42d2d1c57d5
+		summarizeBy: none
+		sourceColumn: fecha_devolucion
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column fecha_compra
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 2b28d298-112f-5445-9cfd-c4167d4b02d2
+		summarizeBy: none
+		sourceColumn: fecha_compra
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column producto_id
+		dataType: string
+		lineageTag: 02666a09-828a-57d6-84d7-cd0ac81bc03e
+		summarizeBy: none
+		sourceColumn: producto_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria
+		dataType: string
+		lineageTag: 865c0e3f-a8b1-562c-b1c5-bbe8c55cd0a4
+		summarizeBy: none
+		sourceColumn: categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column canal
+		dataType: string
+		lineageTag: f1be0461-e8de-5429-9fe8-9467b5864623
+		summarizeBy: none
+		sourceColumn: canal
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_neto
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 7a5f2fc7-8e2b-54d7-9a07-cf5ffb650e49
+		summarizeBy: sum
+		sourceColumn: monto_neto
+
+		annotation SummarizationSetBy = Automatic
+
+	column dias_a_devolucion
+		dataType: int64
+		formatString: 0
+		lineageTag: d4d62aaf-05ee-53ab-8817-112f8b698ea8
+		summarizeBy: sum
+		sourceColumn: dias_a_devolucion
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_dev_recortada
+		dataType: boolean
+		lineageTag: 5ab39db0-df64-5b4b-92aa-6e6b1b76b08f
+		summarizeBy: none
+		sourceColumn: fecha_dev_recortada
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_devoluciones = m
+		mode: import
+		queryGroup: Hechos
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "fact_devoluciones.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"devolucion_id", type text}, {"transaccion_id", type text}, {"cliente_id", type text}, {"motivo", type text}, {"monto_devuelto", type number}, {"fecha_devolucion", type date}, {"fecha_compra", type date}, {"producto_id", type text}, {"categoria", type text}, {"canal", type text}, {"monto_neto", type number}, {"dias_a_devolucion", Int64.Type}, {"fecha_dev_recortada", type logical}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,89 @@
+table resultado_a4_trimestre
+	lineageTag: da6feb73-eec3-5452-b581-b66e992ecc51
+
+	column trimestre
+		dataType: string
+		lineageTag: bb388ac5-b7ed-5198-bcd3-65b1f92a42a4
+		summarizeBy: none
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column envios
+		dataType: int64
+		formatString: 0
+		lineageTag: 4974644a-e23d-5e40-a46a-fac614afd818
+		summarizeBy: sum
+		sourceColumn: envios
+
+		annotation SummarizationSetBy = Automatic
+
+	column conversion
+		dataType: double
+		lineageTag: de0d52d0-1d7a-5668-93ae-2b7795ec92cf
+		summarizeBy: sum
+		sourceColumn: conversion
+
+		annotation SummarizationSetBy = Automatic
+
+	column apertura
+		dataType: double
+		lineageTag: d1782e79-d97b-5680-8275-67f0676f3947
+		summarizeBy: sum
+		sourceColumn: apertura
+
+		annotation SummarizationSetBy = Automatic
+
+	column descuento
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 6a79d178-2a55-521b-a2cb-b0ca6e220027
+		summarizeBy: sum
+		sourceColumn: descuento
+
+		annotation SummarizationSetBy = Automatic
+
+	column inactivos
+		dataType: double
+		lineageTag: d8a4ddad-96cf-5768-9783-ea43d82baaae
+		summarizeBy: sum
+		sourceColumn: inactivos
+
+		annotation SummarizationSetBy = Automatic
+
+	column premium
+		dataType: double
+		lineageTag: 1b995286-591a-5bba-9a7d-768b6cdeada6
+		summarizeBy: sum
+		sourceColumn: premium
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'conv. si abre'
+		dataType: double
+		lineageTag: a9359d99-db56-5ebe-b18a-a94461b2afef
+		summarizeBy: sum
+		sourceColumn: conv. si abre
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'compra real 30 d'
+		dataType: double
+		lineageTag: cd2b2adc-d692-505a-8a29-e60a53448570
+		summarizeBy: sum
+		sourceColumn: compra real 30 d
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a4_trimestre = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a4_trimestre.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"trimestre", type text}, {"envios", Int64.Type}, {"conversion", type number}, {"apertura", type number}, {"descuento", type number}, {"inactivos", type number}, {"premium", type number}, {"conv. si abre", type number}, {"compra real 30 d", type number}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

@@ -1,0 +1,67 @@
+table resultado_a3_fuga_segmento
+	lineageTag: 5d33c1dc-962a-537d-9aed-322a3ea226d7
+
+	column segmento
+		dataType: string
+		lineageTag: 11dcaca8-d26c-5266-ae06-0c941466e2be
+		summarizeBy: none
+		sourceColumn: segmento
+
+		annotation SummarizationSetBy = Automatic
+
+	column en_riesgo
+		dataType: int64
+		formatString: #,0
+		lineageTag: a92c8c1f-5936-504f-a92b-73a23cd5825d
+		summarizeBy: sum
+		sourceColumn: en_riesgo
+
+		annotation SummarizationSetBy = Automatic
+
+	column p_vuelve
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 5bec0159-e836-5a1b-bb80-5477d1cc3816
+		summarizeBy: sum
+		sourceColumn: p_vuelve
+
+		annotation SummarizationSetBy = Automatic
+
+	column gasto_semestral
+		dataType: double
+		formatString: #,0
+		lineageTag: 0f82a15a-f228-582e-9b04-7ec18bfbbedb
+		summarizeBy: sum
+		sourceColumn: gasto_semestral
+
+		annotation SummarizationSetBy = Automatic
+
+	column ingreso_perdido
+		dataType: double
+		formatString: #,0
+		lineageTag: 31576ca6-2b7d-5fd6-a92c-829e6956d993
+		summarizeBy: sum
+		sourceColumn: ingreso_perdido
+
+		annotation SummarizationSetBy = Automatic
+
+	column '% del total'
+		dataType: double
+		lineageTag: 462fc63c-b2cd-5b7c-b16c-d9041922e45e
+		summarizeBy: sum
+		sourceColumn: % del total
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a3_fuga_segmento = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a3_fuga_segmento.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"segmento", type text}, {"en_riesgo", Int64.Type}, {"p_vuelve", type number}, {"gasto_semestral", type number}, {"ingreso_perdido", type number}, {"% del total", type number}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

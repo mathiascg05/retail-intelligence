@@ -1,0 +1,72 @@
+table resultado_a3_quejas
+	lineageTag: 17a476e6-ef14-5801-a1be-17f735fd27b5
+
+	column resolucion
+		dataType: string
+		lineageTag: 63ab8046-e9eb-570f-9709-0b438e8410f4
+		summarizeBy: none
+		sourceColumn: resolucion
+
+		annotation SummarizationSetBy = Automatic
+
+	column quejas
+		dataType: int64
+		formatString: 0
+		lineageTag: fbe7849c-518c-5f2c-ac07-95a5c455f917
+		summarizeBy: sum
+		sourceColumn: quejas
+
+		annotation SummarizationSetBy = Automatic
+
+	column compras_antes
+		dataType: double
+		lineageTag: daf4b624-1de6-5f86-a3c3-3401c69c0f04
+		summarizeBy: sum
+		sourceColumn: compras_antes
+
+		annotation SummarizationSetBy = Automatic
+
+	column compras_despues
+		dataType: double
+		lineageTag: e88f856a-1a99-5603-b34f-cac1c707f782
+		summarizeBy: sum
+		sourceColumn: compras_despues
+
+		annotation SummarizationSetBy = Automatic
+
+	column cambio
+		dataType: double
+		lineageTag: 5428f7b2-4268-554f-9c7a-6ee605e00cb0
+		summarizeBy: sum
+		sourceColumn: cambio
+
+		annotation SummarizationSetBy = Automatic
+
+	column gasto_antes
+		dataType: double
+		lineageTag: 1e262eaa-1a24-59ca-94d2-ef95432e6c11
+		summarizeBy: sum
+		sourceColumn: gasto_antes
+
+		annotation SummarizationSetBy = Automatic
+
+	column gasto_despues
+		dataType: double
+		lineageTag: 53b9d6fa-979e-5a5c-9ae9-f79fb9d51d9c
+		summarizeBy: sum
+		sourceColumn: gasto_despues
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a3_quejas = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a3_quejas.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"resolucion", type text}, {"quejas", Int64.Type}, {"compras_antes", type number}, {"compras_despues", type number}, {"cambio", type number}, {"gasto_antes", type number}, {"gasto_despues", type number}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

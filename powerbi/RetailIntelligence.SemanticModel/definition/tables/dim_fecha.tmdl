@@ -1,0 +1,62 @@
+table dim_fecha
+	lineageTag: ab6c4d99-3f4a-5a07-aabf-ef4383bec5f4
+
+	column fecha
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: d8a82574-976f-5421-8137-814eb3b64e48
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column anio
+		dataType: int64
+		formatString: 0
+		lineageTag: 32a2de4c-37a2-5277-bcca-c8bb5e7c46ee
+		summarizeBy: none
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column semestre
+		dataType: int64
+		formatString: 0
+		lineageTag: 413f04c2-393c-5f58-93c9-8f6ea4711c26
+		summarizeBy: none
+		sourceColumn: semestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column trimestre
+		dataType: int64
+		formatString: 0
+		lineageTag: 7776bab0-8946-50b8-8284-73b0770fde57
+		summarizeBy: none
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 5fd9f5d3-be0c-51c6-841b-9604e7760529
+		summarizeBy: none
+		sourceColumn: mes
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_fecha = m
+		mode: import
+		queryGroup: Dimensiones
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "dim_fecha.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"fecha", type date}, {"anio", Int64.Type}, {"semestre", Int64.Type}, {"trimestre", Int64.Type}, {"mes", Int64.Type}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

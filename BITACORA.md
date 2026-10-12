@@ -4,6 +4,8 @@ Usamos Claude (de Anthropic) para ayudarnos a programar y para discutir decision
 
 La regla es simple: no aceptamos nada que no podamos explicar nosotros mismos.
 
+**Sobre los prompts:** hasta el 8 de octubre, "Qué le pedimos" es un resumen de lo que pedimos, no el texto exacto. Desde el 9 de octubre, el prompt va copiado tal cual.
+
 ---
 
 ## 22 de septiembre: arranque del proyecto
@@ -18,7 +20,7 @@ La regla es simple: no aceptamos nada que no podamos explicar nosotros mismos.
 **Qué hicimos:**
 - **Aceptamos** la estructura del repositorio y que todos carguen los datos desde `src/carga.py`. Así las cifras no dependen de quién corrió el código.
 - **Aceptamos** el calendario de 4 semanas. Lo armamos para la semana 6, que es la fecha que dio el profesor, no para la semana 15 del PDF.
-- **Decidimos** no usar Power BI como entrega principal. Los gráficos salen de los notebooks, así se pueden regenerar si cambia algún dato.
+- **Decidimos** no usar Power BI como entrega principal. Los gráficos salen de los notebooks, así se pueden regenerar si cambia algún dato. *(Nota del 9 de octubre: esto cambió. El 8 de octubre el profesor pidió un dashboard de Power BI y un informe escrito. Ver las entradas del 8 y el 9 de octubre.)*
 - **Falta validar:** la revisión dice que no hay errores en montos ni márgenes. Alguien del equipo tiene que recalcular a mano unas cuantas filas para confirmarlo. Anotar aquí quién lo hizo y qué encontró.
 
 ---
@@ -167,3 +169,224 @@ La regla es simple: no aceptamos nada que no podamos explicar nosotros mismos.
 - Tipo de campaña y canal resultaron ser lo mismo (cada tipo sale por un solo canal). Lo dejamos explicado en vez de presentarlos como dos hallazgos separados.
 
 **Falta:** que Fernando Álvarez, responsable de A4, revise el notebook 04 y pueda explicar por qué el descuento se puede tratar como un experimento, la comparación con las compras reales y las tres versiones del ROI sin ayuda.
+
+---
+
+## 8 de octubre: A5, recomendaciones y datos para Power BI
+
+**Qué le pedimos:** cuantificar al menos tres recomendaciones en el formato del enunciado y preparar los datos para el dashboard de Power BI. El profesor pide un dashboard de Power BI y un informe escrito, así que no hicimos diapositivas.
+
+**Qué propuso:**
+- Cuatro recomendaciones, cada una apoyada en un hallazgo de A2–A4: bajar el descuento online, reducir el exceso de devoluciones de Ropa y Electrónica, una campaña de reactivación con grupo de control y un tope al descuento de las campañas.
+- Dar cada una con su supuesto, un escenario central y un rango, en ingresos y en margen.
+- Exportar el modelo estrella a CSV y guardar desde cada notebook las tablas de resultados, para que el dashboard muestre las mismas cifras que el informe. Y una guía (`docs/dashboard.md`) con las relaciones, las medidas DAX y las 10 visualizaciones.
+
+**Qué hicimos:**
+- **Aceptamos** las cuatro recomendaciones y ordenarlas por margen.
+- **Aceptamos** guardar los CSV de Power BI en el repositorio, para que quien arme el dashboard no tenga que correr Python.
+- **Dejamos fuera del dashboard** las quejas y el ROI por tipo de campaña (no muestran diferencias) para no pasar de 10 visualizaciones. Van en el informe.
+
+**Errores y ajustes al revisar los resultados:**
+- R4 se presentaba solo como ahorro. Al calcular los ingresos, con menos descuento hay menos conversiones y los ingresos registrados bajan (−21.737) aunque el margen suba (+7.197). Ahora se dan las dos cifras.
+- La etiqueta de R1 redondeaba el tope a 5%; es 4,7%.
+- Al agregar la exportación a los notebooks 02, 03 y 04 los volvimos a ejecutar y comprobamos que todas sus salidas siguen siendo idénticas.
+
+**Falta:** armar el dashboard en Power BI siguiendo `docs/dashboard.md`, escribir el informe y que Leonardo Reyes, responsable de A5, pueda explicar de dónde sale cada cifra de las recomendaciones y de qué supuesto depende.
+
+---
+
+## 9 de octubre: revisión externa de todo el trabajo y correcciones
+
+**Qué le pedimos:** antes de escribir el informe, pedimos a otra sesión de Claude (en claude.ai) una revisión crítica de A1–A5. Le dimos el PDF del enunciado, un resumen de todo lo hecho y acceso al repositorio. Este es el prompt, tal cual:
+
+> Te adjunto dos archivos de un proyecto universitario de análisis de datos:
+> 1. Proyecto_01_Retail_Intelligence.pdf: el enunciado del profesor, con la rúbrica.
+> 2. REVISION_retail_intelligence.md: el resumen de todo lo que hizo mi equipo (fases A1 a A5), con decisiones, cifras y recomendaciones.
+> (Si también ves el repositorio, el trabajo está en la rama a5-storytelling. Úsalo para comprobar que el resumen dice la verdad.)
+>
+> Antes de escribir el informe final, necesito una revisión crítica, no una confirmación. Actúa como el profesor más exigente posible, buscando por qué este trabajo no merece la nota máxima según la rúbrica.
+>
+> Revisa, en este orden:
+> 1. Cobertura: compara punto por punto lo que pide el enunciado (A1–A5 y los 5 criterios de la rúbrica) con lo que hicimos. Señala lo que falta o está a medias.
+> 2. Solidez: ¿qué conclusión no se sostiene con la evidencia descrita? ¿Dónde presentamos correlación como causalidad?
+> 3. Coherencia: ¿hay contradicciones entre fases o cifras que no cuadran entre sí?
+> 4. Decisiones: de las marcadas "A confirmar", ¿cuál cambiarías y por qué?
+> 5. Relato: ¿funciona como historia (situación actual → hallazgos → recomendaciones) para una gerencia que no sabe estadística?
+> 6. Los 11 puntos débiles de la sección 4 del resumen: para cada uno, dime si es grave, menor o no es problema, y qué harías.
+> 7. Defensa oral: las 10 preguntas más difíciles que haría el profesor, y cuáles nos costaría responder.
+>
+> Reglas:
+> - Ordena los problemas por impacto en la nota, del más grave al menos grave.
+> - Si algo está bien, dilo en una línea y sigue.
+> - No puedes recalcular las cifras: dalas por buenas, pero marca cualquiera que te parezca inverosímil o incoherente con otra.
+> - Sé concreto: en vez de "falta profundidad", di qué análisis falta y cómo se haría.
+> - Responde en español.
+
+**Qué encontró (lo más grave):**
+1. **El segmento del archivo es circular.** Es una franja del número de compras de los 24 meses (Inactivo 0–1, Premium 4–34). Lo usábamos para predecir la vuelta de los clientes y el CLV, así que "los Inactivo nunca vuelven" era una tautología.
+2. **Las 179 conversiones "confirmadas" son coincidencias:** el 22,5% de las conversiones tiene una compra en 30 días, casi igual que cualquier envío.
+3. **El margen no cae** (24,7% → 24,9%) y no lo decíamos. El relato no explicaba "por qué".
+4. Sumábamos todos los reembolsos como "ingresos perdidos", lo que contradecía A2.1.
+5. R1 era casi todo el beneficio y se apoyaba en una prueba débil. R2 suponía una causa en Electrónica que los datos no muestran. R3 anualizaba mal.
+6. Faltaban: atípicos en todos los campos, las 158 devoluciones del 31-dic y decir "no detectable" en vez de "no hay efecto".
+
+**Cómo lo comprobamos:** antes de cambiar nada, recalculamos cada afirmación marcada como comprobada sobre nuestros datos:
+- los rangos de compras por segmento;
+- el margen por año;
+- las 158 devoluciones del 31-dic;
+- la tasa de las coincidencias (22,5% contra 20,3%);
+- la permutación del descuento;
+- la recompra a 90 días.
+
+Todas se confirmaron. *(Nota de la ronda 2: las cifras se confirmaron, pero una de esas comprobaciones, la recompra a 90 días, controlaba por el segmento del archivo, que es circular. Ver la entrada de la ronda 2.)*
+
+**Qué hicimos:**
+- **Aceptamos** casi todo. Los cambios están en `DECISIONES.md` (A1.1, A1.4, A1.8, A2.1–A2.5, A3.3–A3.5, A4.3–A4.5 y A5.1–A5.5).
+- **Ajustamos** la estimación de la vuelta de los clientes. La revisión proponía estimarla con datos conocidos en la fecha de corte. Lo hicimos, pero esa versión predice peor en la prueba hacia atrás: 49% previsto contra 41% real. La causa es que el archivo tiene clientes fijos y los de una sola compra son cada vez más los que no vuelven. No lo escondimos: damos la versión tal cual y una calibrada con ese error. También probamos una regresión logística con el ritmo de compra y la antigüedad, y no mejoró. La descartamos por ser más difícil de explicar sin ganar nada.
+- **Ajustamos** la lectura de las devoluciones. La revisión decía que por fecha de devolución el último trimestre sube a 15,8%. Comprobamos que esa subida se debe solo a las 158 devoluciones fechadas el 31-dic (sin ellas, 13,3%). Así que "no hubo subida" se mantiene, midiendo por fecha de compra.
+- **Ajustamos** la fecha de registro. La revisión decía que el registro es casi uniforme. Hay un pico en el último trimestre de 2024 (1.538 altas), pero la conclusión es la misma: no es un alta en un sistema nuevo y no la usamos.
+- **Ajustamos** la recomendación para Electrónica. En vez de crear una recomendación aparte, sumamos a R1 que ninguna venta quede bajo costo (+5.093 al año). Casi la mitad del beneficio de R1 viene de Electrónica.
+- **Rechazamos** cambiar el ticket con el que R4 valora las conversiones. La revisión decía que usa el ticket de las 179 coincidencias, pero ese ticket (355) es casi el de cualquier compra (344), así que el resultado no cambia.
+
+**Cómo cambiaron las cifras principales:**
+
+| Cifra | Antes | Ahora |
+|---|---|---|
+| Fugas a 6 meses | 1.011.458 (todo sumado) | 372.680 evitables (350.773 a 446.562); reembolsos aparte |
+| Segmento de mayor valor en riesgo | Esporádico, 169.772 | Esporádico, 148.811 (solo clientes recurrentes) |
+| Recomendaciones (margen central) | 237.544 al año, 11% | 163.329, 7,6% (R1 es el 89%) |
+| CLV en el dashboard | Premium 13 veces Esporádico (segmento circular) | Quien compra 4–6 veces por semestre, 13 veces quien compra una (grupos conocidos de antemano) |
+
+**Falta, y lo tiene que hacer el equipo (no la IA):**
+- Revisar estos cambios en los PR de cada fase.
+- Cerrar los "Falta validar" del 22 de septiembre: recalcular a mano unas filas de montos y márgenes y anotar quién lo hizo.
+- Que cada responsable pueda explicar sin ayuda los métodos de su fase. Para eso está `docs/metodos.md`.
+
+---
+
+## 9 de octubre: segunda revisión externa
+
+**Qué le pedimos:** a la misma sesión de Claude en claude.ai, que comprobara en el repositorio si las correcciones de la primera ronda estaban bien hechas y buscara problemas nuevos. Le dimos un resumen de lo corregido, de dónde no le hicimos caso y por qué. Este es el prompt, tal cual:
+
+> Segunda ronda de revisión del mismo proyecto. Te adjunto:
+> 1. Proyecto_01_Retail_Intelligence.pdf: el enunciado con la rúbrica.
+> 2. REVISION_retail_v2.md: qué corregimos tras tu revisión anterior, dónde no te hicimos caso (y por qué) y las cifras actuales.
+> El repositorio actualizado está en la rama a5-storytelling (mathiascg05/retail-intelligence). Úsalo para comprobar lo que dice el resumen.
+>
+> Sigue actuando como el profesor más exigente posible. Esta vez quiero:
+> 1. Verificación: para cada corrección de la sección 1 del resumen, dime si quedó bien resuelta, a medias o mal. Compruébalo en el repo (notebooks, DECISIONES.md, docs/dashboard.md), no solo en el resumen.
+> 2. Desacuerdos: en los puntos de la sección 2 donde no seguimos tu recomendación, ¿nuestro argumento se sostiene?
+> 3. Problemas nuevos: ¿las correcciones introdujeron errores, incoherencias entre fases o cifras que no cuadran?
+> 4. Nuestras dudas (sección 4): respóndelas una por una.
+> 5. Lo que falta para la nota máxima en cada criterio de la rúbrica, pensando ya en el entregable final: informe escrito + dashboard de Power BI de 10 visuales + defensa oral.
+>
+> Reglas:
+> - Ordena todo por impacto en la nota, del más grave al menos grave.
+> - Si algo está bien, dilo en una línea y sigue.
+> - Sé concreto: qué cambiar, dónde y cómo.
+> - Si algo te parece ya suficiente, dilo: no busques problemas donde no los hay.
+> - Responde en español.
+
+**Qué encontró (lo más importante):**
+1. **La recompra a 90 días que nos sugirió en la primera ronda controlaba por el segmento del archivo,** justo la circularidad que nos había criticado. La conclusión aguanta, pero la cifra estaba mal planteada.
+2. **El descuento no es aleatorio entre clientes:** los Premium reciben menos.
+3. **La estimación de la vuelta de los clientes podía mejorar** contando las compras de los últimos 12 meses en vez de todas.
+4. **La calibración usaba el factor de todos los clientes**, cuando la cifra principal solo incluye a los recurrentes.
+5. **Llamábamos "evitable" a un exceso de devoluciones sin causa conocida.**
+6. **El dashboard tenía 15 gráficos, no 10.**
+7. **Faltaba una tabla que uniera las pérdidas con las recomendaciones.**
+
+**Cómo lo comprobamos:** recalculamos sobre nuestros datos cada cifra que nos dio:
+- la recompra comparando a cada cliente consigo mismo (+0,0 puntos; online +1,0);
+- el descuento por segmento y canal (Premium 6,3% online contra 8,1–8,4%);
+- la prueba hacia atrás con 12 meses (45% previsto contra 41% real);
+- el factor de calibración con los recurrentes.
+
+Todo se confirmó.
+
+**Qué hicimos:**
+- **Aceptamos y rechazamos nuestra propia versión anterior** de la recompra. Usamos la comparación de cada cliente consigo mismo, que no depende del segmento. Fue un error nuestro haber aceptado sin más el control por segmento en la primera ronda: lo habíamos marcado como "confirmado" porque la cifra salía igual, sin revisar el método.
+- **Aceptamos** la ventana de 12 meses y calibrar solo con los recurrentes. Al hacerlo, la calibración cambió de dirección: con los recurrentes la estimación se queda corta (49% previsto, 56% real), así que la versión calibrada da menos fuga que la sin calibrar (232.487 contra 264.897).
+- **Aceptamos:**
+  - cambiar "evitables" por "fugas identificadas" y "por encima de lo normal";
+  - dejar el dashboard en 10 objetos (gráficos combinados y un índice);
+  - la tabla de pérdidas (A5.6);
+  - la sensibilidad de R1;
+  - no sumar R3 (6 meses) con las cifras anuales;
+  - los títulos 5 y 10;
+  - unificar el modelo con Power BI y regenerar el diagrama.
+- **No hicimos** dos cosas que pedía:
+  - "Pegar los prompts reales de cada entrada": las entradas anteriores quedan como resumen, con una nota que lo dice. No las reescribimos después.
+  - "Cerrar los 'Falta' con nombre": eso solo lo puede hacer una persona del equipo. Dejamos preparada la hoja `docs/validacion_manual.md`.
+
+**Errores nuestros al aplicar los cambios, y cómo los encontramos:**
+- **El promedio para el grupo "ninguna compra en 12 meses".** Ese grupo no existe en la foto de 2023, y el primer cálculo usó un promedio sin ponderar. Daba un 68% de vuelta, inflado por los grupos pequeños que vuelven casi siempre. Lo vimos porque la prueba hacia atrás salía peor que antes (53%). Con el promedio ponderado por clientes, 45%.
+- **El peor caso de la recompra para R1.** Al principio usamos la cota baja del intervalo, cuando bajar el descuento es peligroso si el descuento ayuda, es decir, en la cota alta. Corregido: en el peor caso se perdería un 1,2% de las recompras.
+
+**Cómo cambiaron las cifras principales:**
+
+| Cifra | Ronda 1 | Ronda 2 |
+|---|---|---|
+| Prueba hacia atrás de la vuelta | 49% previsto, 41% real | 45% previsto, 41% real |
+| Fugas a 6 meses (cifra principal) | 372.680 | 417.569 (397.117 a 470.712) |
+| Fuga de Esporádicos recurrentes | 148.811 | 172.819 |
+| Recompra según el descuento | +0,2 (control por segmento) | +0,0 (cada cliente consigo mismo) |
+| Margen de las recomendaciones | 163.329 (sumando R3) | 158.657 al año + 5.790 de R3 en 6 meses |
+
+**Falta, y lo tiene que hacer el equipo:**
+- Completar `docs/validacion_manual.md` y anotar aquí quién lo hizo.
+- Que cada responsable repase `docs/metodos.md` para su fase.
+- Revisar los cambios en los PR.
+
+---
+
+## 9 de octubre: tercera revisión externa
+
+**Qué le pedimos:** una evaluación como la haría el profesor, con una nota estimada por criterio, errores, lo que falta para Excelente, una estructura para el informe y las preguntas probables de la defensa. Queríamos que fuera independiente, pero se pegó en el mismo chat de las rondas anteriores, y la propia IA avisó de que no lo era. Este es el prompt, tal cual:
+
+> Te adjunto dos archivos de un proyecto universitario de análisis de datos:
+> 1. Proyecto_01_Retail_Intelligence.pdf: el enunciado del profesor, con la rúbrica.
+> 2. REVISION_retail_final.md: el estado actual del trabajo.
+> El repositorio está en mathiascg05/retail-intelligence, rama a5-storytelling. Úsalo para comprobar lo que dice el resumen: notebooks ejecutados, DECISIONES.md, docs/dashboard.md, docs/metodos.md y BITACORA.md.
+>
+> Quiero una evaluación independiente antes de escribir el informe final y armar el Power BI. Actúa como el profesor que va a corregirlo, exigente pero justo.
+>
+> 1. Nota estimada: para cada uno de los 5 criterios de la rúbrica, ¿qué nivel le pondrías hoy (Excelente / Bien / Regular / Deficiente) y por qué? Ten en cuenta que el informe y el Power BI aún no existen: evalúa el análisis y la guía del dashboard.
+> 2. Errores: ¿hay algún error de análisis, cifra incoherente entre documentos o conclusión que no se sostenga? Compruébalo en el repo, no solo en el resumen.
+> 3. Lo que falta para Excelente en cada criterio, ordenado por impacto en la nota.
+> 4. El informe: propón la estructura (secciones, qué va en cada una y qué gráficos usar), pensando en una gerencia que no sabe estadística y en un profesor que sí.
+> 5. Defensa: las 10 preguntas más probables del profesor y qué contestar en una o dos frases cada una.
+> 6. Las tres preocupaciones de la sección 3 del resumen: respóndelas.
+>
+> Reglas:
+> - Ordena por impacto en la nota.
+> - Si algo ya está bien, dilo en una línea y no busques problemas donde no los hay.
+> - Sé concreto: qué cambiar, dónde y cómo.
+> - Responde en español.
+
+**Qué dijo:**
+- Estima unos 17/20: calidad de datos y profundidad, Excelente; storytelling y bitácora, Bien; la defensa no se puede evaluar todavía.
+- No encontró errores de análisis. Sí tres problemas de presentación:
+  1. el título del visual 2 dependía del supuesto de los defectuosos;
+  2. el del visual 5 sonaba causal;
+  3. el visual 7 no funcionaba como gráfico de líneas.
+- Propuso un modelo de vuelta más simple.
+
+**Cómo lo comprobamos:**
+- Electrónica es el 15,6% del margen neto, o el 23,1% si el proveedor asume los defectuosos. Del margen bruto es el 24,3%, que no depende de ningún supuesto.
+- El modelo simple ("recurrente o no" × días sin comprar), con los recurrentes, da 58% previsto contra 56% real, y una fuga de 227.341.
+
+Las dos cosas se confirmaron.
+
+**Qué hicimos:**
+- **Aceptamos** los tres cambios de títulos y gráficos.
+- **Aceptamos** el modelo simple: predice igual de bien con los recurrentes, no necesita calibración y se explica en una frase. Es el tercer cambio de este modelo: el primero quitó el segmento circular, el segundo usó las compras de 12 meses con calibración y este lo simplifica. La cifra principal casi no se movió (372.680 → 417.569 → 412.423).
+- **No hicimos** dos cosas que vuelve a pedir:
+  - Pegar los prompts anteriores al 9 de octubre: siguen como resumen, con la nota del principio.
+  - Cerrar los "Falta": es trabajo del equipo (`docs/validacion_manual.md`).
+
+**Falta, y lo tiene que hacer el equipo:**
+- Completar la validación manual y anotar aquí quién la hizo.
+- Aprobar los PR.
+- Un simulacro de defensa con preguntas repartidas al azar (las preguntas difíciles, con su respuesta, están en `docs/metodos.md`).
+

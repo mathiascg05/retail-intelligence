@@ -1,0 +1,203 @@
+table fact_ventas
+	lineageTag: 5beb9965-e4a0-5f16-9525-136bcca38719
+
+	column transaccion_id
+		dataType: string
+		lineageTag: 494285e4-f252-5c25-a036-825e54807efb
+		summarizeBy: none
+		sourceColumn: transaccion_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column cliente_id
+		dataType: string
+		lineageTag: 029e8026-13ed-53cb-9b06-c5e93bd532a1
+		summarizeBy: none
+		sourceColumn: cliente_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 98d8c01d-b792-5f2d-b676-b11d9b3d016f
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column producto_id
+		dataType: string
+		lineageTag: 4867901d-f879-5ebf-acbc-07d72bc7ecd1
+		summarizeBy: none
+		sourceColumn: producto_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column cantidad
+		dataType: int64
+		formatString: 0
+		lineageTag: 666a5b6d-bebe-5b66-8c22-866b11b4d5d7
+		summarizeBy: sum
+		sourceColumn: cantidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column precio_unitario
+		dataType: double
+		lineageTag: eb84bb82-6a69-531b-8499-5ad3c777e8f4
+		summarizeBy: sum
+		sourceColumn: precio_unitario
+
+		annotation SummarizationSetBy = Automatic
+
+	column descuento
+		dataType: double
+		formatString: 0.0%
+		lineageTag: bcfa51a4-d294-521f-83db-cf2b125cd5b9
+		summarizeBy: sum
+		sourceColumn: descuento
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_neto
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 1b253e2c-d096-5263-9a01-30f65f97b5a9
+		summarizeBy: sum
+		sourceColumn: monto_neto
+
+		annotation SummarizationSetBy = Automatic
+
+	column canal
+		dataType: string
+		lineageTag: bf889d43-7771-5e75-bd9f-0b9f63294313
+		summarizeBy: none
+		sourceColumn: canal
+
+		annotation SummarizationSetBy = Automatic
+
+	column metodo_pago
+		dataType: string
+		lineageTag: 656746e3-3f1b-54fa-9fa4-94ff3d7fc046
+		summarizeBy: none
+		sourceColumn: metodo_pago
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria
+		dataType: string
+		lineageTag: 9a93582f-6a07-5f96-b393-f2b569bf92bc
+		summarizeBy: none
+		sourceColumn: categoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column subcategoria
+		dataType: string
+		lineageTag: 83ee863c-fd98-5303-9689-d14b590a1c3e
+		summarizeBy: none
+		sourceColumn: subcategoria
+
+		annotation SummarizationSetBy = Automatic
+
+	column costo_total
+		dataType: double
+		lineageTag: fa2c6b09-980f-5a97-bfbf-50bc9bb0a1c5
+		summarizeBy: sum
+		sourceColumn: costo_total
+
+		annotation SummarizationSetBy = Automatic
+
+	column margen_bruto
+		dataType: double
+		formatString: #,0.00
+		lineageTag: 0631a267-7c92-5c02-8ec5-c7563347118e
+		summarizeBy: sum
+		sourceColumn: margen_bruto
+
+		annotation SummarizationSetBy = Automatic
+
+	column bajo_costo
+		dataType: boolean
+		lineageTag: 5a9531cc-bd9d-52fc-975d-f3ba2aeda942
+		summarizeBy: none
+		sourceColumn: bajo_costo
+
+		annotation SummarizationSetBy = Automatic
+
+	column outlier_cat
+		dataType: boolean
+		lineageTag: a4798ead-17d0-5d47-ba5a-462f0a5b7846
+		summarizeBy: none
+		sourceColumn: outlier_cat
+
+		annotation SummarizationSetBy = Automatic
+
+	column devuelta
+		dataType: boolean
+		lineageTag: 29ec3cf7-fb2e-5690-945c-f51f20506f65
+		summarizeBy: none
+		sourceColumn: devuelta
+
+		annotation SummarizationSetBy = Automatic
+
+	column costo_descuento
+		dataType: double
+		lineageTag: 650808ed-8ef0-583c-a6bb-aa845a835b9c
+		summarizeBy: sum
+		sourceColumn: costo_descuento
+
+		annotation SummarizationSetBy = Automatic
+
+	column motivo_devolucion
+		dataType: string
+		lineageTag: 7d2e2eb1-f9eb-565b-a56b-6740bce3fbc7
+		summarizeBy: none
+		sourceColumn: motivo_devolucion
+
+		annotation SummarizationSetBy = Automatic
+
+	column margen_neto
+		dataType: double
+		formatString: #,0.00
+		lineageTag: ec62504a-c9b4-5716-9bca-dd9687e4b0a4
+		summarizeBy: sum
+		sourceColumn: margen_neto
+
+		annotation SummarizationSetBy = Automatic
+
+	column banda_descuento
+		dataType: string
+		lineageTag: 73d96df6-47b9-50b6-b197-1b418c1bbe5b
+		summarizeBy: none
+		sourceColumn: banda_descuento
+		sortByColumn: banda_orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column banda_orden
+		dataType: int64
+		formatString: 0
+		lineageTag: d9279639-5ab3-5510-9849-a3e00be546c1
+		summarizeBy: none
+		sourceColumn: banda_orden
+		isHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_ventas = m
+		mode: import
+		queryGroup: Hechos
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "fact_ventas.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"transaccion_id", type text}, {"cliente_id", type text}, {"fecha", type date}, {"producto_id", type text}, {"cantidad", Int64.Type}, {"precio_unitario", type number}, {"descuento", type number}, {"monto_neto", type number}, {"canal", type text}, {"metodo_pago", type text}, {"categoria", type text}, {"subcategoria", type text}, {"costo_total", type number}, {"margen_bruto", type number}, {"bajo_costo", type logical}, {"outlier_cat", type logical}, {"devuelta", type logical}, {"costo_descuento", type number}, {"motivo_devolucion", type text}, {"margen_neto", type number}, {"banda_descuento", type text}}, "en-US"),
+				    #"Agregar banda_orden" = Table.AddColumn(#"Tipos", "banda_orden", each List.PositionOf({"sin descuento", "hasta 5%", "5% a 10%", "10% a 20%", "más de 20%"}, [banda_descuento]), Int64.Type)
+				in
+				    #"Agregar banda_orden"
+
+	annotation PBI_ResultType = Table

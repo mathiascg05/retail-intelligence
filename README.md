@@ -16,7 +16,7 @@ El enunciado completo está en `data/raw/Proyecto_01_Retail_Intelligence.pdf`.
 | A2 | Qué productos, clientes y canales dejan más margen | Mikel Muñoz | en revisión (PR #3) |
 | A3 | Dónde se pierde dinero: devoluciones, clientes que se van, quejas | Federico Celis | en revisión (PR #4) |
 | A4 | Qué tan bien funcionan las campañas de marketing | Fernando Álvarez | en revisión (PR #5) |
-| A5 | Historia final, gráficos y presentación | Leonardo Reyes | pendiente |
+| A5 | Recomendaciones, dashboard de Power BI e informe | Leonardo Reyes | en curso (PR #6) |
 
 ## Calendario
 
@@ -36,6 +36,11 @@ El enunciado completo está en `data/raw/Proyecto_01_Retail_Intelligence.pdf`.
 | `src/carga.py` | carga y limpieza de los datos |
 | `notebooks/` | un notebook por fase |
 | `docs/modelo.md` | cómo se relacionan las tablas |
+| `docs/dashboard.md` | cómo armar el dashboard de Power BI |
+| `powerbi/` | el dashboard de Power BI ya armado (abrir con `powerbi\abrir_dashboard.bat` en Windows) |
+| `docs/metodos.md` | cada método explicado, para preparar la defensa |
+| `docs/validacion_manual.md` | hoja para comprobar a mano unas filas de montos y márgenes |
+| `data/powerbi/` | datos para Power BI (tablas del modelo y resultados de los notebooks) |
 | `figures/` | gráficos para la presentación |
 | `DECISIONES.md` | qué hicimos con cada problema de los datos y por qué |
 | `BITACORA.md` | cómo usamos la IA (lo pide la rúbrica) |

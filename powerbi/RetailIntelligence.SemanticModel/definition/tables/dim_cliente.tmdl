@@ -1,0 +1,154 @@
+table dim_cliente
+	lineageTag: 4b05bfb0-a60a-5cf6-a4e0-a63750618b39
+
+	column cliente_id
+		dataType: string
+		lineageTag: 86cf1e7b-a085-59cd-b675-42de37f4c03f
+		summarizeBy: none
+		sourceColumn: cliente_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column edad
+		dataType: int64
+		formatString: 0
+		lineageTag: e2211dc6-0368-5a44-90e6-aa5f4f396045
+		summarizeBy: none
+		sourceColumn: edad
+
+		annotation SummarizationSetBy = Automatic
+
+	column genero
+		dataType: string
+		lineageTag: d558e8eb-3e95-50e7-bbb2-2570bebd39fd
+		summarizeBy: none
+		sourceColumn: genero
+
+		annotation SummarizationSetBy = Automatic
+
+	column ciudad
+		dataType: string
+		lineageTag: 0f9aec10-c721-5db6-8853-b30195d9624b
+		summarizeBy: none
+		sourceColumn: ciudad
+
+		annotation SummarizationSetBy = Automatic
+
+	column segmento
+		dataType: string
+		lineageTag: c0cd9b50-eb78-5fd7-b2fd-f3f2ede99973
+		summarizeBy: none
+		sourceColumn: segmento
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_registro
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 5ec423a4-109c-54e5-b643-faf4a517fa76
+		summarizeBy: none
+		sourceColumn: fecha_registro
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column canal_adquisicion
+		dataType: string
+		lineageTag: 2acee491-dbbf-5abb-93e1-7584a4f15010
+		summarizeBy: none
+		sourceColumn: canal_adquisicion
+
+		annotation SummarizationSetBy = Automatic
+
+	column primera_compra
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 338a927a-5541-584c-88fd-9bccb7ba542f
+		summarizeBy: none
+		sourceColumn: primera_compra
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column ultima_compra
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 51e6b04f-cc00-5860-ac89-b4c9fc9cb3ee
+		summarizeBy: none
+		sourceColumn: ultima_compra
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column n_compras
+		dataType: int64
+		formatString: 0
+		lineageTag: c724b1be-e9a3-5fb1-b329-0f8205411d54
+		summarizeBy: sum
+		sourceColumn: n_compras
+
+		annotation SummarizationSetBy = Automatic
+
+	column gasto_total
+		dataType: double
+		lineageTag: 433a4fa2-c732-5b37-bc53-490cf974deec
+		summarizeBy: sum
+		sourceColumn: gasto_total
+
+		annotation SummarizationSetBy = Automatic
+
+	column margen_total
+		dataType: double
+		lineageTag: f1e94119-e2d5-5d9a-961b-3fb79642a5ca
+		summarizeBy: sum
+		sourceColumn: margen_total
+
+		annotation SummarizationSetBy = Automatic
+
+	column margen_neto_total
+		dataType: double
+		lineageTag: ef2faf3e-9e9f-56a6-84b2-6e2f4b396119
+		summarizeBy: sum
+		sourceColumn: margen_neto_total
+
+		annotation SummarizationSetBy = Automatic
+
+	column sin_compras
+		dataType: boolean
+		lineageTag: dec3ed7c-f38d-5c5c-bd42-aec8c42ad815
+		summarizeBy: none
+		sourceColumn: sin_compras
+
+		annotation SummarizationSetBy = Automatic
+
+	column dias_sin_comprar
+		dataType: double
+		lineageTag: 31c5fe7d-9750-5f1f-aee4-2371df6e5303
+		summarizeBy: sum
+		sourceColumn: dias_sin_comprar
+
+		annotation SummarizationSetBy = Automatic
+
+	column segmento_rfm
+		dataType: string
+		lineageTag: 07a88d3f-70d3-5642-ac14-8573b7cda1cc
+		summarizeBy: none
+		sourceColumn: segmento_rfm
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_cliente = m
+		mode: import
+		queryGroup: Dimensiones
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "dim_cliente.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"cliente_id", type text}, {"edad", Int64.Type}, {"genero", type text}, {"ciudad", type text}, {"segmento", type text}, {"fecha_registro", type date}, {"canal_adquisicion", type text}, {"primera_compra", type date}, {"ultima_compra", type date}, {"n_compras", Int64.Type}, {"gasto_total", type number}, {"margen_total", type number}, {"margen_neto_total", type number}, {"sin_compras", type logical}, {"dias_sin_comprar", type number}, {"segmento_rfm", type text}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

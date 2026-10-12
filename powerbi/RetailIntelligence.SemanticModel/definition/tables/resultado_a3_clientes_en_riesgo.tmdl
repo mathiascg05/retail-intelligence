@@ -1,0 +1,99 @@
+table resultado_a3_clientes_en_riesgo
+	lineageTag: 50a8d56d-914a-5cfd-8257-1c825f06e6fd
+
+	column cliente_id
+		dataType: string
+		lineageTag: dbaa4cbb-8791-50e8-9f10-d215a542f1e8
+		summarizeBy: none
+		sourceColumn: cliente_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column segmento
+		dataType: string
+		lineageTag: 76c89543-ca7f-5947-8b97-51cda398c631
+		summarizeBy: none
+		sourceColumn: segmento
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo
+		dataType: string
+		lineageTag: 7c9d7ccb-0804-5ddb-ab55-54dd2471e10b
+		summarizeBy: none
+		sourceColumn: tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column recurrente
+		dataType: boolean
+		lineageTag: 34fa3895-bab2-5217-aa5a-5e37c87fe5eb
+		summarizeBy: none
+		sourceColumn: recurrente
+
+		annotation SummarizationSetBy = Automatic
+
+	column compras
+		dataType: string
+		lineageTag: b91ebe9d-d520-531d-8bd5-052f7951385c
+		summarizeBy: none
+		sourceColumn: compras
+
+		annotation SummarizationSetBy = Automatic
+
+	column tramo
+		dataType: string
+		lineageTag: 3a2abdd2-d3d7-5e5b-9322-8f201375eff1
+		summarizeBy: none
+		sourceColumn: tramo
+
+		annotation SummarizationSetBy = Automatic
+
+	column dias_sin_comprar
+		dataType: int64
+		formatString: 0
+		lineageTag: 49f8cb75-0bdf-54eb-ac4a-0cb28b1f318e
+		summarizeBy: sum
+		sourceColumn: dias_sin_comprar
+
+		annotation SummarizationSetBy = Automatic
+
+	column gasto_semestral
+		dataType: double
+		formatString: #,0
+		lineageTag: bff0fc8a-7c57-51e8-915e-63e2cde9dcc0
+		summarizeBy: sum
+		sourceColumn: gasto_semestral
+
+		annotation SummarizationSetBy = Automatic
+
+	column p_vuelve
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 1ccc6ddc-d678-5bc3-9230-471865e0f14e
+		summarizeBy: sum
+		sourceColumn: p_vuelve
+
+		annotation SummarizationSetBy = Automatic
+
+	column ingreso_perdido
+		dataType: double
+		formatString: #,0
+		lineageTag: efb28b5f-6f79-57fb-8b4c-1d9263936395
+		summarizeBy: sum
+		sourceColumn: ingreso_perdido
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a3_clientes_en_riesgo = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a3_clientes_en_riesgo.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"cliente_id", type text}, {"segmento", type text}, {"tipo", type text}, {"recurrente", type logical}, {"compras", type text}, {"tramo", type text}, {"dias_sin_comprar", Int64.Type}, {"gasto_semestral", type number}, {"p_vuelve", type number}, {"ingreso_perdido", type number}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

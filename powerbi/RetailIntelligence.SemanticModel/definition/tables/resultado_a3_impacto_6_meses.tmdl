@@ -1,0 +1,73 @@
+table resultado_a3_impacto_6_meses
+	lineageTag: 3af94325-e39b-543b-93ff-bacc677c3548
+
+	column fuga
+		dataType: string
+		lineageTag: 2e8c5d42-a63c-5d2a-be0a-6cbc34ed251a
+		summarizeBy: none
+		sourceColumn: fuga
+
+		annotation SummarizationSetBy = Automatic
+
+	column ingresos
+		dataType: double
+		lineageTag: 3097f801-9e7e-574a-8bd5-941707af4882
+		summarizeBy: sum
+		sourceColumn: ingresos
+
+		annotation SummarizationSetBy = Automatic
+
+	column desde
+		dataType: double
+		formatString: #,0
+		lineageTag: 0fa4ce86-1228-5976-9c3c-6d8cdbc66baf
+		summarizeBy: sum
+		sourceColumn: desde
+
+		annotation SummarizationSetBy = Automatic
+
+	column hasta
+		dataType: double
+		formatString: #,0
+		lineageTag: ceb9e713-5330-50c7-b2b2-d9490ecbe50e
+		summarizeBy: sum
+		sourceColumn: hasta
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'margen (bajo)'
+		dataType: double
+		lineageTag: 5e4dd8fb-4ee2-5715-8eaa-1a34da0428db
+		summarizeBy: sum
+		sourceColumn: margen (bajo)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'margen (alto)'
+		dataType: double
+		lineageTag: 25685130-6633-5f13-8855-e159c92e3783
+		summarizeBy: sum
+		sourceColumn: margen (alto)
+
+		annotation SummarizationSetBy = Automatic
+
+	column '% de las ventas del semestre'
+		dataType: double
+		lineageTag: 8853a449-029e-5f0c-ab3b-856161b7fbb8
+		summarizeBy: sum
+		sourceColumn: % de las ventas del semestre
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a3_impacto_6_meses = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a3_impacto_6_meses.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"fuga", type text}, {"ingresos", type number}, {"desde", type number}, {"hasta", type number}, {"margen (bajo)", type number}, {"margen (alto)", type number}, {"% de las ventas del semestre", type number}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

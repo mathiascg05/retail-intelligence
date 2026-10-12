@@ -1,0 +1,5 @@
+﻿id,qué hacemos,métrica,cambio en la métrica,ingresos (central),desde,hasta,margen (central),periodo,ingresos
+R1,"Piloto: tope de 4,7% al descuento online y ninguna venta bajo costo",margen bruto total,0.06758048505888743,146160.57058,77324.6355,146160.57058,146160.57058,al año,ingresos
+R4,Tope de 5% al descuento de las campañas,descuento regalado en campañas,-0.7254204770001378,-21736.556639876144,-21736.556639876144,-21736.556639876144,7196.889977389377,al año,ingresos registrados por campañas
+R3,"Campaña de reactivación a los clientes recurrentes en riesgo, con 20% de grupo de control",ingresos de los clientes recurrentes en riesgo,0.1,22734.12799268798,11367.06399634399,45468.25598537596,5661.589279594377,"en 6 meses, una vez",ingresos
+R2,Guía de tallas en Ropa (y diagnóstico de las devoluciones de Electrónica),devoluciones de Ropa,-0.08331352296602273,13366.645,6683.3225,20049.9675,5299.635,al año,ingresos

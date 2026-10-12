@@ -1,0 +1,85 @@
+table resultado_a2_clv_grupos
+	lineageTag: 7be09c48-5ddd-5805-a389-ecde96e38b4c
+
+	column grupo
+		dataType: string
+		lineageTag: ff23a4cf-c3fc-509f-bbec-40f1da51a67c
+		summarizeBy: none
+		sourceColumn: grupo
+		sortByColumn: orden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CLV 2023'
+		dataType: double
+		formatString: #,0
+		lineageTag: 8e7c80a8-3cd4-53b5-8305-de88769240a1
+		summarizeBy: sum
+		sourceColumn: CLV 2023
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CLV 2024'
+		dataType: double
+		formatString: #,0
+		lineageTag: 32f2cf0f-4ce2-5e50-8d0c-f088d603733d
+		summarizeBy: sum
+		sourceColumn: CLV 2024
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'cambio %'
+		dataType: double
+		lineageTag: 1a268e5b-6d76-5c9e-bf78-a7fb71e15757
+		summarizeBy: sum
+		sourceColumn: cambio %
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'IC 95% bajo %'
+		dataType: double
+		lineageTag: eff3d327-27e9-56cc-a8c1-e8270a0aaf78
+		summarizeBy: sum
+		sourceColumn: IC 95% bajo %
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'IC 95% alto %'
+		dataType: double
+		lineageTag: ef4aca2c-6237-5889-b27f-4e598561dc2b
+		summarizeBy: sum
+		sourceColumn: IC 95% alto %
+
+		annotation SummarizationSetBy = Automatic
+
+	column '¿declive?'
+		dataType: string
+		lineageTag: 56e94876-23cb-5cb7-9ff5-2681c9cc3fc5
+		summarizeBy: none
+		sourceColumn: ¿declive?
+
+		annotation SummarizationSetBy = Automatic
+
+	column orden
+		dataType: int64
+		formatString: 0
+		lineageTag: 64fd0245-17e1-5c24-b6e2-eaf901987617
+		summarizeBy: none
+		sourceColumn: orden
+		isHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a2_clv_grupos = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a2_clv_grupos.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"grupo", type text}, {"CLV 2023", type number}, {"CLV 2024", type number}, {"cambio %", type number}, {"IC 95% bajo %", type number}, {"IC 95% alto %", type number}, {"¿declive?", type text}}, "en-US"),
+				    #"Agregar orden" = Table.AddIndexColumn(#"Tipos", "orden", 1, 1, Int64.Type)
+				in
+				    #"Agregar orden"
+
+	annotation PBI_ResultType = Table

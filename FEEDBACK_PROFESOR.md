@@ -1,5 +1,14 @@
 # Reuniones con el profesor
 
+## Preguntas urgentes (enviar ya, sin esperar a la próxima reunión)
+
+Son las cuatro respuestas que más mueven las cifras y el relato del informe. Si no responde antes de la entrega, el informe lleva una sección de supuestos con las dos versiones de cada cifra.
+
+1. **Las cifras del enunciado (A1):** ¿es a propósito que el ticket (−8%), las devoluciones (14%) y la conversión (22% → 11%) no coincidan con los datos? Nuestro relato se basa en los datos: el margen no cae y solo la conversión registrada se cae a la mitad. (Lo preguntamos desde la semana 2.)
+2. **Reembolsos (A3.5):** ¿los "ingresos perdidos a 6 meses" deben incluir todos los reembolsos por devoluciones? Nosotros damos como cifra principal las fugas identificadas (clientes recurrentes que no vuelven + devoluciones de Ropa y Electrónica por encima de lo normal: 412.423) y los reembolsos totales (645.361) aparte, como costo estructural.
+3. **Conversión (A4.3):** la marca `convertido` no coincide con las compras de `transacciones.csv`. Las 179 compras tras una conversión son coincidencias, y hay clientes sin ninguna compra marcados como convertidos. ¿La marca puede venir de otro sistema? ¿Presentamos la lectura de la marca o la de las compras reales?
+4. **Productos defectuosos (A2.1):** ¿suponemos que la empresa pierde el costo del producto defectuoso, o que lo repone el proveedor? Cambia cuánto margen se llevan las devoluciones: 27,5% o 13,5%.
+
 ## Semana 2
 
 **Qué le vamos a preguntar:**
@@ -28,6 +37,10 @@
 - **Descuento (A4.2):** el descuento se repartió como en un sorteo (no depende del segmento, del tipo, del canal ni del año). ¿Podemos leer su efecto como causal?
 - **Conversión contra compras reales (A4.3):** según la marca, el descuento dobla la conversión; según las transacciones, ni las campañas ni el descuento cambian las compras. ¿La conversión puede venir de compras que no están en `transacciones.csv`? ¿Cuál de las dos lecturas presentamos? (Las 179 compras "confirmadas" resultan ser coincidencias: cualquier envío tiene una compra en 30 días el 21% de las veces.)
 - **ROI (A4.5):** damos tres versiones (sobre ventas, la del enunciado; sobre margen; e incremental). ¿Cuál presentamos como principal?
+
+**Qué le vamos a pedir que confirme (A5):**
+- **Recomendaciones (A5.2):** cada una con su supuesto, un escenario central y un rango, en ingresos y margen. Solo cuantificamos lo que tiene una causa en los datos; el resto del exceso de devoluciones va como "techo". ¿Le parece bien dar rangos como "impacto esperado"?
+- **Informe:** ¿qué extensión y estructura espera? ¿El dashboard de Power BI se entrega como archivo .pbix?
 
 **Qué respondió:**
 

@@ -1,0 +1,49 @@
+table resultado_a5_situacion_trimestre
+	lineageTag: 5f670a07-23d7-5754-8719-f2fa4fd805d8
+
+	column trimestre
+		dataType: string
+		lineageTag: 591f4ea7-a024-5482-8b39-4b1cab2fbcfb
+		summarizeBy: none
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'métrica'
+		dataType: string
+		lineageTag: 18db39ed-fcab-5bc1-a2b5-79281bb19c4b
+		summarizeBy: none
+		sourceColumn: métrica
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'índice (2023 T1 = 100)'
+		dataType: double
+		formatString: 0.0
+		lineageTag: a22b1e6b-3504-51ca-b639-3b27a838511b
+		summarizeBy: sum
+		sourceColumn: índice (2023 T1 = 100)
+
+		annotation SummarizationSetBy = Automatic
+
+	column valor
+		dataType: double
+		formatString: #,0.0
+		lineageTag: 517d38c6-72a5-5149-8bbc-d6db6f7cb3e8
+		summarizeBy: sum
+		sourceColumn: valor
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a5_situacion_trimestre = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a5_situacion_trimestre.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"trimestre", type text}, {"métrica", type text}, {"índice (2023 T1 = 100)", type number}, {"valor", type number}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

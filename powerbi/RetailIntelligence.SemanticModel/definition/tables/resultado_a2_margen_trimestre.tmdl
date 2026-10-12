@@ -1,0 +1,47 @@
+table resultado_a2_margen_trimestre
+	lineageTag: dc01aa8a-31f4-5839-92a2-c93e0f2c185b
+
+	column trimestre
+		dataType: string
+		lineageTag: cc6e3326-7b1f-5a72-985e-e33e19351c13
+		summarizeBy: none
+		sourceColumn: trimestre
+
+		annotation SummarizationSetBy = Automatic
+
+	column ventas
+		dataType: double
+		lineageTag: 635c8536-0aa8-51d3-aaca-5124e978cc62
+		summarizeBy: sum
+		sourceColumn: ventas
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'margen bruto %'
+		dataType: double
+		lineageTag: 809d8e9e-3e4d-5c82-9ad3-eb27e8dd82ca
+		summarizeBy: sum
+		sourceColumn: margen bruto %
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'margen neto %'
+		dataType: double
+		lineageTag: 8a5b9bf7-943a-568e-90cc-83038ae58492
+		summarizeBy: sum
+		sourceColumn: margen neto %
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a2_margen_trimestre = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a2_margen_trimestre.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"trimestre", type text}, {"ventas", type number}, {"margen bruto %", type number}, {"margen neto %", type number}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table
