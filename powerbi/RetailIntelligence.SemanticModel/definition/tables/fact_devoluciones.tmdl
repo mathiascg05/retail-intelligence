@@ -106,15 +106,12 @@ table fact_devoluciones
 		annotation SummarizationSetBy = Automatic
 
 	column fecha_dev_recortada
-		dataType: dateTime
-		formatString: Short Date
+		dataType: boolean
 		lineageTag: 5ab39db0-df64-5b4b-92aa-6e6b1b76b08f
 		summarizeBy: none
 		sourceColumn: fecha_dev_recortada
 
 		annotation SummarizationSetBy = Automatic
-
-		annotation UnderlyingDateTimeDataType = Date
 
 	partition fact_devoluciones = m
 		mode: import
@@ -123,7 +120,7 @@ table fact_devoluciones
 				let
 				    Origen = Csv.Document(File.Contents(CarpetaDatos & "fact_devoluciones.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
 				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
-				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"devolucion_id", type text}, {"transaccion_id", type text}, {"cliente_id", type text}, {"motivo", type text}, {"monto_devuelto", type number}, {"fecha_devolucion", type date}, {"fecha_compra", type date}, {"producto_id", type text}, {"categoria", type text}, {"canal", type text}, {"monto_neto", type number}, {"dias_a_devolucion", Int64.Type}, {"fecha_dev_recortada", type date}}, "en-US")
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"devolucion_id", type text}, {"transaccion_id", type text}, {"cliente_id", type text}, {"motivo", type text}, {"monto_devuelto", type number}, {"fecha_devolucion", type date}, {"fecha_compra", type date}, {"producto_id", type text}, {"categoria", type text}, {"canal", type text}, {"monto_neto", type number}, {"dias_a_devolucion", Int64.Type}, {"fecha_dev_recortada", type logical}}, "en-US")
 				in
 				    #"Tipos"
 
