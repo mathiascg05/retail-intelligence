@@ -1,0 +1,63 @@
+table resultado_a5_tabla_perdidas
+	lineageTag: fd361dbb-94ac-559b-b24b-ec4fff6d3963
+
+	column sitio
+		dataType: string
+		lineageTag: d688fd69-fb02-533c-89ca-e785f5403573
+		summarizeBy: none
+		sourceColumn: sitio
+
+		annotation SummarizationSetBy = Automatic
+
+	column periodo
+		dataType: string
+		lineageTag: 54d387c3-abc4-50c4-9c92-c69ea2e49580
+		summarizeBy: none
+		sourceColumn: periodo
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'margen que se lleva'
+		dataType: string
+		lineageTag: 7c9e733d-ab96-5e6d-8c58-fe3835bf5189
+		summarizeBy: none
+		sourceColumn: margen que se lleva
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'parte atacable (margen)'
+		dataType: string
+		lineageTag: 048bfe41-5509-59e3-997f-74502a8bd2b1
+		summarizeBy: none
+		sourceColumn: parte atacable (margen)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'recomendación'
+		dataType: string
+		lineageTag: 876d39fc-9687-561f-97a3-cc86c90777d7
+		summarizeBy: none
+		sourceColumn: recomendación
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'recupera (central)'
+		dataType: double
+		lineageTag: cc87cf1a-cf78-5eb8-952f-25e41d4515a7
+		summarizeBy: sum
+		sourceColumn: recupera (central)
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a5_tabla_perdidas = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a5_tabla_perdidas.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"sitio", type text}, {"periodo", type text}, {"margen que se lleva", type text}, {"parte atacable (margen)", type text}, {"recomendación", type text}, {"recupera (central)", type number}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

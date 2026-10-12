@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.0.0/schema.json",
+  "themeCollection": {
+    "baseTheme": {
+      "name": "CY21SU04",
+      "reportVersionAtImport": {
+        "visual": "1.8.57",
+        "report": "2.0.57",
+        "page": "1.3.57"
+      },
+      "type": "SharedResources"
+    },
+    "customTheme": {
+      "name": "RetailVenture.json",
+      "reportVersionAtImport": {
+        "visual": "1.8.57",
+        "report": "2.0.57",
+        "page": "1.3.57"
+      },
+      "type": "RegisteredResources"
+    }
+  },
+  "resourcePackages": [
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY21SU04",
+          "path": "BaseThemes/CY21SU04.json",
+          "type": "BaseTheme"
+        }
+      ]
+    },
+    {
+      "name": "RegisteredResources",
+      "type": "RegisteredResources",
+      "items": [
+        {
+          "name": "RetailVenture.json",
+          "path": "RetailVenture.json",
+          "type": "CustomTheme"
+        }
+      ]
+    }
+  ],
+  "settings": {
+    "useStylableVisualContainerHeader": true,
+    "exportDataMode": "AllowSummarized",
+    "defaultDrillFilterOtherVisuals": true,
+    "allowChangeFilterTypes": true,
+    "useEnhancedTooltips": true
+  }
+}

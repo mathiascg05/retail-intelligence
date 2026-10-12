@@ -1,0 +1,49 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.4.0/schema.json",
+  "name": "t01_encabezado",
+  "position": {
+    "x": 16,
+    "y": 12,
+    "z": 100,
+    "height": 70,
+    "width": 620,
+    "tabOrder": 100
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "RetailVenture C.A. · Retail Intelligence",
+                    "textStyle": {
+                      "fontSize": "18pt",
+                      "color": "#252423",
+                      "fontWeight": "bold"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Ventas 2023–2024. Montos en unidades monetarias (u. m.).",
+                    "textStyle": {
+                      "fontSize": "10pt",
+                      "color": "#5f5e5a"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

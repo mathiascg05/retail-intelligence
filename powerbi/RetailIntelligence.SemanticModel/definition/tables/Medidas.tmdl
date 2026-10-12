@@ -1,0 +1,105 @@
+table Medidas
+	lineageTag: 65fabe56-d52b-5635-891b-6295a2c19ecf
+
+	measure Ventas = SUM ( fact_ventas[monto_neto] )
+		formatString: #,0
+		displayFolder: Base
+		lineageTag: fa5bd614-5939-5248-b91d-f8ec7da6d686
+
+	measure 'Margen bruto' = SUM ( fact_ventas[margen_bruto] )
+		formatString: #,0
+		displayFolder: Base
+		lineageTag: 0a349d83-d45d-5eac-b7c2-13a2fb332bbb
+
+	measure 'Margen neto' = SUM ( fact_ventas[margen_neto] )
+		formatString: #,0
+		displayFolder: Base
+		lineageTag: a1bb2445-5a9a-509f-b1af-b7d716be1967
+
+	measure 'Margen bruto %' = DIVIDE ( [Margen bruto], [Ventas] )
+		formatString: 0.0%
+		displayFolder: Base
+		lineageTag: d7966bb2-7f7f-51ac-b2bd-cf7a4fe2d833
+
+	measure '% de las ventas' = DIVIDE ( [Ventas], CALCULATE ( [Ventas], ALL ( dim_producto[categoria] ) ) )
+		formatString: 0.0%
+		displayFolder: Base
+		lineageTag: 64f01719-18ef-5386-9835-532c76433c26
+
+	measure '% del margen bruto' = DIVIDE ( [Margen bruto], CALCULATE ( [Margen bruto], ALL ( dim_producto[categoria] ) ) )
+		formatString: 0.0%
+		displayFolder: Base
+		lineageTag: 272df7c5-d1b9-5d90-9a30-61b92060bba0
+
+	measure '% del margen neto' = DIVIDE ( [Margen neto], CALCULATE ( [Margen neto], ALL ( dim_producto[categoria] ) ) )
+		formatString: 0.0%
+		displayFolder: Base
+		lineageTag: 9bb4a1a8-6162-59d1-aedf-d6ff65ddd5ff
+
+	measure 'Unidades por compra' = AVERAGE ( fact_ventas[cantidad] )
+		formatString: 0.00
+		displayFolder: Base
+		lineageTag: 6287c632-5cfc-530d-8f49-3a03d9cec76b
+
+	measure 'Descuento medio' = AVERAGE ( fact_ventas[descuento] )
+		formatString: 0.0%
+		displayFolder: Base
+		lineageTag: a48038aa-d761-5b51-9c4e-e2d62961a660
+
+	measure 'Tasa de devolución' = DIVIDE ( CALCULATE ( COUNTROWS ( fact_ventas ), fact_ventas[devuelta] = TRUE () ), COUNTROWS ( fact_ventas ) )
+		formatString: 0.0%
+		displayFolder: Base
+		lineageTag: a6d224de-48db-59df-8b07-9e6e17ad02ea
+
+	measure 'Tasa de devolución (todas las categorías)' = CALCULATE ( [Tasa de devolución], REMOVEFILTERS ( dim_producto[categoria] ) )
+		formatString: 0.0%
+		displayFolder: Base
+		lineageTag: 9572f6c2-0299-51f9-8e63-09e04e2934ed
+
+	measure 'Ticket promedio' = DIVIDE ( [Ventas], COUNTROWS ( fact_ventas ) )
+		formatString: #,0.00
+		displayFolder: Base
+		lineageTag: 91855551-5955-55e4-824f-f4494c48230b
+
+	measure 'Color categoría' = IF ( SELECTEDVALUE ( dim_producto[categoria] ) IN { "Ropa_y_Calzado", "Electrónica" }, "#eb6834", "#8a8984" )
+		displayFolder: Colores
+		lineageTag: fc579a37-c89c-5a3f-ba1c-5671ac8c14e2
+
+	measure 'Color canal' = IF ( SELECTEDVALUE ( fact_ventas[canal] ) = "online", "#eb6834", "#8a8984" )
+		displayFolder: Colores
+		lineageTag: e95fadc4-4188-52c5-836a-fa78071fe685
+
+	measure 'Color grupo CLV' = IF ( SELECTEDVALUE ( resultado_a2_clv_grupos[grupo] ) IN { "1 compra", "2–3" }, "#eb6834", "#8a8984" )
+		displayFolder: Colores
+		lineageTag: a6bb581e-890e-5897-a1a1-3dbc318f318c
+
+	measure 'Color compras' = IF ( SELECTEDVALUE ( resultado_a3_retorno_compras[compras] ) IN { "1 compra", "4–6" }, "#eb6834", "#8a8984" )
+		displayFolder: Colores
+		lineageTag: f4a011de-ab8b-5eea-9993-296a0c02563f
+
+	measure 'Color segmento' = IF ( SELECTEDVALUE ( resultado_a3_fuga_segmento[segmento] ) = "Esporádico", "#eb6834", "#8a8984" )
+		displayFolder: Colores
+		lineageTag: f4e6f96e-bfdb-51af-b4fb-748e6da1b67b
+
+	measure 'Color recomendación' = IF ( SELECTEDVALUE ( resultado_a5_recomendaciones[id] ) = "R1", "#eb6834", "#8a8984" )
+		displayFolder: Colores
+		lineageTag: 87ddf713-5f28-5729-a85c-9124e0b6b59e
+
+	column Columna
+		dataType: string
+		isHidden
+		lineageTag: 1ee196b0-4ebc-50d1-a849-42713dc42faf
+		summarizeBy: none
+		sourceColumn: Columna
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Medidas = m
+		mode: import
+		source =
+				let
+				    Origen = #table(type table [Columna = text], {})
+				in
+				    Origen
+
+	annotation PBI_ResultType = Table

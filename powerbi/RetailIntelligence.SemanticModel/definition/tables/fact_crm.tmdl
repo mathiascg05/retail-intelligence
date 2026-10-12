@@ -1,0 +1,82 @@
+table fact_crm
+	lineageTag: 6f71e79b-27d5-5973-af03-5649b85ffd18
+
+	column interaccion_id
+		dataType: string
+		lineageTag: 7dcff9aa-19ed-576a-8336-907371f83a24
+		summarizeBy: none
+		sourceColumn: interaccion_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column cliente_id
+		dataType: string
+		lineageTag: 3f5402d7-8d15-53fd-8846-9d6184ad5c22
+		summarizeBy: none
+		sourceColumn: cliente_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo
+		dataType: string
+		lineageTag: 8ecd6a17-2993-5cef-b136-7b9f127a36e0
+		summarizeBy: none
+		sourceColumn: tipo
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: b532dee2-86c2-569c-8844-c00cf1a80f12
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column canal
+		dataType: string
+		lineageTag: 75972990-c52d-5797-b84c-8fb772894317
+		summarizeBy: none
+		sourceColumn: canal
+
+		annotation SummarizationSetBy = Automatic
+
+	column resolucion
+		dataType: string
+		lineageTag: c2df6cd6-4f51-588e-be8f-e58079010b87
+		summarizeBy: none
+		sourceColumn: resolucion
+
+		annotation SummarizationSetBy = Automatic
+
+	column tiempo_respuesta_hrs
+		dataType: double
+		lineageTag: 668b9800-42ca-5e78-b285-674e112ef548
+		summarizeBy: sum
+		sourceColumn: tiempo_respuesta_hrs
+
+		annotation SummarizationSetBy = Automatic
+
+	column respuesta_atipica
+		dataType: boolean
+		lineageTag: 56052cd9-016f-5c8d-a8f5-f40b94edb36e
+		summarizeBy: none
+		sourceColumn: respuesta_atipica
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_crm = m
+		mode: import
+		queryGroup: Hechos
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "fact_crm.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"interaccion_id", type text}, {"cliente_id", type text}, {"tipo", type text}, {"fecha", type date}, {"canal", type text}, {"resolucion", type text}, {"tiempo_respuesta_hrs", type number}, {"respuesta_atipica", type logical}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

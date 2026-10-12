@@ -1,0 +1,71 @@
+table resultado_a2_clv_segmento
+	lineageTag: 8c4bb8cb-6268-56a2-9bf9-d22bb1568e2b
+
+	column segmento
+		dataType: string
+		lineageTag: 6949e404-cce2-5df4-be30-9e666c5d769c
+		summarizeBy: none
+		sourceColumn: segmento
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CLV 2023 (S1→S2)'
+		dataType: double
+		lineageTag: af022513-b8e3-5377-8cfe-bd13ee904f3e
+		summarizeBy: sum
+		sourceColumn: CLV 2023 (S1→S2)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CLV 2024 (S1→S2)'
+		dataType: double
+		lineageTag: d2d97249-259c-58bb-8bb7-7f3b3cceabd1
+		summarizeBy: sum
+		sourceColumn: CLV 2024 (S1→S2)
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'cambio %'
+		dataType: double
+		lineageTag: 7b7b2920-4d64-59a1-82d5-25a3e5929a9b
+		summarizeBy: sum
+		sourceColumn: cambio %
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'IC 95% bajo %'
+		dataType: double
+		lineageTag: 72f76c34-48c8-5063-88ae-d30512406049
+		summarizeBy: sum
+		sourceColumn: IC 95% bajo %
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'IC 95% alto %'
+		dataType: double
+		lineageTag: 73452bf8-2968-54e0-8caf-6a4c0a419873
+		summarizeBy: sum
+		sourceColumn: IC 95% alto %
+
+		annotation SummarizationSetBy = Automatic
+
+	column '¿declive?'
+		dataType: string
+		lineageTag: 469953d3-ff9e-5415-afc0-5c31dd60238b
+		summarizeBy: none
+		sourceColumn: ¿declive?
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a2_clv_segmento = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a2_clv_segmento.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"segmento", type text}, {"CLV 2023 (S1→S2)", type number}, {"CLV 2024 (S1→S2)", type number}, {"cambio %", type number}, {"IC 95% bajo %", type number}, {"IC 95% alto %", type number}, {"¿declive?", type text}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

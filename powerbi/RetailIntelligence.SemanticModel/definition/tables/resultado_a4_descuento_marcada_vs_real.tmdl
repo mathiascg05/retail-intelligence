@@ -1,0 +1,59 @@
+table resultado_a4_descuento_marcada_vs_real
+	lineageTag: 03be120a-8fca-5512-881f-c3681551931c
+
+	column descuento_ofrecido
+		dataType: double
+		formatString: 0%
+		lineageTag: e2935cc8-91b1-5f8a-b98b-267bc09e96e6
+		summarizeBy: none
+		sourceColumn: descuento_ofrecido
+
+		annotation SummarizationSetBy = Automatic
+
+	column conversion_marcada
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 872af982-21fa-5d2c-a75e-5d908a18817a
+		summarizeBy: sum
+		sourceColumn: conversion_marcada
+
+		annotation SummarizationSetBy = Automatic
+
+	column compra_despues
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 1f855daf-3c5f-5dc1-a593-1c236be8d478
+		summarizeBy: sum
+		sourceColumn: compra_despues
+
+		annotation SummarizationSetBy = Automatic
+
+	column compra_antes
+		dataType: double
+		formatString: 0.0%
+		lineageTag: 2ea89e06-257f-5e6f-a23c-ea19081cb0ca
+		summarizeBy: sum
+		sourceColumn: compra_antes
+
+		annotation SummarizationSetBy = Automatic
+
+	column gasto_despues
+		dataType: double
+		lineageTag: a988ddca-0f3d-5e5f-9eee-bc4b5b90d873
+		summarizeBy: sum
+		sourceColumn: gasto_despues
+
+		annotation SummarizationSetBy = Automatic
+
+	partition resultado_a4_descuento_marcada_vs_real = m
+		mode: import
+		queryGroup: Resultados
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "resultado_a4_descuento_marcada_vs_real.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"descuento_ofrecido", type number}, {"conversion_marcada", type number}, {"compra_despues", type number}, {"compra_antes", type number}, {"gasto_despues", type number}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

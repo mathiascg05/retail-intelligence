@@ -1,0 +1,46 @@
+relationship ae2126b3-cbed-59a2-bf7b-c365d4e46bae
+	fromColumn: fact_ventas.cliente_id
+	toColumn: dim_cliente.cliente_id
+
+relationship 0a7adac7-7502-5f26-834e-ee16807bfe28
+	fromColumn: fact_devoluciones.cliente_id
+	toColumn: dim_cliente.cliente_id
+
+relationship 4adb09ab-372b-51da-9ece-3f0c48a690e2
+	fromColumn: fact_crm.cliente_id
+	toColumn: dim_cliente.cliente_id
+
+relationship c3b3d96d-5696-5b5a-b028-e0f23142674b
+	fromColumn: fact_campanas.cliente_id
+	toColumn: dim_cliente.cliente_id
+
+relationship abb09eb3-69c1-5c19-a312-c7bbce99e1b8
+	fromColumn: resultado_a3_clientes_en_riesgo.cliente_id
+	toColumn: dim_cliente.cliente_id
+
+relationship c23c9273-b8f9-5150-b544-0d7f296711de
+	fromColumn: fact_ventas.producto_id
+	toColumn: dim_producto.producto_id
+
+relationship 301ed141-bcf4-5002-9e0e-d7a7f9841737
+	fromColumn: fact_devoluciones.producto_id
+	toColumn: dim_producto.producto_id
+
+relationship 2c42e3af-6179-5c22-8587-6a9fde4f96e9
+	fromColumn: fact_ventas.fecha
+	toColumn: dim_fecha.fecha
+
+relationship 22cf7298-420d-5bfb-ab58-f27d346c4392
+	isActive: false
+	fromColumn: fact_devoluciones.fecha_devolucion
+	toColumn: dim_fecha.fecha
+
+relationship 9f9afd18-da68-5f7f-ac9d-9670d8e06ded
+	isActive: false
+	fromColumn: fact_crm.fecha
+	toColumn: dim_fecha.fecha
+
+relationship 99ac6a1d-7323-5548-b089-29814e257732
+	isActive: false
+	fromColumn: fact_campanas.fecha_envio
+	toColumn: dim_fecha.fecha

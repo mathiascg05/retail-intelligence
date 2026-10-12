@@ -37,6 +37,7 @@ El enunciado completo está en `data/raw/Proyecto_01_Retail_Intelligence.pdf`.
 | `notebooks/` | un notebook por fase |
 | `docs/modelo.md` | cómo se relacionan las tablas |
 | `docs/dashboard.md` | cómo armar el dashboard de Power BI |
+| `powerbi/` | el dashboard de Power BI ya armado (abrir con `powerbi\abrir_dashboard.bat` en Windows) |
 | `docs/metodos.md` | cada método explicado, para preparar la defensa |
 | `docs/validacion_manual.md` | hoja para comprobar a mano unas filas de montos y márgenes |
 | `data/powerbi/` | datos para Power BI (tablas del modelo y resultados de los notebooks) |

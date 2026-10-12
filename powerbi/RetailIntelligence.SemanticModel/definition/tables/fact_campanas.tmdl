@@ -1,0 +1,109 @@
+table fact_campanas
+	lineageTag: 6b2e9adf-2e80-5142-bb57-895fd476d3b2
+
+	column campana_id
+		dataType: string
+		lineageTag: 9af5f2f3-e097-591e-b60d-2769841b7d6c
+		summarizeBy: none
+		sourceColumn: campana_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column cliente_id
+		dataType: string
+		lineageTag: baea5d8e-9b72-5894-910e-9836be8dc95e
+		summarizeBy: none
+		sourceColumn: cliente_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_campana
+		dataType: string
+		lineageTag: 91d5d56b-6e6f-574a-bb4d-f7aea9faeba1
+		summarizeBy: none
+		sourceColumn: tipo_campana
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_envio
+		dataType: dateTime
+		formatString: Short Date
+		lineageTag: 382d3431-3979-522d-83a1-d053ae938b0c
+		summarizeBy: none
+		sourceColumn: fecha_envio
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column canal_campana
+		dataType: string
+		lineageTag: 4ccc3a26-032e-5f01-9ce8-d3dd440b4ccb
+		summarizeBy: none
+		sourceColumn: canal_campana
+
+		annotation SummarizationSetBy = Automatic
+
+	column abierto
+		dataType: int64
+		formatString: 0
+		lineageTag: 6b8c99f3-cff2-5e88-8f36-f55166ecdee7
+		summarizeBy: sum
+		sourceColumn: abierto
+
+		annotation SummarizationSetBy = Automatic
+
+	column convertido
+		dataType: int64
+		formatString: 0
+		lineageTag: 6203df9f-a6bb-5a4b-b0b1-7cb81e0a5e51
+		summarizeBy: sum
+		sourceColumn: convertido
+
+		annotation SummarizationSetBy = Automatic
+
+	column descuento_ofrecido
+		dataType: double
+		formatString: 0%
+		lineageTag: 992b545e-e048-594f-96dd-0ce1e6daf7e8
+		summarizeBy: none
+		sourceColumn: descuento_ofrecido
+
+		annotation SummarizationSetBy = Automatic
+
+	column compra_en_ventana
+		dataType: boolean
+		lineageTag: 9194d568-4754-507d-a408-c81fe2215499
+		summarizeBy: none
+		sourceColumn: compra_en_ventana
+
+		annotation SummarizationSetBy = Automatic
+
+	column conversion_respaldada
+		dataType: boolean
+		lineageTag: e8ba3ccc-bc02-53dd-a0cf-b4ee4f83b245
+		summarizeBy: none
+		sourceColumn: conversion_respaldada
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_respaldado
+		dataType: double
+		lineageTag: a8cbcf38-3ec7-5fa6-b135-2c10d553e444
+		summarizeBy: sum
+		sourceColumn: monto_respaldado
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_campanas = m
+		mode: import
+		queryGroup: Hechos
+		source =
+				let
+				    Origen = Csv.Document(File.Contents(CarpetaDatos & "fact_campanas.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),
+				    #"Encabezados" = Table.PromoteHeaders(Origen, [PromoteAllScalars = true]),
+				    #"Tipos" = Table.TransformColumnTypes(#"Encabezados", {{"campana_id", type text}, {"cliente_id", type text}, {"tipo_campana", type text}, {"fecha_envio", type date}, {"canal_campana", type text}, {"abierto", Int64.Type}, {"convertido", Int64.Type}, {"descuento_ofrecido", type number}, {"compra_en_ventana", type logical}, {"conversion_respaldada", type logical}, {"monto_respaldado", type number}}, "en-US")
+				in
+				    #"Tipos"
+
+	annotation PBI_ResultType = Table

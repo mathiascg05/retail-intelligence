@@ -16,7 +16,22 @@ Todo está en `data/powerbi/`. No hace falta correr Python para armar el dashboa
 
 **Si cambian los datos o el código:** desde la raíz del proyecto, `python -m src.powerbi` regenera las tablas dim_* y fact_*. Los `resultado_*` se regeneran al ejecutar los notebooks 02 a 05, en ese orden (el 05 lee un resultado del 03).
 
-## 2. Cargar en Power BI
+## 2. Abrir el dashboard ya armado
+
+El dashboard está en `powerbi/` en formato de proyecto de Power BI (PBIP): el modelo, las relaciones, las medidas y las 10 visualizaciones de este documento, en archivos de texto.
+
+1. Clonar el repositorio en Windows (cualquier carpeta) y pasarse a la rama del dashboard.
+2. Doble clic en `powerbi\abrir_dashboard.bat`. Apunta el parámetro `CarpetaDatos` a la carpeta `data\powerbi\` del repositorio y abre `RetailIntelligence.pbip` en Power BI Desktop.
+3. En Power BI, pulsar **Actualizar** para cargar los CSV.
+4. Para entregar: **Archivo → Guardar como → .pbix**.
+
+El script cambia la ruta dentro de `powerbi/RetailIntelligence.SemanticModel/definition/expressions.tmdl`. Ese cambio es local, no hay que subirlo. Sin el script: **Transformar datos → Editar parámetros → CarpetaDatos**, poner la ruta de `data\powerbi\` (terminada en `\`) y actualizar.
+
+Los CSV se leen con configuración regional en inglés, así que el punto decimal no da problemas, y el informe muestra los números en español (coma decimal, punto de miles).
+
+Si alguien prefiere armarlo a mano, estos son los pasos.
+
+## 2b. Cargar en Power BI a mano
 
 1. **Obtener datos → Texto/CSV** y cargar los 22 archivos.
 2. **Ojo con los decimales:** los CSV usan punto decimal. Si Power BI está en español, lee `0.25` como 25. Antes de cargar: **Archivo → Opciones → Configuración regional (archivo actual) → Inglés (Estados Unidos)**. Otra opción: en Power Query, "Cambiar tipo → Usando configuración regional".

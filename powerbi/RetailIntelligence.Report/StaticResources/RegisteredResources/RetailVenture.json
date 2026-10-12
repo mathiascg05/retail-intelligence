@@ -1,0 +1,16 @@
+{
+  "name": "RetailVenture",
+  "dataColors": [
+    "#2a78d6",
+    "#eb6834",
+    "#8a8984",
+    "#5f5e5a",
+    "#c4c3bf",
+    "#3b9c6e",
+    "#a35fc2",
+    "#d9a400"
+  ],
+  "foreground": "#252423",
+  "background": "#FFFFFF",
+  "tableAccent": "#eb6834"
+}
